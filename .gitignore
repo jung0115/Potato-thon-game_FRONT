@@ -24,3 +24,5 @@ yarn-error.log*
 
 # jungmi
 package-lock.json
+.bash_profile
+.DS_Store
