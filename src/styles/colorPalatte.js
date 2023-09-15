@@ -5,6 +5,9 @@ const palette = {
 
   bg_color: '#0D0D0D',
   box_bg_color: '#161617',
+
+  orange: '#FF7710',
+  login_yellow: '#D6B462',
 };
 
 export default palette;
