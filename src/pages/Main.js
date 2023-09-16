@@ -5,6 +5,7 @@ import styled from "styled-components";
 import palette from "../styles/colorPalatte";
 
 import Header from '../components/header/Header';
+import CoinList from "../components/CoinList";
 
 // 메인: 헤더 + (거래소 or 자산)
 const Main = () => {
@@ -29,6 +30,9 @@ const Main = () => {
 
   return(
     <Container>
+      <div>
+        수정이 완료
+      </div>
       {/* 헤더 */}
       <Header 
         exchange={isExchange}
@@ -49,7 +53,8 @@ const Main = () => {
         :
         null
       }
-        
+      
+      <CoinList/>
     </Container>
   )
 }
