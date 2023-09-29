@@ -11,7 +11,7 @@
 ---
 
 ### 🥔 What is 감자톤?
-`감자톤`이란 [멋쟁이사자처럼(LIKELION)](https://www.likelion.net/) 한림대학교 지부와 강원대학교 지부가 연합해서 진행하는 2023 하반기 해커톤(Hackathon)입니다.  
+`감자톤(POTATOTHON)`이란 [멋쟁이사자처럼(LIKELION)](https://www.likelion.net/) 한림대학교 지부와 강원대학교 지부가 연합해서 진행하는 2023 하반기 해커톤(Hackathon)입니다.  
 해커톤 진행 중, 참가자들이 이벤트 형태로 참여할 수 있는 주식 게임을 개발하였습니다.
 
 ---
