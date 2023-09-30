@@ -132,7 +132,7 @@ const CoinList = () => {
             </CoinInfoContent>
         </CoinInfo>
     </Container>
-  )
+  );
 }
 
 export default CoinList;
