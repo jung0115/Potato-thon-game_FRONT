@@ -8,7 +8,6 @@ import palette from "../../styles/colorPalatte";
 const StockChart = () => {
   return(
     <Container>
-      
 
     </Container>
   );
@@ -17,6 +16,7 @@ const StockChart = () => {
 const Container = styled.div`
   display: block;
   background-color: ${palette.box_bg_color};
+  padding: 37px 17px 33px 15px;ß
 `;
 
 
