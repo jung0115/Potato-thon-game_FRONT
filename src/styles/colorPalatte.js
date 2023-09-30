@@ -10,6 +10,7 @@ const palette = {
   login_brown: '#8E614E',
 
   header_btm_line: '#D9D9D9',
+  sub_title: '#C8C8C8',
 };
 
 export default palette;
