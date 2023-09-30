@@ -5,13 +5,15 @@ import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
 
 import logo from "../../contents/logo.png";
+import profile from "../../contents/profile.png";
 
 const Header = ({ exchange, property, selectExchange, selectProperty }) => {
   const [isExchange, setExchange] = useState(exchange);  // 헤더에서 거래소 탭 선택 유무
   const [isProperty, setProperty] = useState(property);  // 헤더에서 자산 탭 선택 유무
   const [isExchangeHover, setExchangeHover] = useState(false); // 거래소 탭 마우스 hover
   const [isPropertyHover, setPropertyHover] = useState(false); // 자산 탭 마우스 hover
-  const name = "";
+  const [isSelectLogin, setSelectLogin] = useState(false);     // 로그인 버튼 선택 유무
+  const name = "감자톤";
     
   // 거래소탭 선택
   const onClickExchange = () => {
@@ -76,13 +78,21 @@ const Header = ({ exchange, property, selectExchange, selectProperty }) => {
         </TabContainer>
 
         {/* 로그인 버튼 or 사용자명 */}
-        <UserContainer>
-          {name.length > 0 ?
-            <UserName>{name} 님</UserName>
-            :
-            <LoginBtn>로그인</LoginBtn>
-          }
-        </UserContainer>
+        {name.length > 0 ?
+          <UserContainer>
+            <UserName>{name} 팀</UserName>
+            <UserProfile src={profile}/>
+          </UserContainer>
+          :
+          <UserContainer
+            onClick={() => setSelectLogin(true)}>
+            {isSelectLogin ?
+              <SelectLoginBtn>로그인</SelectLoginBtn>
+              :
+              <LoginBtn>로그인</LoginBtn>
+            }
+          </UserContainer>
+        }
 
       </HeaderContainer>
 
@@ -171,25 +181,46 @@ const UnselectLine = styled.div`
 `;
 
 const UserContainer = styled.div`
+  display: flex;
   margin-left: auto;
+  align-items: end;
 `;
 
 // 로그인 버튼
 const LoginBtn = styled.div`
-  padding: 4px 17px;
-  font-size: 14px;
-  font-weight: 600;
-  color: ${palette.black};
-  background-color: ${palette.login_yellow};
+  padding: 9.58px 25.5px;
+  font-size: 20px;
+  font-family: 'Pretendard-Bold';
+  color: ${palette.login_brown};
+  background-color: ${palette.white};
   border-radius: 60px;
   cursor: pointer;
+  margin: 0px 13px 9px 0px;
+`;
+// 선택된 로그인 버튼
+const SelectLoginBtn = styled.div`
+  padding: 9.58px 25.5px;
+  font-size: 20px;
+  font-family: 'Pretendard-Bold';
+  color: ${palette.orange};
+  background-color: ${palette.white};
+  border-radius: 60px;
+  cursor: pointer;
+  margin: 0px 13px 9px 0px;
 `;
 
 // 사용자명
 const UserName = styled.div`
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 22px;
+  font-family: 'Pretendard-Bold';
   color: ${palette.white};
+  margin: 0px 13px 20px 0px;
+`;
+// 사용자 프로필
+const UserProfile = styled.img`
+  width: 63px;
+  height: 63px;
+  margin: 20px 20px 20px 0px;
 `;
 
 export default Header;
