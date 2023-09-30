@@ -8,6 +8,8 @@ const palette = {
 
   orange: '#FF7710',
   login_yellow: '#D6B462',
+
+  header_line: '#D9D9D9',
 };
 
 export default palette;

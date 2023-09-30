@@ -84,7 +84,7 @@ const PotatoLogo = styled.img`
 `;
 // 사이트명
 const PotatoTitle = styled.div`
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
   color: ${palette.white};
   margin-right: 62px;
@@ -98,7 +98,7 @@ const Tabs = styled.div`
 // 거래소 버튼
 const SelectTabBtn = styled.div`
   margin-left: 68px;
-  font-size: 20px;
+  font-size: 27px;
   font-weight: 600;
   color: ${palette.orange};
   cursor: pointer;
@@ -106,7 +106,7 @@ const SelectTabBtn = styled.div`
 // 자산 버튼
 const UnselectTabBtn = styled.div`
   margin-left: 68px;
-  font-size: 20px;
+  font-size: 27px;
   font-weight: 600;
   color: ${palette.white};
   cursor: pointer;
