@@ -13,7 +13,7 @@ const Header = ({ exchange, property, selectExchange, selectProperty }) => {
   const [isExchangeHover, setExchangeHover] = useState(false); // 거래소 탭 마우스 hover
   const [isPropertyHover, setPropertyHover] = useState(false); // 자산 탭 마우스 hover
   const [isSelectLogin, setSelectLogin] = useState(false);     // 로그인 버튼 선택 유무
-  const name = "감자톤";
+  const name = "";
     
   // 거래소탭 선택
   const onClickExchange = () => {
