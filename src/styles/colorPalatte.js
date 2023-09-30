@@ -7,7 +7,9 @@ const palette = {
   box_bg_color: '#161617',
 
   orange: '#FF7710',
-  login_yellow: '#D6B462',
+  login_brown: '#8E614E',
+
+  header_btm_line: '#D9D9D9',
 };
 
 export default palette;
