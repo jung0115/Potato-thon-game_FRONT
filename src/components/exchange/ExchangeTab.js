@@ -10,6 +10,14 @@ const ExchangeTab = () => {
     <Container>
       <Title>실시간 주식 차트</Title>
 
+      {/* 실시간 주식 차트 */}
+
+      {/* 전체 코인 or 선택한 코인 */}
+
+      {/* 도움말 */}
+
+      {/* 매수/매도 */}
+
     </Container>
   );
 }
