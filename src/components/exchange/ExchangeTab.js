@@ -6,6 +6,7 @@ import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
 
 import StockChart from "./StockChart";
+import CoinList from "./CoinList";
 
 // 메인 > 거래소 탭
 const ExchangeTab = () => {
