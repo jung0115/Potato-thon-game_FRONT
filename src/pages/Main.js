@@ -1,3 +1,4 @@
+// 메인 홈
 import React from "react";
 import { useEffect, useState } from "react";
 
@@ -5,7 +6,10 @@ import styled from "styled-components";
 import palette from "../styles/colorPalatte";
 
 import Header from '../components/header/Header';
+import ExchangeTab from "../components/exchange/ExchangeTab";
+import PropertyTab from "../components/property/PropertyTab";
 import CoinList from "../components/CoinList";
+
 
 // 메인: 헤더 + (거래소 or 자산)
 const Main = () => {
@@ -43,13 +47,13 @@ const Main = () => {
       {/* 거래소, 자산 탭 선택 유무에 따라 보여지는 값 */}
       {/* 거래소탭 선택 시 */}
       { isExchange ? 
-        <div style={{color: '#ffffff'}}>거래소</div>
+        <ExchangeTab />
         :
         null
       }
       {/* 자산탭 선택 시 */}
       { isProperty ? 
-        <div style={{color: '#ffffff'}}>자산</div>
+        <PropertyTab />
         :
         null
       }
