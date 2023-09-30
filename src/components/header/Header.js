@@ -9,6 +9,8 @@ import logo from "../../contents/logo.png";
 const Header = ({ exchange, property, selectExchange, selectProperty }) => {
   const [isExchange, setExchange] = useState(exchange);  // 헤더에서 거래소 탭 선택 유무
   const [isProperty, setProperty] = useState(property);  // 헤더에서 자산 탭 선택 유무
+  const [isExchangeHover, setExchangeHover] = useState(false); // 거래소 탭 마우스 hover
+  const [isPropertyHover, setPropertyHover] = useState(false); // 자산 탭 마우스 hover
   const name = "";
     
   // 거래소탭 선택
@@ -40,25 +42,33 @@ const Header = ({ exchange, property, selectExchange, selectProperty }) => {
 
         <TabContainer>
           {/* 거래소 탭 버튼 */}
-          {isExchange ? 
-            <Tab>
+          {isExchange || isExchangeHover ? 
+            <Tab
+              onMouseOver={() => {setExchangeHover(true); setProperty(false);}}
+              onMouseOut={() => {setExchangeHover(false); setProperty(!isExchange);}}>
               <SelectTabBtn onClick={onClickExchange}>거래소</SelectTabBtn>
               <SelectLine/>
             </Tab>
             :
-            <Tab>
+            <Tab
+              onMouseOver={() => {setExchangeHover(true); setProperty(false);}}
+              onMouseOut={() => {setExchangeHover(false); setProperty(!isExchange);}}>
               <UnselectTabBtn onClick={onClickExchange}>거래소</UnselectTabBtn>
               <UnselectLine/>
             </Tab>
           }
           {/* 자산 탭 버튼 */}
-          {isProperty ? 
-            <Tab>
+          {isProperty || isPropertyHover ? 
+            <Tab
+              onMouseOver={() => {setPropertyHover(true); setExchange(false);}}
+              onMouseOut={() => {setPropertyHover(false); setExchange(!isProperty);}}>
               <SelectTabBtn onClick={onClickProperty}>자산</SelectTabBtn>
               <SelectLine/>
             </Tab>
             :
-            <Tab>
+            <Tab
+              onMouseOver={() => {setPropertyHover(true); setExchange(false);}}
+              onMouseOut={() => {setPropertyHover(false); setExchange(!isProperty);}}>
               <UnselectTabBtn onClick={onClickProperty}>자산</UnselectTabBtn>
               <UnselectLine/>
             </Tab>
