@@ -9,7 +9,7 @@ import logo from "../../contents/logo.png";
 const Header = ({ exchange, property, selectExchange, selectProperty }) => {
   const [isExchange, setExchange] = useState(exchange);  // 헤더에서 거래소 탭 선택 유무
   const [isProperty, setProperty] = useState(property);  // 헤더에서 자산 탭 선택 유무
-  const name = "감자톤";
+  const name = "";
     
   // 거래소탭 선택
   const onClickExchange = () => {
@@ -31,45 +31,70 @@ const Header = ({ exchange, property, selectExchange, selectProperty }) => {
 
   return(
     <Container>
-      {/* 감자톤 로고 + 서비스명 */}
-      <LogoAndTitle>
-        <PotatoLogo src={logo}/>
-        <PotatoTitle>POTATO THON</PotatoTitle>
-      </LogoAndTitle>
+      <HeaderContainer>
+        {/* 감자톤 로고 + 서비스명 */}
+        <LogoAndTitle>
+          <PotatoLogo src={logo}/>
+          <PotatoTitle>POTATO THON</PotatoTitle>
+        </LogoAndTitle>
 
-      <Tabs>
-        {/* 거래소 탭 버튼 */}
-        {isExchange ? 
-          <SelectTabBtn onClick={onClickExchange}>거래소</SelectTabBtn>
-          :
-          <UnselectTabBtn onClick={onClickExchange}>거래소</UnselectTabBtn>
-        }
-        {/* 자산 탭 버튼 */}
-        {isProperty ? 
-          <SelectTabBtn onClick={onClickProperty}>자산</SelectTabBtn>
-          :
-          <UnselectTabBtn onClick={onClickProperty}>자산</UnselectTabBtn>
-        }
-      </Tabs>
+        <TabContainer>
+          {/* 거래소 탭 버튼 */}
+          {isExchange ? 
+            <Tab>
+              <SelectTabBtn onClick={onClickExchange}>거래소</SelectTabBtn>
+              <SelectLine/>
+            </Tab>
+            :
+            <Tab>
+              <UnselectTabBtn onClick={onClickExchange}>거래소</UnselectTabBtn>
+              <UnselectLine/>
+            </Tab>
+          }
+          {/* 자산 탭 버튼 */}
+          {isProperty ? 
+            <Tab>
+              <SelectTabBtn onClick={onClickProperty}>자산</SelectTabBtn>
+              <SelectLine/>
+            </Tab>
+            :
+            <Tab>
+              <UnselectTabBtn onClick={onClickProperty}>자산</UnselectTabBtn>
+              <UnselectLine/>
+            </Tab>
+          }
+        </TabContainer>
 
-      {/* 로그인 버튼 or 사용자명 */}
-      <UserContainer>
-        {name.length > 0 ?
-          <UserName>{name} 님</UserName>
-          :
-          <LoginBtn>로그인</LoginBtn>
-        }
-      </UserContainer>
+        {/* 로그인 버튼 or 사용자명 */}
+        <UserContainer>
+          {name.length > 0 ?
+            <UserName>{name} 님</UserName>
+            :
+            <LoginBtn>로그인</LoginBtn>
+          }
+        </UserContainer>
+
+      </HeaderContainer>
+
+      <BottomLine/>
     </Container>
   )
 }
 
 const Container = styled.div`
+  display: block;
+  background-color: ${palette.bg_color};
+`;
+
+// 헤더 내용
+const HeaderContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: ${palette.box_bg_color};
-  padding: 14px 42px 18px 20px;
+`;
+
+// 하단 수평바
+const BottomLine = styled.div`
+  background-color: ${palette.header_btm_line};
+  height: 4.56px;
 `;
 
 const LogoAndTitle = styled.div`
@@ -79,37 +104,60 @@ const LogoAndTitle = styled.div`
 
 // 감자톤 로고
 const PotatoLogo = styled.img`
-  width: 40px;
-  height: 45px;
+  width: 52px;
+  height: 58px;
+  margin: 24px 14px 21px 9px;
 `;
 // 사이트명
 const PotatoTitle = styled.div`
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 28px;
   color: ${palette.white};
-  margin-right: 62px;
+  font-family: 'Pretendard-ExtraBold';
+  margin: 60.5px 179px 25px 0px;
 `;
 
-const Tabs = styled.div`
+const TabContainer = styled.div`
   display: flex;
-  align-items: center;
+  align-items: end;
 `;
 
-// 거래소 버튼
+const Tab = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 155px;
+`;
+
+// 선택된 탭 버튼
 const SelectTabBtn = styled.div`
-  margin-left: 68px;
-  font-size: 27px;
+  font-size: 23px;
   font-weight: 600;
   color: ${palette.orange};
+  font-family: 'Pretendard-Bold';
   cursor: pointer;
 `;
-// 자산 버튼
+// 선택되지 않은 탭 버튼
 const UnselectTabBtn = styled.div`
-  margin-left: 68px;
-  font-size: 27px;
+  font-size: 23px;
   font-weight: 600;
   color: ${palette.white};
+  font-family: 'Pretendard-Bold';
   cursor: pointer;
+`;
+
+// 선택된 탭 강조 라인
+const SelectLine = styled.div`
+  width: 155px;
+  height: 9px;
+  margin: 12px 0px 3px 0px;
+  background-color: ${palette.orange};
+`;
+// 선택되지 않은 탭 강조 라인
+const UnselectLine = styled.div`
+  width: 155px;
+  height: 9px;
+  margin: 12px 0px 3px 0px;
+  background-color: ${palette.bg_color};
 `;
 
 const UserContainer = styled.div`
