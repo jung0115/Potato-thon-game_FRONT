@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 
 import cancel from '../contents/cancel.svg';
 
 
-const Login = (props) => {
+const Login = ({ onClose }) => {
     const navigate = useNavigate();
     const [id, setId] = useState('');
     const [pw, setPw] = useState('');
 
-    const realId = '01000000000';
+    const realId = '010-0000-0000';
     const realPw = 'pwpw1';
 
     useEffect(() => {
@@ -37,7 +37,7 @@ const Login = (props) => {
     const CheckLogin = () => {
         if (id === realId) {
             if (pw === realPw) {
-                navigate('/');
+                onClose();
             }
         } else {
             alert('아이디 혹은 비밀번호가 일치하지 않습니다.');
@@ -48,13 +48,17 @@ const Login = (props) => {
         <Container>
             <Header>
                 <Title> 로그인 </Title>
-                <Img src={cancel}/>
+                <Img 
+                    src={cancel}
+                    onClick={() => onClose()}
+                />
             </Header>
             <Line/>
             <Body>
                 <SubTitle> 아이디 </SubTitle>
                 <InputForm 
                     type="text"
+                    placeholder="본인 팀의 팀장 전화번호를 입력해주세요."
                     value={id}
                     onChange={onChamgeId}
                 />
@@ -109,6 +113,8 @@ const InputForm = styled.input`
     padding: 12px 0 12px 24px;
     border-radius: 6px;
     border: 1px solid #DCDFE3;
+
+    color: ();
 `;
 const Img = styled.img`
     margin-right: 32px;
