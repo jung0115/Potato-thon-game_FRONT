@@ -6,6 +6,7 @@ import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
 
 import StockChart from "./StockChart";
+import CoinList from '../CoinList';
 
 // 메인 > 거래소 탭
 const ExchangeTab = () => {
@@ -24,7 +25,7 @@ const ExchangeTab = () => {
         {/* 우측 component */}
         <RightContainter>
           {/* 전체 코인 or 선택한 코인 */}
-
+          <CoinList/>
           {/* 도움말 */}
 
           {/* 매수/매도 */}

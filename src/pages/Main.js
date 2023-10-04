@@ -57,8 +57,6 @@ const Main = () => {
         :
         null
       }
-      
-      <CoinList/>
     </Container>
   )
 }
