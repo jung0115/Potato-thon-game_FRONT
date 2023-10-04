@@ -1,10 +1,48 @@
+import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 import cancel from '../contents/cancel.svg';
 
+
 const Login = (props) => {
-    const id = '01000000000';
-    const pw = 'pwpw1';
+    const navigate = useNavigate();
+    const [id, setId] = useState('');
+    const [pw, setPw] = useState('');
+
+    const realId = '01000000000';
+    const realPw = 'pwpw1';
+
+    useEffect(() => {
+        console.log(id);
+        if (id.length === 11) {
+            setId(id.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
+        }
+        else if (id.length === 13) {
+            setId(id.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
+        }
+    }, [id]);
+
+    const onChamgeId = (e) => {
+        const regex = /^[0-9\b -]{0,13}$/;
+        if (regex.test(e.target.value)) {
+            setId(e.target.value);
+        }
+    }
+
+    const onChamgePw = (e) => {
+        setPw(e.target.value);
+    }
+
+    const CheckLogin = () => {
+        if (id === realId) {
+            if (pw === realPw) {
+                navigate('/');
+            }
+        } else {
+            alert('아이디 혹은 비밀번호가 일치하지 않습니다.');
+        }
+    }
     
     return (
         <Container>
@@ -15,11 +53,19 @@ const Login = (props) => {
             <Line/>
             <Body>
                 <SubTitle> 아이디 </SubTitle>
-                <InputForm/>
+                <InputForm 
+                    type="text"
+                    value={id}
+                    onChange={onChamgeId}
+                />
                 <SubTitle> 비밀번호 </SubTitle>
-                <InputForm type="password"/>
+                <InputForm 
+                    type="password"
+                    value={pw}
+                    onChange={onChamgePw}
+                />
             </Body>
-            <LoginBtn> 로그인 </LoginBtn>
+            <LoginBtn onClick={() => CheckLogin()}> 로그인 </LoginBtn>
         </Container>
     )
 }
