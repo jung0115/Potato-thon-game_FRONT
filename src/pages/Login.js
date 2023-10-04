@@ -1,25 +1,75 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 
 import cancel from '../contents/cancel.svg';
 
-const Login = (props) => {
-    const id = '01000000000';
-    const pw = 'pwpw1';
+
+const Login = ({ onClose }) => {
+    const navigate = useNavigate();
+    const [id, setId] = useState('');
+    const [pw, setPw] = useState('');
+
+    const realId = '010-0000-0000';
+    const realPw = 'pwpw1';
+
+    useEffect(() => {
+        console.log(id);
+        if (id.length === 11) {
+            setId(id.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
+        }
+        else if (id.length === 13) {
+            setId(id.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
+        }
+    }, [id]);
+
+    const onChamgeId = (e) => {
+        const regex = /^[0-9\b -]{0,13}$/;
+        if (regex.test(e.target.value)) {
+            setId(e.target.value);
+        }
+    }
+
+    const onChamgePw = (e) => {
+        setPw(e.target.value);
+    }
+
+    const CheckLogin = () => {
+        if (id === realId) {
+            if (pw === realPw) {
+                onClose();
+            }
+        } else {
+            alert('아이디 혹은 비밀번호가 일치하지 않습니다.');
+        }
+    }
     
     return (
         <Container>
             <Header>
                 <Title> 로그인 </Title>
-                <Img src={cancel}/>
+                <Img 
+                    src={cancel}
+                    onClick={() => onClose()}
+                />
             </Header>
             <Line/>
             <Body>
                 <SubTitle> 아이디 </SubTitle>
-                <InputForm/>
+                <InputForm 
+                    type="text"
+                    placeholder="본인 팀의 팀장 전화번호를 입력해주세요."
+                    value={id}
+                    onChange={onChamgeId}
+                />
                 <SubTitle> 비밀번호 </SubTitle>
-                <InputForm type="password"/>
+                <InputForm 
+                    type="password"
+                    value={pw}
+                    onChange={onChamgePw}
+                />
             </Body>
-            <LoginBtn> 로그인 </LoginBtn>
+            <LoginBtn onClick={() => CheckLogin()}> 로그인 </LoginBtn>
         </Container>
     )
 }
@@ -63,6 +113,8 @@ const InputForm = styled.input`
     padding: 12px 0 12px 24px;
     border-radius: 6px;
     border: 1px solid #DCDFE3;
+
+    color: ();
 `;
 const Img = styled.img`
     margin-right: 32px;

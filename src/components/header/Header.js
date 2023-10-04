@@ -86,18 +86,21 @@ const Header = ({ exchange, property, selectExchange, selectProperty }) => {
             <UserProfile src={profile}/>
           </UserContainer>
           :
-          <UserContainer
-            onClick={() => setSelectLogin(true)}>
+          <UserContainer>
             {isSelectLogin ? (
               <>
                 <SelectLoginBtn>로그인</SelectLoginBtn>
                 <LoginOverlay>
-                  <Login/>
+                  <Login onClose={() => setSelectLogin(false)}/>
                 </LoginOverlay>
               </>
             ) 
               :
-              <LoginBtn>로그인</LoginBtn>
+              <LoginBtn 
+                onClick={() => setSelectLogin(true)}
+              > 
+                로그인
+              </LoginBtn>
             }
           </UserContainer>
         }
