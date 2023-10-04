@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -8,9 +8,9 @@ const Container = styled.div`
 `;
 
 const Title = styled.p`
-    font-size: 20px;
+    font-size: 25px;
     font-weight: bold;
-    color: #C8C8C8;
+    color: #FAEBD5;
 `;
 
 const CoinInfo = styled.div`
@@ -53,6 +53,7 @@ const SubContent = styled.div`
     margin: 25px 33px;
     text-align: center;
     justify-content: space-between;
+    cursor: pointer;
 
     font-size: 16px;
     font-weight: bold;
@@ -94,45 +95,47 @@ const Coin = [
 ];
 
 const CoinList = () => {
-  return (
-    <Container>
-        <Title> 전체 코인 </Title>
-        <CoinInfo>
-            <CoinInfoTitle>
-                {TitleNmae.map(item => (
-                    <SubTitle> {item} </SubTitle>
-                ))}
-            </CoinInfoTitle>
-            <Line />
-            <CoinInfoContent>
-                <SubContent>
-                    {Coin.map(item => (
-                        <div> {item.name} </div>
+    const [title, setTitle] = useState("전체 코인");
+
+    return (
+        <Container>
+            <Title> {title} </Title>
+            <CoinInfo>
+                <CoinInfoTitle>
+                    {TitleNmae.map(item => (
+                        <SubTitle> {item} </SubTitle>
                     ))}
-                </SubContent>
-                <SubContent>
-                    {Coin.map(item => (
-                        <div> {item.price} </div>
-                    ))}
-                </SubContent>
-                <SubContent>
-                    {Coin.map(item => (
-                        <div style={{marginLeft: '20px'}}> 
-                            {item.contrast} 
-                        </div>
-                    ))}
-                </SubContent>
-                <SubContent>
-                    {Coin.map(item => (
-                        <div style={{marginLeft: '35px'}}> 
-                            {item.quantity} 
-                        </div>
-                    ))}
-                </SubContent>
-            </CoinInfoContent>
-        </CoinInfo>
-    </Container>
-  )
+                </CoinInfoTitle>
+                <Line />
+                <CoinInfoContent>
+                    <SubContent>
+                        {Coin.map(item => (
+                            <div onClick={() => setTitle(item.name)}> {item.name} </div>
+                        ))}
+                    </SubContent>
+                    <SubContent>
+                        {Coin.map(item => (
+                            <div> {item.price} </div>
+                        ))}
+                    </SubContent>
+                    <SubContent>
+                        {Coin.map(item => (
+                            <div style={{marginLeft: '20px'}}> 
+                                {item.contrast} 
+                            </div>
+                        ))}
+                    </SubContent>
+                    <SubContent>
+                        {Coin.map(item => (
+                            <div style={{marginLeft: '35px'}}> 
+                                {item.quantity} 
+                            </div>
+                        ))}
+                    </SubContent>
+                </CoinInfoContent>
+            </CoinInfo>
+        </Container>
+    )
 }
 
 export default CoinList;
