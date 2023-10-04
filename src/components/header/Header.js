@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
+import Login from '../../pages/Login';
 
 import logo from "../../contents/logo.png";
 import profile from "../../contents/profile.png";
@@ -87,8 +88,14 @@ const Header = ({ exchange, property, selectExchange, selectProperty }) => {
           :
           <UserContainer
             onClick={() => setSelectLogin(true)}>
-            {isSelectLogin ?
-              <SelectLoginBtn>로그인</SelectLoginBtn>
+            {isSelectLogin ? (
+              <>
+                <SelectLoginBtn>로그인</SelectLoginBtn>
+                <LoginOverlay>
+                  <Login/>
+                </LoginOverlay>
+              </>
+            ) 
               :
               <LoginBtn>로그인</LoginBtn>
             }
@@ -222,6 +229,19 @@ const UserProfile = styled.img`
   width: 63px;
   height: 63px;
   margin: 20px 20px 20px 0px;
+`;
+
+const LoginOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
 `;
 
 export default Header;
