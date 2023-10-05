@@ -16,6 +16,14 @@ const palette = {
   time_table_border: '#292929',
   time_table_number: '#666666',
   time_table_back: '#4F4F4F4C',
+
+  coin_color_tag: '#848484',
+
+  myjju: '#408229',
+  chickchock: '#8A6123',
+  pocachip: '#09A0E0',
+  ohgamja: '#7C47BF',
+  ggoggalcorn: '#B9BB51',
 };
 
 export default palette;

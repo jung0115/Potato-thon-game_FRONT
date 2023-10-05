@@ -6,6 +6,10 @@ import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
 
 const StockChart = () => {
+  // 코인별 색상
+  const coins = [{"name": "마이쮸", "color": palette.myjju}, {"name": "칙촉", "color": palette.chickchock}, {"name": "포카칩", "color": palette.pocachip},
+  {"name": "오감자", "color": palette.ohgamja}, {"name": "꼬깔콘", "color": palette.ggoggalcorn}];
+
   const [is10Minute, set10Minute] = useState(true);  // 10분 단위 선택 유무
   const [is30Minute, set30Minute] = useState(false); // 30분 단위 선택 유무
   const [is1Hour, set1Hour] = useState(false);       // 1시간 단위 선택 유무
@@ -64,6 +68,15 @@ const StockChart = () => {
         </TimeContainer>
 
         {/* 코인 차트 색상 표시 */}
+        <CoinColorContainer>
+          {coins.map((coin, idx) => (
+            <CoinColor key={idx}>
+              <CoinColorBox
+                style={{ backgroundColor: coin.color }}/>
+              <CointTag>{coin.name} 코인</CointTag>
+            </CoinColor>
+          ))}
+        </CoinColorContainer>
 
       </ChartHeader>
 
@@ -76,7 +89,7 @@ const StockChart = () => {
 const Container = styled.div`
   display: block;
   background-color: ${palette.box_bg_color};
-  padding: 37px 17px 33px 15px;
+  padding: 37px 13px 33px 15px;
 `;
 
 // 그래프 상단 부분
@@ -87,8 +100,7 @@ const ChartHeader = styled.div`
 // 시간 간격 선택
 const TimeContainer = styled.div`
   display: flex;
-  margin-top: 37px;
-  margin-left: 27px;
+  margin-left: 12px;
   align-items: center;
 `;
 // time
@@ -132,6 +144,35 @@ const TimeLine = styled.div`
   height: auto;
   margin: 9px 0px;
   background-color: ${palette.time_table_border};
+`;
+
+// 코인 차트 색상 표시
+const CoinColorContainer = styled.div`
+  display: flex;
+  justify-content: end;
+  flex-wrap: wrap;
+  width: 440px;
+  margin-left: auto;
+  margin-top: 33px;
+`;
+// 코인 낱개
+const CoinColor = styled.div`
+  width: 142px;
+  display: flex;
+  align-items: center;
+`;
+// 색상 박스
+const CoinColorBox = styled.div`
+  width: 36px;
+  height: 12px;
+  margin-left: 17px;
+  margin-right: 10px;
+`;
+// 코인 이름
+const CointTag = styled.div`
+  font-size: 16.5px;
+  font-family: 'Pretendard-Regular';
+  color: ${palette.coin_color_tag};
 `;
 
 export default StockChart;
