@@ -210,12 +210,13 @@ const LoginBtn = styled.div`
 `;
 // 선택된 로그인 버튼
 const SelectLoginBtn = styled.div`
-  padding: 9.58px 25.5px;
+  padding: 8.58px 24.5px;
   font-size: 20px;
   font-family: 'Pretendard-Bold';
   color: ${palette.orange};
   background-color: ${palette.white};
   border-radius: 60px;
+  border: 1px solid ${palette.orange};
   cursor: pointer;
   margin: 0px 13px 9px 0px;
 `;

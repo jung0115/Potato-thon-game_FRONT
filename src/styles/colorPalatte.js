@@ -11,6 +11,7 @@ const palette = {
 
   header_btm_line: '#D9D9D9',
   sub_title: '#C8C8C8',
+  time_title: '#A3A3A3',
 };
 
 export default palette;
