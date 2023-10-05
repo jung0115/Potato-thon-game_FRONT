@@ -8,8 +8,6 @@ import palette from "../styles/colorPalatte";
 import Header from '../components/header/Header';
 import ExchangeTab from "../components/exchange/ExchangeTab";
 import PropertyTab from "../components/property/PropertyTab";
-import CoinList from "../components/CoinList";
-
 
 // 메인: 헤더 + (거래소 or 자산)
 const Main = () => {
@@ -57,6 +55,7 @@ const Main = () => {
         :
         null
       }
+
     </Container>
   )
 }
@@ -68,40 +67,6 @@ const Container = styled.div`
   
   min-height: 100vh;
   background-color: ${palette.bg_color};
-`;
-
-const Test1 = styled.div`
-  width: 240px;
-  height: 136px;
-  display: block;
-  background-color: #D9D9D9;
-  justify-items: center;
-  
-`;
-const Test2 = styled.div`
-  display: block;
-  padding-top: 30px;
-  margin: 0 46px;
-  padding-bottom: 30px;
-  font-size: 16px;
-  font-weight: 400;
-  color: ${palette.box_bg_color};
-  align-content: center;
-  justify-content: center;
-`;
-
-const Test3 = styled.div`
-  display: block;
-  padding: 10px 90px;
-  
-  margin: 0 10px;
-  border-radius: 8px;
-  background-color: #F1F1F1;
-  color: #09A0E0;
-  font-size: 18px;
-  font-weight: 600;
-  align-content: center;
-  justify-content: center;
 `;
 
 export default Main;

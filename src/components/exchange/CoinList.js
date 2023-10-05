@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import { useEffect, useState } from "react";
+import styled from 'styled-components';
 
 const Container = styled.div`
     display: flex;
@@ -135,7 +136,7 @@ const CoinList = () => {
                 </CoinInfoContent>
             </CoinInfo>
         </Container>
-    )
+    );
 }
 
 export default CoinList;
