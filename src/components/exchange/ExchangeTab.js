@@ -12,7 +12,7 @@ import CoinList from "./CoinList";
 const ExchangeTab = () => {
   return(
     <Container>
-      <Title>실시간 주식 차트</Title>
+      {/*<Title>실시간 주식 차트</Title>*/}
 
       <Contents>
         {/* 좌측 components */}
@@ -25,6 +25,7 @@ const ExchangeTab = () => {
         {/* 우측 component */}
         <RightContainter>
           {/* 전체 코인 or 선택한 코인 */}
+          <CoinList />
 
           {/* 도움말 */}
 
@@ -54,13 +55,13 @@ const Title = styled.div`
 // 내용
 const Contents = styled.div`
   display: flex;
-  padding: 10px;
+  padding: 21px 21px 10px 12px;
 `;
 
 // 좌측 내용: 주식 차트
 const LeftContainter = styled.div`
-  flex: 5;
-  margin-right: 10px;
+  flex: 5.5;
+  margin-right: 13px;
 `;
 
 // 우측 내용: 코인 등락 정보, 도움말, 매수/매도

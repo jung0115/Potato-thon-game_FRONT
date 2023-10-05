@@ -1,5 +1,6 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
+import palette from "../../styles/colorPalatte";
 
 const Container = styled.div`
     display: flex;
@@ -8,7 +9,7 @@ const Container = styled.div`
 `;
 
 const Title = styled.p`
-    font-size: 20px;
+    font-size: 25px;
     font-weight: bold;
     color: #C8C8C8;
 `;
