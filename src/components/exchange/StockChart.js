@@ -81,15 +81,78 @@ const StockChart = () => {
       </ChartHeader>
 
       {/* 코인 차트 그래프 */}
+      <GridContainer>
+        <GridHorizonContainer>
+          <GridHorizon>
+            <GridHorizonLine/>
+            <GridHorizonRange/>
+            <GridHorizonRangeText>3000.00</GridHorizonRangeText>
+          </GridHorizon>
+          <GridHorizon>
+            <GridHorizonLine/>
+            <GridHorizonRange/>
+          </GridHorizon>
+          <GridHorizon>
+            <GridHorizonLine/>
+            <GridHorizonRange/>
+          </GridHorizon>
+          <GridHorizon>
+            <GridHorizonLine/>
+            <GridHorizonRange/>
+          </GridHorizon>
+          <GridHorizon>
+            <GridHorizonLine/>
+            <GridHorizonRange/>
+          </GridHorizon>
+          <GridHorizon>
+            <GridHorizonEnd/>
+            <GridHorizonRange/>
+          </GridHorizon>
+        </GridHorizonContainer>
 
+
+        <GridVerticalContainer>
+          <GridVertical>
+            <GridVerticalLine/>
+            <GridVerticalRange/>
+            <GridVerticalRangeText>14:20</GridVerticalRangeText>
+          </GridVertical>
+          <GridVertical>
+            <GridVerticalLine/>
+            <GridVerticalRange/>
+          </GridVertical>
+          <GridVertical>
+            <GridVerticalLine/>
+            <GridVerticalRange/>
+          </GridVertical>
+          <GridVertical>
+            <GridVerticalLine/>
+            <GridVerticalRange/>
+          </GridVertical>
+          <GridVertical>
+            <GridVerticalLine/>
+            <GridVerticalRange/>
+          </GridVertical>
+          <GridVertical>
+            <GridVerticalLine/>
+            <GridVerticalRange/>
+          </GridVertical>
+          <GridVertical>
+            <GridVerticalEnd/>
+            <GridVerticalRangeEnd/>
+          </GridVertical>
+        </GridVerticalContainer>
+      </GridContainer>
+      
     </Container>
   );
 }
 
 const Container = styled.div`
   display: block;
+  height: auto;
   background-color: ${palette.box_bg_color};
-  padding: 37px 13px 33px 15px;
+  padding: 37px 13px 513px 15px;
 `;
 
 // 그래프 상단 부분
@@ -173,5 +236,106 @@ const CointTag = styled.div`
   font-family: 'Pretendard-Regular';
   color: ${palette.coin_color_tag};
 `;
+
+// 격자
+const GridContainer = styled.div`
+  margin: 40px 15px 0px 10px;
+  width: auto;
+  height: auto;
+  position: relative;
+`;
+const GridHorizonContainer = styled.div`
+  width: auto;
+  height: auto;
+  margin-left: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+`;
+const GridVerticalContainer = styled.div`
+  width: auto;
+  height: auto;
+  display: flex;
+  margin-left: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+`;
+const GridHorizon = styled.div`
+  width: auto;
+  height: auto;
+  display: flex;
+  margin-left: auto;
+`;
+const GridVertical = styled.div`
+  width: auto;
+  height: auto;
+  margin-top: 40px
+`;
+// 격자 세로선
+const GridVerticalLine = styled.div`
+  width: 1px;
+  height: 405px;
+  background-color: ${palette.grid_line};
+  margin: 0px 40px;
+`;
+// 격자 가로선
+const GridHorizonLine = styled.div`
+  height: 1px;
+  width: 1000px;
+  background-color: ${palette.grid_line};
+  margin: 40px 0px;
+`;
+// 격자 세로선 끝
+const GridVerticalEnd = styled.div`
+  width: 1px;
+  height: 406px;
+  background-color: ${palette.grid_end_line};
+  margin-left: 40px;
+  margin-right: 105px;
+`;
+// 격자 가로선 끝
+const GridHorizonEnd = styled.div`
+  height: 1px;
+  width: 1000px;
+  background-color: ${palette.grid_end_line};
+  margin-top: 40px
+`;
+// 격자 세로선 범위
+const GridVerticalRange = styled.div`
+  width: 2px;
+  height: 16px;
+  background-color: ${palette.grid_end_line};
+  margin: auto;
+`;
+const GridVerticalRangeEnd = styled.div`
+  width: 2px;
+  height: 16px;
+  background-color: ${palette.grid_end_line};
+  margin-left: auto;
+  margin-right: 104.5px;
+`;
+const GridVerticalRangeText = styled.div`
+  height: 22px;
+  font-size: 18px;
+  font-family: 'Pretendard-Regular';
+  color: ${palette.grid_range};
+  margin: 9px auto 0px auto;
+`;
+// 격자 가로선 범위
+const GridHorizonRange = styled.div`
+  height: 2px;
+  width: 16px;
+  background-color: ${palette.grid_end_line};
+  margin-top: 40px
+`;
+const GridHorizonRangeText = styled.div`
+  width: 80px;
+  font-size: 18px;
+  font-family: 'Pretendard-Regular';
+  color: ${palette.grid_range};
+  margin: auto 0px auto 9px;
+`;
+
 
 export default StockChart;
