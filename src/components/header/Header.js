@@ -141,14 +141,14 @@ const LogoAndTitle = styled.div`
 const PotatoLogo = styled.img`
   width: 52px;
   height: 58px;
-  margin: 24px 14px 21px 9px;
+  margin: 20px 14px 21px 9px;
 `;
 // 사이트명
 const PotatoTitle = styled.div`
   font-size: 28px;
   color: ${palette.white};
   font-family: 'Pretendard-ExtraBold';
-  margin: 60.5px 179px 25px 0px;
+  margin: auto 179px 25px 0px;
 `;
 
 const TabContainer = styled.div`
