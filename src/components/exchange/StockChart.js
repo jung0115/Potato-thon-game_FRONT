@@ -120,6 +120,7 @@ const StockChart = () => {
           <GridVertical>
             <GridVerticalLine/>
             <GridVerticalRange/>
+            <GridVerticalRangeText>14:20</GridVerticalRangeText>
           </GridVertical>
           <GridVertical>
             <GridVerticalLine/>
@@ -270,7 +271,9 @@ const GridHorizon = styled.div`
 const GridVertical = styled.div`
   width: auto;
   height: auto;
-  margin-top: 40px
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
 `;
 // 격자 세로선
 const GridVerticalLine = styled.div`
@@ -306,7 +309,7 @@ const GridVerticalRange = styled.div`
   width: 2px;
   height: 16px;
   background-color: ${palette.grid_end_line};
-  margin: auto;
+  margin: 0px auto;
 `;
 const GridVerticalRangeEnd = styled.div`
   width: 2px;
@@ -316,7 +319,6 @@ const GridVerticalRangeEnd = styled.div`
   margin-right: 104.5px;
 `;
 const GridVerticalRangeText = styled.div`
-  height: 22px;
   font-size: 18px;
   font-family: 'Pretendard-Regular';
   color: ${palette.grid_range};
@@ -327,7 +329,7 @@ const GridHorizonRange = styled.div`
   height: 2px;
   width: 16px;
   background-color: ${palette.grid_end_line};
-  margin-top: 40px
+  margin-top: 40px;
 `;
 const GridHorizonRangeText = styled.div`
   width: 80px;
