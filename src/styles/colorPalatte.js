@@ -19,11 +19,12 @@ const palette = {
 
   coin_color_tag: '#848484',
 
-  myjju: '#408229',
-  chickchock: '#8A6123',
-  pocachip: '#09A0E0',
-  ohgamja: '#7C47BF',
-  ggoggalcorn: '#B9BB51',
+  ohyes: '#AD402D',
+  haribo: '#B36220',
+  chikchok: '#B9BB51',
+  twix: '#408229',
+  castad: '#09A0E0',
+  abcchoco: '#7C47BF',
 };
 
 export default palette;

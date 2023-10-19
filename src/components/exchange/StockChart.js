@@ -7,8 +7,8 @@ import palette from "../../styles/colorPalatte";
 
 const StockChart = () => {
   // 코인별 색상
-  const coins = [{"name": "마이쮸", "color": palette.myjju}, {"name": "칙촉", "color": palette.chickchock}, {"name": "포카칩", "color": palette.pocachip},
-  {"name": "오감자", "color": palette.ohgamja}, {"name": "꼬깔콘", "color": palette.ggoggalcorn}];
+  const coins = [{"name": "오예스 미니", "color": palette.ohyes}, {"name": "하리보", "color": palette.haribo}, {"name": "칙촉", "color": palette.chikchok},
+  {"name": "트윅스 미니스", "color": palette.twix}, {"name": "오리온 카스타드", "color": palette.castad}, {"name": "ABC 초콜릿", "color": palette.abcchoco}];
 
   const [is10Minute, set10Minute] = useState(true);  // 10분 단위 선택 유무
   const [is30Minute, set30Minute] = useState(false); // 30분 단위 선택 유무
@@ -149,15 +149,14 @@ const TimeLine = styled.div`
 // 코인 차트 색상 표시
 const CoinColorContainer = styled.div`
   display: flex;
-  justify-content: end;
+  justify-content: center;
   flex-wrap: wrap;
-  width: 440px;
-  margin-left: auto;
-  margin-top: 33px;
+  width: 600px;
+  margin: 12px 0px 12px auto;
 `;
 // 코인 낱개
 const CoinColor = styled.div`
-  width: 142px;
+  width: 200px;
   display: flex;
   align-items: center;
 `;
