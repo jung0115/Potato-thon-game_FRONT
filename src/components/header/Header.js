@@ -46,34 +46,38 @@ const Header = ({ exchange, property, selectExchange, selectProperty }) => {
 
         <TabContainer>
           {/* 거래소 탭 버튼 */}
-          {isExchange || isExchangeHover ? 
+          {isExchangeHover || (isExchange && !isPropertyHover) ? 
             <Tab
-              onMouseOver={() => {setExchangeHover(true); setProperty(false);}}
-              onMouseOut={() => {setExchangeHover(false); setProperty(!isExchange);}}>
-              <SelectTabBtn onClick={onClickExchange}>거래소</SelectTabBtn>
+              onMouseOver={() => {setExchangeHover(true)}}
+              onMouseOut={() => {setExchangeHover(false)}}
+              onClick={onClickExchange}>
+              <SelectTabBtn>거래소</SelectTabBtn>
               <SelectLine/>
             </Tab>
             :
             <Tab
-              onMouseOver={() => {setExchangeHover(true); setProperty(false);}}
-              onMouseOut={() => {setExchangeHover(false); setProperty(!isExchange);}}>
-              <UnselectTabBtn onClick={onClickExchange}>거래소</UnselectTabBtn>
+              onMouseOver={() => {setExchangeHover(true)}}
+              onMouseOut={() => {setExchangeHover(false)}}
+              onClick={onClickExchange}>
+              <UnselectTabBtn>거래소</UnselectTabBtn>
               <UnselectLine/>
             </Tab>
           }
           {/* 자산 탭 버튼 */}
-          {isProperty || isPropertyHover ? 
+          {isPropertyHover || (isProperty && !isExchangeHover ) ? 
             <Tab
-              onMouseOver={() => {setPropertyHover(true); setExchange(false);}}
-              onMouseOut={() => {setPropertyHover(false); setExchange(!isProperty);}}>
-              <SelectTabBtn onClick={onClickProperty}>자산</SelectTabBtn>
+              onMouseOver={() => {setPropertyHover(true)}}
+              onMouseOut={() => {setPropertyHover(false)}}
+              onClick={onClickProperty}>
+              <SelectTabBtn>자산</SelectTabBtn>
               <SelectLine/>
             </Tab>
             :
             <Tab
-              onMouseOver={() => {setPropertyHover(true); setExchange(false);}}
-              onMouseOut={() => {setPropertyHover(false); setExchange(!isProperty);}}>
-              <UnselectTabBtn onClick={onClickProperty}>자산</UnselectTabBtn>
+              onMouseOver={() => {setPropertyHover(true)}}
+              onMouseOut={() => {setPropertyHover(false)}}
+              onClick={onClickProperty}>
+              <UnselectTabBtn>자산</UnselectTabBtn>
               <UnselectLine/>
             </Tab>
           }
@@ -137,14 +141,14 @@ const LogoAndTitle = styled.div`
 const PotatoLogo = styled.img`
   width: 52px;
   height: 58px;
-  margin: 24px 14px 21px 9px;
+  margin: 20px 14px 21px 9px;
 `;
 // 사이트명
 const PotatoTitle = styled.div`
   font-size: 28px;
   color: ${palette.white};
   font-family: 'Pretendard-ExtraBold';
-  margin: 60.5px 179px 25px 0px;
+  margin: auto 179px 25px 0px;
 `;
 
 const TabContainer = styled.div`
@@ -157,6 +161,7 @@ const Tab = styled.div`
   flex-direction: column;
   align-items: center;
   width: 155px;
+  cursor: pointer;
 `;
 
 // 선택된 탭 버튼
@@ -165,7 +170,6 @@ const SelectTabBtn = styled.div`
   font-weight: 600;
   color: ${palette.orange};
   font-family: 'Pretendard-Bold';
-  cursor: pointer;
 `;
 // 선택되지 않은 탭 버튼
 const UnselectTabBtn = styled.div`
@@ -173,7 +177,6 @@ const UnselectTabBtn = styled.div`
   font-weight: 600;
   color: ${palette.white};
   font-family: 'Pretendard-Bold';
-  cursor: pointer;
 `;
 
 // 선택된 탭 강조 라인
@@ -210,12 +213,13 @@ const LoginBtn = styled.div`
 `;
 // 선택된 로그인 버튼
 const SelectLoginBtn = styled.div`
-  padding: 9.58px 25.5px;
+  padding: 8.58px 24.5px;
   font-size: 20px;
   font-family: 'Pretendard-Bold';
   color: ${palette.orange};
   background-color: ${palette.white};
   border-radius: 60px;
+  border: 1px solid ${palette.orange};
   cursor: pointer;
   margin: 0px 13px 9px 0px;
 `;
