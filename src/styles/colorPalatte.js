@@ -11,6 +11,24 @@ const palette = {
 
   header_btm_line: '#D9D9D9',
   sub_title: '#C8C8C8',
+
+  time_title: '#A3A3A3',
+  time_table_border: '#292929',
+  time_table_number: '#666666',
+  time_table_back: '#4F4F4F4C',
+
+  coin_color_tag: '#848484',
+
+  ohyes: '#AD402D',
+  haribo: '#B36220',
+  chikchok: '#B9BB51',
+  twix: '#408229',
+  castad: '#09A0E0',
+  abcchoco: '#7C47BF',
+
+  grid_line: `#292929`,
+  grid_end_line: `#666666`,
+  grid_range: `#666666`,
 };
 
 export default palette;
