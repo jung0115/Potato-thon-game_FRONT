@@ -52,8 +52,17 @@ const PropertyTab = () => {
               <CoinList>
                 <CoinInfo> {item.name} </CoinInfo>
                 <CoinInfo style={{ marginLeft: '20px' }}> {item.purchasingPrice} </CoinInfo>
-                <CoinInfo style={{ marginLeft: '15px' }}> {item.presentPrice} </CoinInfo>
-                <CoinInfo style={{ marginLeft: '10px' }}> {item.contrast} </CoinInfo>
+                <CoinInfo 
+                  style={{ marginLeft: '15px' }}
+                  fontColor={item.presentPrice - item.purchasingPrice}
+                > {item.presentPrice} </CoinInfo>
+                <CoinInfo 
+                  style={{ marginLeft: '10px' }}
+                  fontColor={item.presentPrice - item.purchasingPrice}
+                >
+                  {item.presentPrice - item.purchasingPrice > 0 ? '▲' : '▼'} {" "}
+                  {item.contrast} 
+                </CoinInfo>
                 <CoinInfo> {item.quantity} </CoinInfo>
               </CoinList>
             ))}
@@ -131,6 +140,10 @@ const CoinInfo = styled.p`
   text-align: center;
   flex: 1;
   padding-left: 10px;
+  color: ${(props) => props.fontColor > 0 ? 
+    '#AA1919' : props.fontColor < 0 ? 
+    '#1F27D7' : '#121212'
+  };
 `;
 
 export default PropertyTab;
