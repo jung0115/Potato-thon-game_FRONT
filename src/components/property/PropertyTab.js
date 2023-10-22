@@ -14,14 +14,12 @@ const PropertyTab = () => {
       name: "칙촉코인",
       purchasingPrice: 1395.00,
       presentPrice: 1295.00,
-      contrast: 100,
       quantity: 1,
     },
     {
       name: "마이쮸코인",
       purchasingPrice: 795.00,
       presentPrice: 810.00,
-      contrast: 15,
       quantity: 3,
     }
   ]
@@ -51,17 +49,20 @@ const PropertyTab = () => {
             {coin.map((item, idx) => (
               <CoinList>
                 <CoinInfo> {item.name} </CoinInfo>
-                <CoinInfo style={{ marginLeft: '20px' }}> {item.purchasingPrice} </CoinInfo>
+                <CoinInfo style={{ marginLeft: '15px' }}> {(item.purchasingPrice).toFixed(2)} </CoinInfo>
                 <CoinInfo 
                   style={{ marginLeft: '15px' }}
                   fontColor={item.presentPrice - item.purchasingPrice}
-                > {item.presentPrice} </CoinInfo>
+                > {(item.presentPrice.toFixed(2))} </CoinInfo>
                 <CoinInfo 
-                  style={{ marginLeft: '10px' }}
                   fontColor={item.presentPrice - item.purchasingPrice}
                 >
-                  {item.presentPrice - item.purchasingPrice > 0 ? '▲' : '▼'} {" "}
-                  {item.contrast} 
+                  {item.presentPrice - item.purchasingPrice !== 0 ? (
+                    <>
+                      {item.presentPrice - item.purchasingPrice > 0 ? '▲' : '▼'} {" "}
+                      {Math.abs(item.presentPrice - item.purchasingPrice)} 
+                    </>) : ('−')
+                  } 
                 </CoinInfo>
                 <CoinInfo> {item.quantity} </CoinInfo>
               </CoinList>
