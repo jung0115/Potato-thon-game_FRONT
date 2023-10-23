@@ -62,7 +62,7 @@ const Contents = styled.div`
 
 // 좌측 내용: 주식 차트
 const LeftContainter = styled.div`
-  flex: 2;
+  flex: 2.2;
   margin-right: 13px;
 `;
 
