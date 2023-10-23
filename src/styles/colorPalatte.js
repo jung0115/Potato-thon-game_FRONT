@@ -29,6 +29,11 @@ const palette = {
   grid_line: `#292929`,
   grid_end_line: `#666666`,
   grid_range: `#666666`,
+
+  buy_sell_box: `#292929`,
+  unselect_buy_sell_bg: `#505050`,
+  select_buy_sell_text: `#FFFFFF`,
+  unselect_buy_sell_text: `#747474`,
 };
 
 export default palette;

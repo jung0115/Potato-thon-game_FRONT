@@ -285,7 +285,7 @@ const GridVerticalLine = styled.div`
 // 격자 가로선
 const GridHorizonLine = styled.div`
   height: 1px;
-  width: 1000px;
+  width: 900px;
   background-color: ${palette.grid_line};
   margin: 40px 0px;
 `;
@@ -300,7 +300,7 @@ const GridVerticalEnd = styled.div`
 // 격자 가로선 끝
 const GridHorizonEnd = styled.div`
   height: 1px;
-  width: 1000px;
+  width: 900px;
   background-color: ${palette.grid_end_line};
   margin-top: 40px
 `;
