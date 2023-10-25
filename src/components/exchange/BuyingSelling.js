@@ -19,6 +19,32 @@ const BuyingSelling = () => {
 
         {/* 매수 */}
         <BuySellContainer>
+          {/* 매수 가능 */}
+          <BuySellContent>
+            <BuySellLabel>매수 가능</BuySellLabel>
+
+            <BuySellValues>
+              <BuySellNumber>29</BuySellNumber>
+              <BuySellMeasure>coin</BuySellMeasure>
+            </BuySellValues>
+          </BuySellContent>
+
+          {/* 1 coin당 가격 */}
+          <BuySellContent>
+            <BuySellLabel>1 coin 당</BuySellLabel>
+
+            <BuySellValues>
+              <BuySellNumber>1,920</BuySellNumber>
+              <BuySellMeasure>원</BuySellMeasure>
+            </BuySellValues>
+          </BuySellContent>
+
+          {/* 매수 수량 */}
+
+          {/* 매수 금액 */}
+
+          {/* 주문하기 버튼 */}
+
 
         </BuySellContainer>
 
@@ -90,10 +116,29 @@ const BuySellContainer = styled.div`
 const BuySellContent = styled.div`
   display: flex;
   width: auto;
-  
+  align-items: center;
+  margin-bottom: 16px;
 `;
 const BuySellLabel = styled.div`
-
+  font-size: 18px;
+  font-family: 'Pretendard-Bold';
+  color: ${palette.white};
+`;
+const BuySellValues = styled.div`
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+`;
+const BuySellNumber = styled.div`
+  font-size: 20px;
+  font-family: 'Pretendard-Bold';
+  color: ${palette.white};
+`;
+const BuySellMeasure = styled.div`
+  font-size: 21px;
+  font-family: 'Pretendard-Bold';
+  color: ${palette.buy_sell_measure};
+  margin-left: 6px;
 `;
 
 export default BuyingSelling;

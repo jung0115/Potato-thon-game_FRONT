@@ -34,6 +34,7 @@ const palette = {
   unselect_buy_sell_bg: `#505050`,
   select_buy_sell_text: `#FFFFFF`,
   unselect_buy_sell_text: `#747474`,
+  buy_sell_measure: `#DED0D0`,
 };
 
 export default palette;
