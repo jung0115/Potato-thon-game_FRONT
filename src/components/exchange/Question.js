@@ -29,7 +29,72 @@ const Question = () => {
       <QnaListAll>
         {/* 질문답변 리스트 */}
         <QnaListContainer>
-          sss
+          <QnaList>
+            <QnaItemContainer>
+              <QnaQuestion>
+                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
+              </QnaQuestion>
+              <QnaAnswer>
+                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
+              </QnaAnswer>
+            </QnaItemContainer>
+            <QnaItemContainer>
+              <QnaQuestion>
+                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
+              </QnaQuestion>
+              <QnaAnswer>
+                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
+              </QnaAnswer>
+            </QnaItemContainer>
+            <QnaItemContainer>
+              <QnaQuestion>
+                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
+              </QnaQuestion>
+              <QnaAnswer>
+                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
+              </QnaAnswer>
+            </QnaItemContainer>
+            <QnaItemContainer>
+              <QnaQuestion>
+                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
+              </QnaQuestion>
+              <QnaAnswer>
+                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
+              </QnaAnswer>
+            </QnaItemContainer>
+            <QnaItemContainer>
+              <QnaQuestion>
+                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
+              </QnaQuestion>
+              <QnaAnswer>
+                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
+              </QnaAnswer>
+            </QnaItemContainer>
+            <QnaItemContainer>
+              <QnaQuestion>
+                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
+              </QnaQuestion>
+              <QnaAnswer>
+                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
+              </QnaAnswer>
+            </QnaItemContainer>
+            <QnaItemContainer>
+              <QnaQuestion>
+                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
+              </QnaQuestion>
+              <QnaAnswer>
+                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
+              </QnaAnswer>
+            </QnaItemContainer>
+            <QnaItemContainer>
+              <QnaQuestion>
+                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
+              </QnaQuestion>
+              <QnaAnswer>
+                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
+              </QnaAnswer>
+            </QnaItemContainer>
+          </QnaList>
         </QnaListContainer>
 
         {/* 새롭게 답변이 달린 질문 알림 */}
@@ -100,6 +165,7 @@ const QnaListAll = styled.div`;
   position: relative;
 `;
 const QnaListContainer = styled.div`
+  height: 266.75px;
   background-color: ${palette.qna_list_bg};
   border-radius: 20px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.45) inset;
@@ -135,6 +201,34 @@ const CheckNewIcon = styled.img`
   width: 25.328px;
   height: 24.12px;
   margin: 3px 7.5px 6.5px 0px;
+`;
+
+const QnaList = styled.div`
+  height: 236.75px;
+  padding-top: 35px;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: #C1C1C1;
+  }
+`;
+const QnaItemContainer = styled.div`
+  margin-bottom: 15px;
+  margin-right: 10px;
+`;
+const QnaQuestion = styled.div`
+  font-size: 14px;
+  font-family: 'Pretendard-Bold';
+  color: ${palette.qna_item_text};
+`;
+const QnaAnswer = styled.div`
+  margin-top: 6px;
+  font-size: 12px;
+  font-family: 'Pretendard-Regular';
+  color: ${palette.qna_item_text};
 `;
 
 export default Question;
