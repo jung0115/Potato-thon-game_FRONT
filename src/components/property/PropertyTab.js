@@ -12,8 +12,8 @@ const PropertyTab = () => {
   const coin = [
     {
       name: "칙촉코인",
-      purchasingPrice: 1395.00,
-      presentPrice: 1295.00,
+      purchasingPrice: 1395,
+      presentPrice: 1295,
       quantity: 1,
     },
     {
@@ -46,14 +46,22 @@ const PropertyTab = () => {
         </TitleContainer>
         <Line/>
         <ListContainer>
-            {coin.map((item, idx) => (
+          {coin.map((item, idx) => {
+            const fmPurchasingPrice = (item.purchasingPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            const fmPresentPrice = (item.presentPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+            return (
               <CoinList>
                 <CoinInfo> {item.name} </CoinInfo>
-                <CoinInfo style={{ marginLeft: '15px' }}> {(item.purchasingPrice).toFixed(2)} </CoinInfo>
+                <CoinInfo style={{ marginLeft: '15px' }}> 
+                  {fmPurchasingPrice}
+                </CoinInfo>
                 <CoinInfo 
                   style={{ marginLeft: '15px' }}
                   fontColor={item.presentPrice - item.purchasingPrice}
-                > {(item.presentPrice.toFixed(2))} </CoinInfo>
+                > 
+                  {fmPresentPrice} 
+                </CoinInfo>
                 <CoinInfo 
                   fontColor={item.presentPrice - item.purchasingPrice}
                 >
@@ -66,7 +74,7 @@ const PropertyTab = () => {
                 </CoinInfo>
                 <CoinInfo> {item.quantity} </CoinInfo>
               </CoinList>
-            ))}
+            )})}
         </ListContainer>
       </CoinContainer>
     </Container>
