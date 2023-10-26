@@ -37,6 +37,9 @@ const palette = {
   buy_sell_measure: `#DED0D0`,
   buy_sell_input_border: `#494646`,
   buy_sell_result: `#E39458`,
+  
+  question_title: `#FAEBD5`,
+  question_bg: `#DFE0EA`,
 };
 
 export default palette;
