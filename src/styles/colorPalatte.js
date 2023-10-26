@@ -40,6 +40,8 @@ const palette = {
   
   question_title: `#FAEBD5`,
   question_bg: `#DFE0EA`,
+  qna_list_bg: `#E6E6E6`,
+  new_qna_bg: `#626DEB`,
 };
 
 export default palette;

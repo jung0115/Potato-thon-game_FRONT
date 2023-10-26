@@ -6,7 +6,8 @@ import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
 
 import helpIcon from "../../contents/ic_question_help.png";
-import submitIcon from "../../contents/ic_question_submit.png"
+import submitIcon from "../../contents/ic_question_submit.png";
+import checkNewIcon from "../../contents/ic_question_check.png";
 
 const Question = () => {
   return(
@@ -25,7 +26,21 @@ const Question = () => {
         <QuestionSubmitBtn src={submitIcon}/>
       </QuestionContainer>
 
-      {/* 질문답변 리스트 */}
+      <QnaListAll>
+        {/* 질문답변 리스트 */}
+        <QnaListContainer>
+          sss
+        </QnaListContainer>
+
+        {/* 새롭게 답변이 달린 질문 알림 */}
+        <NewQnaContainer>
+          <NewNoitceText>답변이 달린 질문이 있어요</NewNoitceText>
+          <CheckNewNotice>
+            <CheckNewText>읽음으로 표시하기</CheckNewText>
+            <CheckNewIcon src={checkNewIcon}/>
+          </CheckNewNotice>
+        </NewQnaContainer>
+      </QnaListAll>
 
     </Container>
   );
@@ -34,7 +49,7 @@ const Question = () => {
 const Container = styled.div`
   display: block;
   background-color: ${palette.bg_color};
-  margin-top: 28px;
+  margin-top: 28px;  
 `;
 const TitleContainer = styled.div`
   display: flex;
@@ -61,7 +76,7 @@ const QuestionContainer = styled.div`
   display: flex;
   background-color: ${palette.question_bg};
   padding: 0px 17px 0px 17px;
-  margin: 23px 17px 0px 0px;
+  margin: 23px 17px 13px 0px;
   border-radius: 40px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.45) inset;
 `;
@@ -79,6 +94,47 @@ const QuestionSubmitBtn = styled.img`
   height: 29.469px;
   margin: 13px 0px 7px auto;
   transform: rotate(0.859deg);
+`;
+
+const QnaListAll = styled.div`;
+  position: relative;
+`;
+const QnaListContainer = styled.div`
+  background-color: ${palette.qna_list_bg};
+  border-radius: 20px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.45) inset;
+  padding: 15px 0px 15px 10px;
+`;
+const NewQnaContainer = styled.div`
+  display: flex;
+  width: 326.52px;
+  background-color: ${palette.new_qna_bg};
+  border-radius: 7px 0px 10px 10px;
+  margin-left: 10px;
+  position: absolute;
+  left: 0;
+  top: 0;
+`;
+const NewNoitceText = styled.div`
+  font-size: 12px;
+  font-family: 'Pretendard-Medium';
+  color: ${palette.white};
+  margin: 12px 0px 7.5px 9px;
+`;
+const CheckNewNotice = styled.div`
+  margin-left: auto;
+  display: flex;
+`;
+const CheckNewText = styled.div`
+  font-size: 12px;
+  font-family: 'Pretendard-Medium';
+  color: ${palette.white};
+  margin: 12px 6.5px 7.5px 0px;
+`;
+const CheckNewIcon = styled.img`
+  width: 25.328px;
+  height: 24.12px;
+  margin: 3px 7.5px 6.5px 0px;
 `;
 
 export default Question;
