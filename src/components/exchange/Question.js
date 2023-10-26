@@ -169,7 +169,7 @@ const QnaListContainer = styled.div`
   background-color: ${palette.qna_list_bg};
   border-radius: 20px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.45) inset;
-  padding: 15px 0px 15px 10px;
+  padding: 15px 0px 0px 10px;
 `;
 const NewQnaContainer = styled.div`
   display: flex;
@@ -204,13 +204,16 @@ const CheckNewIcon = styled.img`
 `;
 
 const QnaList = styled.div`
-  height: 170.75px;
+  height: 145.75px;
   padding-top: 35px;
   overflow-y: auto;
   &::-webkit-scrollbar {
     width: 8px;
+    border-radius: 8px;
+    background: ${palette.white};
   }
   &::-webkit-scrollbar-thumb {
+    width: 8px;
     border-radius: 4px;
     background: #C1C1C1;
   }
