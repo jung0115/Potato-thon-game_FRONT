@@ -7,6 +7,7 @@ import palette from "../../styles/colorPalatte";
 import StockChart from "./StockChart";
 import CoinList from './CoinList';
 import BuyingSelling from "./BuyingSelling";
+import Question from "./Question";
 
 // 메인 > 거래소 탭
 const ExchangeTab = () => {
@@ -28,10 +29,10 @@ const ExchangeTab = () => {
           {/*<CoinList/>*/}
 
           {/* 도움말 */}
-          <BuyingSelling/>
+          <Question/>
 
           {/* 매수/매도 */}
-          
+          {/*<BuyingSelling/>*/}
 
         </RightContainter>
 
