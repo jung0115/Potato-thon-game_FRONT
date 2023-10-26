@@ -141,7 +141,7 @@ const QuestionContainer = styled.div`
   display: flex;
   background-color: ${palette.question_bg};
   padding: 0px 17px 0px 17px;
-  margin: 23px 17px 13px 0px;
+  margin: 15px 17px 8px 0px;
   border-radius: 40px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.45) inset;
 `;
@@ -152,12 +152,12 @@ const QuestionInput = styled.input`
   font-size: 14px;
   font-family: 'Pretendard-Regular';
   color: ${palette.black};
-  margin: 18px 0px 15px 0px;
+  margin: 12px 0px 9px 0px;
 `;
 const QuestionSubmitBtn = styled.img`
   width: 15.808px;
   height: 29.469px;
-  margin: 13px 0px 7px auto;
+  margin: 10px 0px 3px auto;
   transform: rotate(0.859deg);
 `;
 
@@ -165,7 +165,7 @@ const QnaListAll = styled.div`;
   position: relative;
 `;
 const QnaListContainer = styled.div`
-  height: 266.75px;
+  height: 200px;
   background-color: ${palette.qna_list_bg};
   border-radius: 20px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.45) inset;
@@ -204,7 +204,7 @@ const CheckNewIcon = styled.img`
 `;
 
 const QnaList = styled.div`
-  height: 236.75px;
+  height: 170.75px;
   padding-top: 35px;
   overflow-y: auto;
   &::-webkit-scrollbar {
