@@ -1,8 +1,8 @@
 import React from 'react';
-import { useState } from "react";
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const TitleNmae = ['종목명', '현재가', '대비', '수량'];
+const TitleName = ['종목명', '현재가', '대비', '수량'];
 
 const Coin = [
     {
@@ -37,45 +37,35 @@ const Coin = [
     },
 ];
 
-const CoinList = () => {
-    const [title, setTitle] = useState("전체 코인");
-
+const CoinList = ({ onCoinClick }) => {
     return (
         <Container>
-            <Title> {title} </Title>
+            <Title> 전체 코인 </Title>
             <CoinInfo>
                 <CoinInfoTitle>
-                    {TitleNmae.map(item => (
+                    {TitleName.map(item => (
                         <SubTitle> {item} </SubTitle>
                     ))}
                 </CoinInfoTitle>
                 <Line />
                 <CoinInfoContent>
-                    <SubContent>
-                        {Coin.map(item => (
-                            <div onClick={() => setTitle(item.name)}> {item.name} </div>
-                        ))}
-                    </SubContent>
-                    <SubContent>
-                        {Coin.map(item => {
-                            const presentPrice = (item.price).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-                            return <div> {presentPrice} </div>;
-                        })}
-                    </SubContent>
-                    <SubContent>
-                        {Coin.map(item => (
-                            <div style={{marginLeft: '15px'}}> 
-                                {item.contrast} 
-                            </div>
-                        ))}
-                    </SubContent>
-                    <SubContent>
-                        {Coin.map(item => (
-                            <div style={{marginLeft: '25px'}}> 
-                                {item.quantity} 
-                            </div>
-                        ))}
-                    </SubContent>
+                    {Coin.map((item, idx) => {
+                        const presentPrice = (item.price).toFixed(2).toLocaleString();
+                        return (
+                            <CoinInfoSubContent onClick={() => onCoinClick(item.name)}>
+                                <SubContent> {item.name} </SubContent>
+                                    <SubContent style={{ marginLeft: '20px' }}> 
+                                        {presentPrice} 
+                                    </SubContent>
+                                    <SubContent style={{ marginLeft: '10px' }}> 
+                                        {item.contrast} 
+                                    </SubContent>
+                                    <SubContent style={{ marginLeft: '5px' }}> 
+                                        {item.quantity} 
+                                    </SubContent>  
+                            </CoinInfoSubContent>      
+                        )
+                    })}
                 </CoinInfoContent>
             </CoinInfo>
         </Container>
@@ -87,13 +77,11 @@ const Container = styled.div`
     flex-direction: column;
     float: right;
 `;
-
 const Title = styled.p`
     font-size: 20px;
     font-weight: bold;
     color: #FAEBD5;
 `;
-
 const CoinInfo = styled.div`
     width: 516px;
     height: 377px;
@@ -101,40 +89,41 @@ const CoinInfo = styled.div`
     background-color: #E6E6E6;
     box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
 `;
-
 const CoinInfoTitle = styled.div`
     display: flex;
     flex-direction: row;
+    justify-content: space-around;
 `;
-
 const SubTitle = styled.p`
     display: flex;
     margin: 25px 45px 10px 45px;
     font-size: 18px;
     color: #666666;
 `;
-
 const CoinInfoContent = styled.div`
-    height: 250px;
-    display: flex;
-    flex-direction: row;
+    height: 290px;
+    margin-top: 23px;
     overflow: scroll;
-    align-content: space-around;
 `;
-
 const Line = styled.hr`
     width: 480px;
     display: flex;
     color: #666666;
 `;
-
+const CoinInfoSubContent = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-left: 10px;
+  text-decoration: none;
+  cursor: pointer;
+`;
 const SubContent = styled.div`
     display: flex;
     flex-direction: column;
-    margin: 20px 33px 25px 33px;
+    margin-bottom: 25px;
     text-align: center;
-    justify-content: space-between;
-    cursor: pointer;
+    flex: 1;
 
     font-size: 16px;
     font-weight: bold;
