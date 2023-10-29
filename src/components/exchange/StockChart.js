@@ -5,7 +5,12 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
 
+//import client from "gamja-backend-client";
+
 const StockChart = () => {
+  // 가로, 세로
+  const [chartWidth, setChartWidth] = useState(Math.round(window.innerWidth / 3.5 * 2.5 / 81) * 81 - 202);
+
   // 코인별 색상
   const coins = [{"name": "오예스 미니", "color": palette.ohyes}, {"name": "하리보", "color": palette.haribo}, {"name": "칙촉", "color": palette.chikchok},
   {"name": "트윅스 미니스", "color": palette.twix}, {"name": "오리온 카스타드", "color": palette.castad}, {"name": "ABC 초콜릿", "color": palette.abcchoco}];
@@ -34,6 +39,37 @@ const StockChart = () => {
     set30Minute(false);
     set1Hour(true);
   }
+
+  // 화면 크기 변할 때마다 가로길이 가져오기
+  const handleResize = () => {
+    setChartWidth(Math.round(window.innerWidth / 3.5 * 2.5 / 81) * 81 - 202);
+  };
+
+  // 세로선 삽입
+  const setVerticalLines = () => {
+    let lines = [];
+
+    for(let i = 81; i < chartWidth; i += 81) {
+      lines.push(
+        <GridVertical>
+          <GridVerticalLine/>
+          <GridVerticalRange/>
+          <GridVerticalRangeText>14:20</GridVerticalRangeText>
+        </GridVertical>
+      );
+    }
+
+    return lines;
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      // cleanup
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
 
   return(
     <Container>
@@ -84,60 +120,36 @@ const StockChart = () => {
       <GridContainer>
         <GridHorizonContainer>
           <GridHorizon>
-            <GridHorizonLine/>
+            <GridHorizonLine style={{width: chartWidth}}/>
             <GridHorizonRange/>
             <GridHorizonRangeText>3000.00</GridHorizonRangeText>
           </GridHorizon>
           <GridHorizon>
-            <GridHorizonLine/>
+            <GridHorizonLine style={{width: chartWidth}}/>
             <GridHorizonRange/>
           </GridHorizon>
           <GridHorizon>
-            <GridHorizonLine/>
+            <GridHorizonLine style={{width: chartWidth}}/>
             <GridHorizonRange/>
           </GridHorizon>
           <GridHorizon>
-            <GridHorizonLine/>
+            <GridHorizonLine style={{width: chartWidth}}/>
             <GridHorizonRange/>
           </GridHorizon>
           <GridHorizon>
-            <GridHorizonLine/>
+            <GridHorizonLine style={{width: chartWidth}}/>
             <GridHorizonRange/>
           </GridHorizon>
           <GridHorizon>
-            <GridHorizonEnd/>
+            <GridHorizonEnd style={{width: chartWidth}}/>
             <GridHorizonRange/>
           </GridHorizon>
         </GridHorizonContainer>
 
 
         <GridVerticalContainer>
-          <GridVertical>
-            <GridVerticalLine/>
-            <GridVerticalRange/>
-            <GridVerticalRangeText>14:20</GridVerticalRangeText>
-          </GridVertical>
-          <GridVertical>
-            <GridVerticalLine/>
-            <GridVerticalRange/>
-            <GridVerticalRangeText>14:20</GridVerticalRangeText>
-          </GridVertical>
-          <GridVertical>
-            <GridVerticalLine/>
-            <GridVerticalRange/>
-          </GridVertical>
-          <GridVertical>
-            <GridVerticalLine/>
-            <GridVerticalRange/>
-          </GridVertical>
-          <GridVertical>
-            <GridVerticalLine/>
-            <GridVerticalRange/>
-          </GridVertical>
-          <GridVertical>
-            <GridVerticalLine/>
-            <GridVerticalRange/>
-          </GridVertical>
+          {setVerticalLines()}
+          
           <GridVertical>
             <GridVerticalEnd/>
             <GridVerticalRangeEnd/>
@@ -250,7 +262,7 @@ const GridHorizonContainer = styled.div`
   height: auto;
   margin-left: auto;
   position: absolute;
-  right: 0;
+  left: 0;
   top: 0;
 `;
 const GridVerticalContainer = styled.div`
@@ -259,7 +271,7 @@ const GridVerticalContainer = styled.div`
   display: flex;
   margin-left: auto;
   position: absolute;
-  right: 0;
+  left: 0;
   top: 0;
 `;
 const GridHorizon = styled.div`
@@ -285,7 +297,6 @@ const GridVerticalLine = styled.div`
 // 격자 가로선
 const GridHorizonLine = styled.div`
   height: 1px;
-  width: 900px;
   background-color: ${palette.grid_line};
   margin: 40px 0px;
 `;
@@ -300,7 +311,6 @@ const GridVerticalEnd = styled.div`
 // 격자 가로선 끝
 const GridHorizonEnd = styled.div`
   height: 1px;
-  width: 900px;
   background-color: ${palette.grid_end_line};
   margin-top: 40px
 `;
