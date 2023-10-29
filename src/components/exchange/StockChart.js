@@ -7,9 +7,12 @@ import palette from "../../styles/colorPalatte";
 
 //import client from "gamja-backend-client";
 
+// 격자 크기
+const gridSize = 88;
+
 const StockChart = () => {
   // 가로, 세로
-  const [chartWidth, setChartWidth] = useState(Math.round(window.innerWidth / 3.5 * 2.5 / 81) * 81 - 202);
+  const [chartWidth, setChartWidth] = useState(Math.round(window.innerWidth / 3.5 * 2.5 / (gridSize + 1)) * (gridSize + 1 ) - (gridSize * 2.5 + 2));
 
   // 코인별 색상
   const coins = [{"name": "오예스 미니", "color": palette.ohyes}, {"name": "하리보", "color": palette.haribo}, {"name": "칙촉", "color": palette.chikchok},
@@ -42,7 +45,7 @@ const StockChart = () => {
 
   // 화면 크기 변할 때마다 가로길이 가져오기
   const handleResize = () => {
-    setChartWidth(Math.round(window.innerWidth / 3.5 * 2.5 / 81) * 81 - 202);
+    setChartWidth(Math.round(window.innerWidth / 3.5 * 2.5 / (gridSize + 1)) * (gridSize + 1) - (gridSize * 2.5 + 2));
   };
 
   // 가로선 삽입
@@ -66,7 +69,7 @@ const StockChart = () => {
   const setVerticalLines = () => {
     let lines = [];
 
-    for(let i = 81; i < chartWidth; i += 81) {
+    for(let i = (gridSize + 1); i < chartWidth; i += (gridSize + 1)) {
       lines.push(
         <GridVertical>
           <GridVerticalLine/>
@@ -141,7 +144,7 @@ const StockChart = () => {
           <GridHorizon>
             <GridHorizonEnd style={{width: chartWidth}}/>
             <GridHorizonRange/>
-            <GridHorizonRangeEndText>500.00</GridHorizonRangeEndText>
+            <GridHorizonRangeText>500.00</GridHorizonRangeText>
           </GridHorizon>
         </GridHorizonContainer>
 
@@ -164,7 +167,7 @@ const Container = styled.div`
   display: block;
   height: auto;
   background-color: ${palette.box_bg_color};
-  padding: 37px 13px 513px 15px;
+  padding: 37px 13px 27px 15px;
 `;
 
 // 그래프 상단 부분
@@ -260,9 +263,6 @@ const GridHorizonContainer = styled.div`
   width: auto;
   height: auto;
   margin-left: auto;
-  position: absolute;
-  left: 0;
-  top: 0;
 `;
 const GridVerticalContainer = styled.div`
   width: auto;
@@ -284,34 +284,34 @@ const GridVertical = styled.div`
   height: auto;
   display: flex;
   flex-direction: column;
-  margin-top: 40px;
+  margin-top: ${gridSize / 2}px;
 `;
 // 격자 세로선
 const GridVerticalLine = styled.div`
   width: 1px;
-  height: 405px;
+  height: ${(gridSize + 1) * 5}px;
   background-color: ${palette.grid_line};
-  margin: 0px 40px;
+  margin: 0px ${gridSize / 2}px;
 `;
 // 격자 가로선
 const GridHorizonLine = styled.div`
   height: 1px;
   background-color: ${palette.grid_line};
-  margin: 40px 0px;
+  margin: ${gridSize / 2}px 0px;
 `;
 // 격자 세로선 끝
 const GridVerticalEnd = styled.div`
   width: 1px;
-  height: 406px;
+  height: ${(gridSize + 1) * 5}px;
   background-color: ${palette.grid_end_line};
-  margin-left: 40px;
+  margin-left: ${gridSize / 2}px;
   margin-right: 105px;
 `;
 // 격자 가로선 끝
 const GridHorizonEnd = styled.div`
   height: 1px;
   background-color: ${palette.grid_end_line};
-  margin: 40px 0px;
+  margin: ${gridSize / 2}px 0px;
 `;
 // 격자 세로선 범위
 const GridVerticalRange = styled.div`
@@ -338,16 +338,9 @@ const GridHorizonRange = styled.div`
   height: 2px;
   width: 16px;
   background-color: ${palette.grid_end_line};
-  margin-top: 40px;
+  margin-top: ${gridSize / 2}px;
 `;
 const GridHorizonRangeText = styled.div`
-  width: 80px;
-  font-size: 18px;
-  font-family: 'Pretendard-Regular';
-  color: ${palette.grid_range};
-  margin: auto 0px auto 9px;
-`;
-const GridHorizonRangeEndText = styled.div`
   width: 80px;
   font-size: 18px;
   font-family: 'Pretendard-Regular';
