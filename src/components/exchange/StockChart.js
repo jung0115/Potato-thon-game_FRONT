@@ -45,6 +45,23 @@ const StockChart = () => {
     setChartWidth(Math.round(window.innerWidth / 3.5 * 2.5 / 81) * 81 - 202);
   };
 
+  // 가로선 삽입
+  const setHorizonLines = () => {
+    let lines = [];
+
+    for(let i = 3000; i > 500; i -= 500) {
+      lines.push(
+        <GridHorizon>
+          <GridHorizonLine style={{width: chartWidth}}/>
+          <GridHorizonRange/>
+          <GridHorizonRangeText>{i}.00</GridHorizonRangeText>
+        </GridHorizon>
+      );
+    }
+
+    return lines;
+  }
+
   // 세로선 삽입
   const setVerticalLines = () => {
     let lines = [];
@@ -119,30 +136,12 @@ const StockChart = () => {
       {/* 코인 차트 그래프 */}
       <GridContainer>
         <GridHorizonContainer>
-          <GridHorizon>
-            <GridHorizonLine style={{width: chartWidth}}/>
-            <GridHorizonRange/>
-            <GridHorizonRangeText>3000.00</GridHorizonRangeText>
-          </GridHorizon>
-          <GridHorizon>
-            <GridHorizonLine style={{width: chartWidth}}/>
-            <GridHorizonRange/>
-          </GridHorizon>
-          <GridHorizon>
-            <GridHorizonLine style={{width: chartWidth}}/>
-            <GridHorizonRange/>
-          </GridHorizon>
-          <GridHorizon>
-            <GridHorizonLine style={{width: chartWidth}}/>
-            <GridHorizonRange/>
-          </GridHorizon>
-          <GridHorizon>
-            <GridHorizonLine style={{width: chartWidth}}/>
-            <GridHorizonRange/>
-          </GridHorizon>
+          {setHorizonLines()}
+
           <GridHorizon>
             <GridHorizonEnd style={{width: chartWidth}}/>
             <GridHorizonRange/>
+            <GridHorizonRangeEndText>500.00</GridHorizonRangeEndText>
           </GridHorizon>
         </GridHorizonContainer>
 
@@ -312,7 +311,7 @@ const GridVerticalEnd = styled.div`
 const GridHorizonEnd = styled.div`
   height: 1px;
   background-color: ${palette.grid_end_line};
-  margin-top: 40px
+  margin: 40px 0px;
 `;
 // 격자 세로선 범위
 const GridVerticalRange = styled.div`
@@ -342,6 +341,13 @@ const GridHorizonRange = styled.div`
   margin-top: 40px;
 `;
 const GridHorizonRangeText = styled.div`
+  width: 80px;
+  font-size: 18px;
+  font-family: 'Pretendard-Regular';
+  color: ${palette.grid_range};
+  margin: auto 0px auto 9px;
+`;
+const GridHorizonRangeEndText = styled.div`
   width: 80px;
   font-size: 18px;
   font-family: 'Pretendard-Regular';
