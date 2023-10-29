@@ -12,7 +12,7 @@ const gridSize = 88;
 
 const StockChart = () => {
   // 가로 너비
-  const minWidth = (gridSize * 9.5) + 9;
+  const minWidth = (gridSize * 9.5) + 10;
   const [chartWidth, setChartWidth] = useState(Math.max(minWidth, Math.round(window.innerWidth / 3.5 * 2.5 / (gridSize + 1)) * (gridSize + 1) - (gridSize * 2.5 + 2)));
 
   // 코인별 색상
@@ -99,7 +99,7 @@ const StockChart = () => {
   const setVerticalLines = () => {
     let lines = [];
 
-    for(let i = (chartWidth - gridSize/2) / (gridSize + 1); i >= 1; i--) {
+    for(let i = (chartWidth - gridSize/2 - 1) / (gridSize + 1); i >= 1; i--) {
       let h = hour;
       let m = minute;
 
