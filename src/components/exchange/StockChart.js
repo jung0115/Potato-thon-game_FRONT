@@ -5,14 +5,51 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
 
+//import client from "gamja-backend-client";
+
+// 격자 크기
+const gridSize = 88;
+
 const StockChart = () => {
+  // 가로 너비
+  const minWidth = (gridSize * 9.5) + 10;
+  const [chartWidth, setChartWidth] = useState(Math.max(minWidth, Math.round(window.innerWidth / 3.5 * 2.5 / (gridSize + 1)) * (gridSize + 1) - (gridSize * 2.5 + 2)));
+
   // 코인별 색상
   const coins = [{"name": "오예스 미니", "color": palette.ohyes}, {"name": "하리보", "color": palette.haribo}, {"name": "칙촉", "color": palette.chikchok},
   {"name": "트윅스 미니스", "color": palette.twix}, {"name": "오리온 카스타드", "color": palette.castad}, {"name": "ABC 초콜릿", "color": palette.abcchoco}];
 
+  // 시간
+  const [hour, setHour] = useState(0);
+  const [minute, setMinute] = useState(0);
+
   const [is10Minute, set10Minute] = useState(true);  // 10분 단위 선택 유무
   const [is30Minute, set30Minute] = useState(false); // 30분 단위 선택 유무
-  const [is1Hour, set1Hour] = useState(false);       // 1시간 단위 선택 유무
+  const [is1Hour, set1Hour] = useState(false);       // 1시간 단위 선택 
+  
+  // 현재 시간 가져오기
+  const setTime = () => {
+    const date = new Date();
+    let presentHour = date.getHours();
+    let presentMinute = date.getMinutes();
+
+    // 10분 단위
+    if(is10Minute) {
+      presentMinute -= presentMinute % 10;
+    }
+    // 30분 단위
+    else if(is30Minute) {
+      if(presentMinute >= 30) presentMinute = 30;
+      else presentMinute = 0;
+    }
+    // 1시간 단위
+    else if(is1Hour) {
+      presentMinute = 0;
+    }
+
+    setHour(presentHour);
+    setMinute(presentMinute);
+  }
 
   // 10분 단위 선택
   const onClick10m = () => {
@@ -34,6 +71,99 @@ const StockChart = () => {
     set30Minute(false);
     set1Hour(true);
   }
+
+  // 화면 크기 변할 때마다 가로길이 가져오기
+  const handleResize = () => {
+    let newWidth = Math.round(window.innerWidth / 3.5 * 2.5 / (gridSize + 1)) * (gridSize + 1) - (gridSize * 2.5 + 2);
+    setChartWidth(Math.max(newWidth, minWidth));
+  };
+
+  // 가로선 삽입
+  const setHorizonLines = () => {
+    let lines = [];
+
+    for(let i = 3000; i > 500; i -= 500) {
+      lines.push(
+        <GridHorizon>
+          <GridHorizonLine style={{width: chartWidth}}/>
+          <GridHorizonRange/>
+          <GridHorizonRangeText>{i}.00</GridHorizonRangeText>
+        </GridHorizon>
+      );
+    }
+
+    return lines;
+  }
+
+  // 세로선 삽입
+  const setVerticalLines = () => {
+    let lines = [];
+
+    for(let i = (chartWidth - gridSize/2 - 1) / (gridSize + 1); i >= 1; i--) {
+      let h = hour;
+      let m = minute;
+
+      // 10분 단위
+      if(is10Minute) {
+        m -= 10 * i;
+        
+        if(m < 0) {
+          m *= -1;
+          h -= Math.floor(m/60) + 1;
+          m = (60 - (m % 60)) % 60;
+        }
+        else {
+          h -= Math.floor(m/60);
+          m %= 60;
+        }
+      }
+      // 30분 단위
+      else if(is30Minute) {
+        m -= 30 * i;
+
+        if(m < 0) {
+          m *= -1;
+          h -= Math.floor(m/60) + 1;
+          m %= 60;
+        }
+        h -= Math.floor(m/60);
+        m %= 60;
+      }
+      // 40분 단위
+      else if(is1Hour) {
+        m = 0;
+        h = (h - i) % 24;
+      }
+
+      if(h <= 0) {
+        h = (24 + h) % 24;
+      }
+
+      lines.push(
+        <GridVertical>
+          <GridVerticalLine/>
+          <GridVerticalRange/>
+          <GridVerticalRangeText>{String(h).padStart(2, "0")}:{String(m).padStart(2, "0")}</GridVerticalRangeText>
+        </GridVertical>
+      );
+    }
+
+    return lines;
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      // cleanup
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  setInterval(setTime, 10000);
+
+  useEffect(() => {
+    setTime();
+  }, [minute, is10Minute, is30Minute, is1Hour]);
 
   return(
     <Container>
@@ -81,69 +211,34 @@ const StockChart = () => {
       </ChartHeader>
 
       {/* 코인 차트 그래프 */}
+      {/* 그래프 격자 */}
       <GridContainer>
+        {/* 가로선 */}
         <GridHorizonContainer>
+          {setHorizonLines()}
+
+          {/* 가격 단위 */}
           <GridHorizon>
-            <GridHorizonLine/>
+            <GridHorizonEnd style={{width: chartWidth}}/>
             <GridHorizonRange/>
-            <GridHorizonRangeText>3000.00</GridHorizonRangeText>
-          </GridHorizon>
-          <GridHorizon>
-            <GridHorizonLine/>
-            <GridHorizonRange/>
-          </GridHorizon>
-          <GridHorizon>
-            <GridHorizonLine/>
-            <GridHorizonRange/>
-          </GridHorizon>
-          <GridHorizon>
-            <GridHorizonLine/>
-            <GridHorizonRange/>
-          </GridHorizon>
-          <GridHorizon>
-            <GridHorizonLine/>
-            <GridHorizonRange/>
-          </GridHorizon>
-          <GridHorizon>
-            <GridHorizonEnd/>
-            <GridHorizonRange/>
+            <GridHorizonRangeText>500.00</GridHorizonRangeText>
           </GridHorizon>
         </GridHorizonContainer>
 
-
+        {/* 세로선 */}
         <GridVerticalContainer>
-          <GridVertical>
-            <GridVerticalLine/>
-            <GridVerticalRange/>
-            <GridVerticalRangeText>14:20</GridVerticalRangeText>
-          </GridVertical>
-          <GridVertical>
-            <GridVerticalLine/>
-            <GridVerticalRange/>
-            <GridVerticalRangeText>14:20</GridVerticalRangeText>
-          </GridVertical>
-          <GridVertical>
-            <GridVerticalLine/>
-            <GridVerticalRange/>
-          </GridVertical>
-          <GridVertical>
-            <GridVerticalLine/>
-            <GridVerticalRange/>
-          </GridVertical>
-          <GridVertical>
-            <GridVerticalLine/>
-            <GridVerticalRange/>
-          </GridVertical>
-          <GridVertical>
-            <GridVerticalLine/>
-            <GridVerticalRange/>
-          </GridVertical>
+          {setVerticalLines()}
+          
+          {/* 시간 단위 */}
           <GridVertical>
             <GridVerticalEnd/>
             <GridVerticalRangeEnd/>
+            <GridVerticalRangeEndText>{String(hour).padStart(2, "0")}:{String(minute).padStart(2, "0")}</GridVerticalRangeEndText>
           </GridVertical>
         </GridVerticalContainer>
       </GridContainer>
+
+      {/* 그래프 꺾은선 */}
       
     </Container>
   );
@@ -153,7 +248,7 @@ const Container = styled.div`
   display: block;
   height: auto;
   background-color: ${palette.box_bg_color};
-  padding: 37px 13px 513px 15px;
+  padding: 37px 13px 27px 15px;
 `;
 
 // 그래프 상단 부분
@@ -249,9 +344,6 @@ const GridHorizonContainer = styled.div`
   width: auto;
   height: auto;
   margin-left: auto;
-  position: absolute;
-  right: 0;
-  top: 0;
 `;
 const GridVerticalContainer = styled.div`
   width: auto;
@@ -259,7 +351,7 @@ const GridVerticalContainer = styled.div`
   display: flex;
   margin-left: auto;
   position: absolute;
-  right: 0;
+  left: 0;
   top: 0;
 `;
 const GridHorizon = styled.div`
@@ -273,36 +365,34 @@ const GridVertical = styled.div`
   height: auto;
   display: flex;
   flex-direction: column;
-  margin-top: 40px;
+  margin-top: ${gridSize / 2}px;
 `;
 // 격자 세로선
 const GridVerticalLine = styled.div`
   width: 1px;
-  height: 405px;
+  height: ${(gridSize + 1) * 5}px;
   background-color: ${palette.grid_line};
-  margin: 0px 40px;
+  margin: 0px ${gridSize / 2}px;
 `;
 // 격자 가로선
 const GridHorizonLine = styled.div`
   height: 1px;
-  width: 900px;
   background-color: ${palette.grid_line};
-  margin: 40px 0px;
+  margin: ${gridSize / 2}px 0px;
 `;
 // 격자 세로선 끝
 const GridVerticalEnd = styled.div`
   width: 1px;
-  height: 406px;
+  height: ${(gridSize + 1) * 5}px;
   background-color: ${palette.grid_end_line};
-  margin-left: 40px;
+  margin-left: ${gridSize / 2}px;
   margin-right: 105px;
 `;
 // 격자 가로선 끝
 const GridHorizonEnd = styled.div`
   height: 1px;
-  width: 900px;
   background-color: ${palette.grid_end_line};
-  margin-top: 40px
+  margin: ${gridSize / 2}px 0px;
 `;
 // 격자 세로선 범위
 const GridVerticalRange = styled.div`
@@ -324,12 +414,19 @@ const GridVerticalRangeText = styled.div`
   color: ${palette.grid_range};
   margin: 9px auto 0px auto;
 `;
+const GridVerticalRangeEndText = styled.div`
+  font-size: 18px;
+  font-family: 'Pretendard-Regular';
+  color: ${palette.grid_range};
+  margin: 9px 84.5px 0px auto;
+`;
+
 // 격자 가로선 범위
 const GridHorizonRange = styled.div`
   height: 2px;
   width: 16px;
   background-color: ${palette.grid_end_line};
-  margin-top: 40px;
+  margin-top: ${gridSize / 2}px;
 `;
 const GridHorizonRangeText = styled.div`
   width: 80px;
