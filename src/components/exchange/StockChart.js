@@ -11,8 +11,9 @@ import palette from "../../styles/colorPalatte";
 const gridSize = 88;
 
 const StockChart = () => {
-  // 가로, 세로
-  const [chartWidth, setChartWidth] = useState(Math.round(window.innerWidth / 3.5 * 2.5 / (gridSize + 1)) * (gridSize + 1 ) - (gridSize * 2.5 + 2));
+  // 가로 너비
+  const minWidth = (gridSize * 9.5) + 9;
+  const [chartWidth, setChartWidth] = useState(Math.max(minWidth, Math.round(window.innerWidth / 3.5 * 2.5 / (gridSize + 1)) * (gridSize + 1 ) - (gridSize * 2.5 + 2)));
 
   // 코인별 색상
   const coins = [{"name": "오예스 미니", "color": palette.ohyes}, {"name": "하리보", "color": palette.haribo}, {"name": "칙촉", "color": palette.chikchok},
@@ -45,7 +46,8 @@ const StockChart = () => {
 
   // 화면 크기 변할 때마다 가로길이 가져오기
   const handleResize = () => {
-    setChartWidth(Math.round(window.innerWidth / 3.5 * 2.5 / (gridSize + 1)) * (gridSize + 1) - (gridSize * 2.5 + 2));
+    let newWidth = Math.round(window.innerWidth / 3.5 * 2.5 / (gridSize + 1)) * (gridSize + 1) - (gridSize * 2.5 + 2);
+    setChartWidth(Math.max(newWidth, minWidth));
   };
 
   // 가로선 삽입
