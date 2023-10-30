@@ -77,7 +77,9 @@ const LeftContainter = styled.div`
 
 // 우측 내용: 코인 등락 정보, 도움말, 매수/매도
 const RightContainter = styled.div`
+  display: flex;
   flex: 1;
+  flex-direction: column;
 `;
 
 export default ExchangeTab;
