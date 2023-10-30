@@ -32,9 +32,6 @@ const Main = () => {
 
   return(
     <Container>
-      <div>
-        수정이 완료
-      </div>
       {/* 헤더 */}
       <Header 
         exchange={isExchange}

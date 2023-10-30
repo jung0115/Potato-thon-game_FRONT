@@ -6,6 +6,8 @@ import palette from "../../styles/colorPalatte";
 
 import StockChart from "./StockChart";
 import CoinList from './CoinList';
+import BuyingSelling from "./BuyingSelling";
+import Question from "./Question";
 import DetailCoinList from "./DetailCoinList";
 
 // 메인 > 거래소 탭
@@ -33,10 +35,12 @@ const ExchangeTab = () => {
               onCoinClick={(coinName) => setSelectedCoin(coinName)}  
             />
           )}
-
+          
           {/* 도움말 */}
+          <Question/>
 
           {/* 매수/매도 */}
+          {/*<BuyingSelling/>*/}
 
         </RightContainter>
 
@@ -67,13 +71,13 @@ const Contents = styled.div`
 
 // 좌측 내용: 주식 차트
 const LeftContainter = styled.div`
-  flex: 5.5;
+  flex: 2.5;
   margin-right: 13px;
 `;
 
 // 우측 내용: 코인 등락 정보, 도움말, 매수/매도
 const RightContainter = styled.div`
-  flex: 2;
+  flex: 1;
 `;
 
 export default ExchangeTab;

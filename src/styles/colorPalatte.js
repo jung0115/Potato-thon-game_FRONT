@@ -11,6 +11,38 @@ const palette = {
 
   header_btm_line: '#D9D9D9',
   sub_title: '#C8C8C8',
+
+  time_title: '#A3A3A3',
+  time_table_border: '#292929',
+  time_table_number: '#666666',
+  time_table_back: '#4F4F4F4C',
+
+  coin_color_tag: '#848484',
+
+  ohyes: '#AD402D',
+  haribo: '#B36220',
+  chikchok: '#B9BB51',
+  twix: '#408229',
+  castad: '#09A0E0',
+  abcchoco: '#7C47BF',
+
+  grid_line: `#292929`,
+  grid_end_line: `#666666`,
+  grid_range: `#666666`,
+
+  buy_sell_box: `#292929`,
+  unselect_buy_sell_bg: `#505050`,
+  select_buy_sell_text: `#FFFFFF`,
+  unselect_buy_sell_text: `#747474`,
+  buy_sell_measure: `#DED0D0`,
+  buy_sell_input_border: `#494646`,
+  buy_sell_result: `#E39458`,
+  
+  question_title: `#FAEBD5`,
+  question_bg: `#DFE0EA`,
+  qna_list_bg: `#E6E6E6`,
+  new_qna_bg: `#626DEB`,
+  qna_item_text: `#290C0C`,
 };
 
 export default palette;
