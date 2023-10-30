@@ -41,6 +41,12 @@ const CoinList = ({ onCoinClick }) => {
     return (
         <Container>
             <Title> 전체 코인 </Title>
+            <Line 
+                style={{ 
+                    width: '516px',
+                    marginTop: 'auto'
+                }}
+            />
             <CoinInfo>
                 <CoinInfoTitle>
                     {TitleName.map(item => (
