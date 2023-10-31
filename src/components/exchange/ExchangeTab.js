@@ -1,5 +1,5 @@
 // 거래소 탭
-import React from "react";
+import React, { useState } from "react";
 
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
@@ -7,9 +7,12 @@ import palette from "../../styles/colorPalatte";
 import StockChart from "./StockChart";
 import CoinList from './CoinList';
 import BuyingSelling from "./BuyingSelling";
+import Question from "./Question";
+import DetailCoinList from "./DetailCoinList";
 
 // 메인 > 거래소 탭
 const ExchangeTab = () => {
+  const [selectedCoin, setSelectedCoin] = useState(null);
   return(
     <Container>
       {/*<Title>실시간 주식 차트</Title>*/}
@@ -25,13 +28,19 @@ const ExchangeTab = () => {
         {/* 우측 component */}
         <RightContainter>
           {/* 전체 코인 or 선택한 코인 */}
-          {/*<CoinList/>*/}
-
+          {selectedCoin ? (
+            <DetailCoinList coinName={selectedCoin}/>
+          ) : (
+            <CoinList
+              onCoinClick={(coinName) => setSelectedCoin(coinName)}  
+            />
+          )}
+          
           {/* 도움말 */}
-          <BuyingSelling/>
+          <Question/>
 
           {/* 매수/매도 */}
-          
+          {/*<BuyingSelling/>*/}
 
         </RightContainter>
 
@@ -62,13 +71,15 @@ const Contents = styled.div`
 
 // 좌측 내용: 주식 차트
 const LeftContainter = styled.div`
-  flex: 2.2;
+  flex: 2.5;
   margin-right: 13px;
 `;
 
 // 우측 내용: 코인 등락 정보, 도움말, 매수/매도
 const RightContainter = styled.div`
+  display: flex;
   flex: 1;
+  flex-direction: column;
 `;
 
 export default ExchangeTab;

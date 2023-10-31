@@ -34,6 +34,15 @@ const palette = {
   unselect_buy_sell_bg: `#505050`,
   select_buy_sell_text: `#FFFFFF`,
   unselect_buy_sell_text: `#747474`,
+  buy_sell_measure: `#DED0D0`,
+  buy_sell_input_border: `#494646`,
+  buy_sell_result: `#E39458`,
+  
+  question_title: `#FAEBD5`,
+  question_bg: `#DFE0EA`,
+  qna_list_bg: `#E6E6E6`,
+  new_qna_bg: `#626DEB`,
+  qna_item_text: `#290C0C`,
 };
 
 export default palette;

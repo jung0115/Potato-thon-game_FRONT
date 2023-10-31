@@ -141,7 +141,7 @@ const LogoAndTitle = styled.div`
 const PotatoLogo = styled.img`
   width: 52px;
   height: 58px;
-  margin: 20px 14px 21px 9px;
+  margin: 20px 5px 21px 15px;
 `;
 // 사이트명
 const PotatoTitle = styled.div`
