@@ -37,6 +37,9 @@ const StockChart = () => {
   const [is10Minute, set10Minute] = useState(true);  // 10분 단위 선택 유무
   const [is30Minute, set30Minute] = useState(false); // 30분 단위 선택 유무
   const [is1Hour, set1Hour] = useState(false);       // 1시간 단위 선택 
+
+  // 코인차트 선택
+  const [selectCoin, setSelectCoin] = useState(null);
   
   // 현재 시간 가져오기
   const setTime = () => {
@@ -81,6 +84,18 @@ const StockChart = () => {
     set10Minute(false);
     set30Minute(false);
     set1Hour(true);
+  }
+
+  // 코인 그래프 선택
+  const onClickCoin = (index) => {
+    // 선택했던 걸 재선택하면 선택 취소
+    if(index == selectCoin) {
+      setSelectCoin(null);
+    }
+    // 아닐 경우 선택
+    else {
+      setSelectCoin(index);
+    }
   }
 
   // 화면 크기 변할 때마다 가로길이 가져오기
@@ -162,17 +177,18 @@ const StockChart = () => {
           </GridVerticalContents>
 
           {/* 꺾은선 그래프 */}
-          {
-            coinDatas.map((coinData, idx) => (
-              <GraphLine
-                style={{
-                marginTop: getGraphHeight(coinData[index]),
-                width: getGraphLineSize(coinData[index], coinData[index + 1]),
-                transform: `rotate(${getGraphLineDegree(coinData[index], coinData[index + 1])}deg)`,
-                backgroundColor: Object.values(coins[idx])[1]}}/>
-
-            ))
-          }
+          {/* 선택된 코인이거나, 아무 코인도 선택되지 않은 경우에만 보여줄 것 */}
+          {coinDatas.map((coinData, idx) => (
+            selectCoin == idx || selectCoin == null ?
+            <GraphLine
+              style={{
+              marginTop: getGraphHeight(coinData[index]),
+              width: getGraphLineSize(coinData[index], coinData[index + 1]),
+              transform: `rotate(${getGraphLineDegree(coinData[index], coinData[index + 1])}deg)`,
+              backgroundColor: Object.values(coins[idx])[1]}}
+              onClick={() => onClickCoin(idx)}/>
+              : null
+          ))}
         </GridVertical>
       );
     }
@@ -250,7 +266,9 @@ const StockChart = () => {
         {/* 코인 차트 색상 표시 */}
         <CoinColorContainer>
           {coins.map((coin, idx) => (
-            <CoinColor key={idx}>
+            <CoinColor
+              key={idx}
+              onClick={() => onClickCoin(idx)}>
               <CoinColorBox
                 style={{ backgroundColor: coin.color }}/>
               <CointTag>{coin.name} 코인</CointTag>
@@ -290,14 +308,17 @@ const StockChart = () => {
         {/* 그래프 꺾은선 */}
         <GraphLineContainer>
           {/* 맨 왼쪽 반쪽짜리 선 */}
+          {/* 선택된 코인이거나, 아무 코인도 선택되지 않은 경우에만 보여줄 것 */}
           {coinDatas.map((coinData, idx) => (
+            selectCoin == idx || selectCoin == null ?
             <GraphStartLine
               style={{
                 marginTop: getGraphHeight((coinData[0] + coinData[1]) / 2),
                 width: getGraphLineSize(coinData[0], coinData[1]) / 2,
                 transform: `rotate(${getGraphLineDegree(coinData[0], coinData[1])}deg)`,
-                backgroundColor: Object.values(coins[idx])[1]
-                }} />
+                backgroundColor: Object.values(coins[idx])[1]}}
+              onClick={() => onClickCoin(idx)}/>
+            : null
           ))}
           {/* 나머지 선은 수직 격자에 겹쳐서*/}
         </GraphLineContainer>
@@ -348,6 +369,7 @@ const SelectTimeBtn = styled.div`
   background-color: ${palette.time_table_back};
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `;
 // 시간 - 선택 안 됨
 const UnselectTimeBtn = styled.div`
@@ -359,6 +381,7 @@ const UnselectTimeBtn = styled.div`
   color: ${palette.time_table_number};
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `;
 // 시간 버튼 구분선
 const TimeLine = styled.div`
@@ -381,6 +404,7 @@ const CoinColor = styled.div`
   width: 200px;
   display: flex;
   align-items: center;
+  cursor: pointer;
 `;
 // 색상 박스
 const CoinColorBox = styled.div`
@@ -517,6 +541,7 @@ const GraphStartLine = styled.div`
   left: 0;
   z-index: 10;
   border-radius: 10px;
+  cursor: pointer;
 `;
 const GraphLine = styled.div`
   height: 3px;
@@ -525,6 +550,7 @@ const GraphLine = styled.div`
   margin-left: ${gridSize / 2 + 0.5}px;
   z-index: 10;
   border-radius: 10px;
+  cursor: pointer;
 `;
 
 export default StockChart;
