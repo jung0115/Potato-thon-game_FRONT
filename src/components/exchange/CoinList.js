@@ -41,34 +41,29 @@ const CoinList = ({ onCoinClick }) => {
     return (
         <Container>
             <Title> 전체 코인 </Title>
-            <Line 
-                style={{ 
-                    width: '516px',
-                    marginTop: 'auto'
-                }}
-            />
+            <Line />
             <CoinInfo>
                 <CoinInfoTitle>
                     {TitleName.map(item => (
                         <SubTitle> {item} </SubTitle>
                     ))}
                 </CoinInfoTitle>
-                <Line />
+                <Line style={{ margin: '10px 10px 0 10px' }} />
                 <CoinInfoContent>
                     {Coin.map((item, idx) => {
                         const presentPrice = (item.price).toFixed(2).toLocaleString();
                         return (
                             <CoinInfoSubContent onClick={() => onCoinClick(item.name)}>
                                 <SubContent> {item.name} </SubContent>
-                                    <SubContent style={{ marginLeft: '20px' }}> 
-                                        {presentPrice} 
-                                    </SubContent>
-                                    <SubContent style={{ marginLeft: '10px' }}> 
-                                        {item.contrast} 
-                                    </SubContent>
-                                    <SubContent style={{ marginLeft: '5px' }}> 
-                                        {item.quantity} 
-                                    </SubContent>  
+                                <SubContent style={{ marginLeft: '20px' }}> 
+                                    {presentPrice} 
+                                </SubContent>
+                                <SubContent style={{ marginLeft: '10px' }}> 
+                                    {item.contrast} 
+                                </SubContent>
+                                <SubContent style={{ marginLeft: '5px' }}> 
+                                    {item.quantity} 
+                                </SubContent>  
                             </CoinInfoSubContent>      
                         )
                     })}
@@ -79,18 +74,20 @@ const CoinList = ({ onCoinClick }) => {
 }
 
 const Container = styled.div`
-    display: flex;
+    display: block;
     flex-direction: column;
-    float: right;
 `;
 const Title = styled.p`
-    font-size: 20px;
-    font-weight: bold;
+    margin: 0 auto;
+    font-size: 22px;
+    font-family: 'Pretendard-Bold';
     color: #FAEBD5;
+    margin-left: 4px;
 `;
 const CoinInfo = styled.div`
-    width: 516px;
-    height: 377px;
+    display: block;
+    flex-direction: column;
+    margin-top: 15px;
     border-radius: 20px;
     background-color: #E6E6E6;
     box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
@@ -102,18 +99,18 @@ const CoinInfoTitle = styled.div`
 `;
 const SubTitle = styled.p`
     display: flex;
-    margin: 25px 45px 10px 45px;
-    font-size: 18px;
+    margin: 25px 35px 10px 35px;
+    font-size: 16px;
     color: #666666;
+    white-space: nowrap;
 `;
 const CoinInfoContent = styled.div`
-    height: 290px;
     margin-top: 23px;
     overflow: scroll;
 `;
 const Line = styled.hr`
-    width: 480px;
-    display: flex;
+    height: 0.85px;
+    margin-top: 10px;
     color: #666666;
 `;
 const CoinInfoSubContent = styled.div`
