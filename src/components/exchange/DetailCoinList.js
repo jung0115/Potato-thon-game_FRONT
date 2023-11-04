@@ -2,30 +2,26 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
-const TitleNmae = ['시간', '현재가', '대비', '잔량'];
+const TitleNmae = ['시간', '현재가', '대비', '수량'];
 const Coin = [
-    {
-        time: '14:10:00',
-        purchasingPrice: 810,
-        contrast: '▲ 23',
-        remain: 3,
-    },
-    {
-        time: '14:20:00',
-        purchasingPrice: 810,
-        contrast: '▲ 23',
-        remain: 10,
-    },
-    {
-        time: '14:30:00',
-        purchasingPrice: 810,
-        contrast: '▲ 23',
-        remain: 20,
-    },
     {
         time: '14:40:00',
         purchasingPrice: 810,
-        contrast: '▲ 23',
+        remain: 3,
+    },
+    {
+        time: '14:30:00',
+        purchasingPrice: 790,
+        remain: 10,
+    },
+    {
+        time: '14:20:00',
+        purchasingPrice: 740,
+        remain: 20,
+    },
+    {
+        time: '14:10:00',
+        purchasingPrice: 815,
         remain: 32,
     },
 ];
@@ -44,13 +40,39 @@ const DetailCoinList = ({ coinName }) => {
                 <Line style={{ margin: '10px 10px 0 10px' }} />
                 <CoinInfoContent>
                     {Coin.map((item, idx) => {
-                        const purchasinPrice = (item.purchasingPrice).toFixed(2).toLocaleString();
+                        const purchasinPrice = (item.purchasingPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                        let priceDiff = 0;
+
+                        if (idx < Coin.length - 1) {
+                            priceDiff = item.purchasingPrice - Coin[idx + 1].purchasingPrice;
+                        }
+
                         return (
                             <CoinInfoSubContent>
                                 <SubContent> {item.time} </SubContent>
-                                <SubContent style={{ marginLeft: '20px' }}> {purchasinPrice} </SubContent>
-                                <SubContent style={{ marginLeft: '15px' }}> {item.contrast} </SubContent>
-                                <SubContent style={{ marginLeft: '15px', marginRight: '8px' }}> {item.remain} </SubContent>  
+                                <SubContent 
+                                    style={{ marginLeft: '20px' }}
+                                    fontColor={priceDiff}
+                                > 
+                                    {purchasinPrice} 
+                                </SubContent>
+                                <SubContent 
+                                    style={{ marginLeft: '15px' }}
+                                    fontColor={priceDiff}
+                                > 
+                                    {priceDiff != 0 ? (
+                                        <>
+                                            {priceDiff > 0 ? '▲' : '▼'} {" "}
+                                            {Math.abs(priceDiff).toLocaleString()} 
+                                        </>) : ('-')
+                                    }
+                                </SubContent>
+                                <SubContent 
+                                    style={{ 
+                                        marginLeft: '15px',
+                                        marginRight: '8px' 
+                                    }}
+                                > {item.remain} </SubContent>  
                             </CoinInfoSubContent>      
                         )
                     })}
@@ -117,7 +139,10 @@ const SubContent = styled.div`
 
     font-size: 16px;
     font-weight: bold;
-    color: #666666;
+    color: ${(props) => props.fontColor > 0 ?
+        '#AA1919' : props.fontColor < 0 ? 
+        '#1F27D7' : '#666666'
+    };
 `;
 
 export default DetailCoinList;
