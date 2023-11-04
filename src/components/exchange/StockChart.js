@@ -27,8 +27,6 @@ const StockChart = () => {
         password: 'test1234'
       }
     )
-
-    //console.log(response);
   }
   async function auth() {
     // Sign in
@@ -208,24 +206,26 @@ const StockChart = () => {
         <GridVertical>
           {/* 수직 격자선 */}
           <GridVerticalContents>
-          <GridVerticalLine/>
-          <GridVerticalRange/>
-          <GridVerticalRangeText>{String(h).padStart(2, "0")}:{String(m).padStart(2, "0")}</GridVerticalRangeText>
+            <GridVerticalLine/>
+            <GridVerticalRange/>
+            <GridVerticalRangeText>{String(h).padStart(2, "0")}:{String(m).padStart(2, "0")}</GridVerticalRangeText>
           </GridVerticalContents>
 
           {/* 꺾은선 그래프 */}
           {/* 선택된 코인이거나, 아무 코인도 선택되지 않은 경우에만 보여줄 것 */}
-          {coinDatas.map((coinData, idx) => (
-            selectCoin == idx || selectCoin == null ?
-            <GraphLine
-              style={{
-              marginTop: getGraphHeight(coinData[index]),
-              width: getGraphLineSize(coinData[index], coinData[index + 1]),
-              transform: `rotate(${getGraphLineDegree(coinData[index], coinData[index + 1])}deg)`,
-              backgroundColor: Object.values(coins[idx])[1]}}
-              onClick={() => onClickCoin(idx)}/>
-              : null
-          ))}
+          <GraphLines>
+            {coinDatas.map((coinData, idx) => (
+              selectCoin == idx || selectCoin == null ?
+              <GraphLine
+                style={{
+                marginTop: getGraphHeight(coinData[index]),
+                width: getGraphLineSize(coinData[index], coinData[index + 1]),
+                transform: `rotate(${getGraphLineDegree(coinData[index], coinData[index + 1])}deg)`,
+                backgroundColor: Object.values(coins[idx])[1]}}
+                onClick={() => onClickCoin(idx)}/>
+                : null
+            ))}
+          </GraphLines>
         </GridVertical>
       );
     }
@@ -487,9 +487,13 @@ const GridVertical = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: ${gridSize / 2}px;
+  position: relative;
 `;
 const GridVerticalContents = styled.div`
-  position: relative;
+  display: flex;
+  width: auto;
+  height: auto;
+  flex-direction: column;
 `;
 // 격자 세로선
 const GridVerticalLine = styled.div`
@@ -579,6 +583,10 @@ const GraphStartLine = styled.div`
   z-index: 10;
   border-radius: 10px;
   cursor: pointer;
+`;
+const GraphLines = styled.div`
+  transform-origin: top left;
+  position: absolute;
 `;
 const GraphLine = styled.div`
   height: 3px;
