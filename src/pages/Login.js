@@ -1,48 +1,52 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
-
 import cancel from '../contents/cancel.svg';
-
+import client from 'gamja-backend-client';
 
 const Login = ({ onClose }) => {
-    const navigate = useNavigate();
-    const [id, setId] = useState('');
-    const [pw, setPw] = useState('');
+    const [userId, setUserId] = useState('');
+    const [userPw, setUserPw] = useState('');
+    const [token, setToken] = useState(null);
 
-    const realId = '010-0000-0000';
-    const realPw = 'pwpw1';
+    const host = 'https://api.miruku.dog';
+    const getConnetion = () => {
+        return {
+            host: host,
+            header: {
+            }
+        }
+    }
 
     useEffect(() => {
-        console.log(id);
-        if (id.length === 11) {
-            setId(id.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
+        console.log(userId);
+        if (userId.length === 11) {
+            setUserId(userId.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
         }
-        else if (id.length === 13) {
-            setId(id.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
+        else if (userId.length === 13) {
+            setUserId(userId.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
         }
-    }, [id]);
+    }, [userId]);
 
-    const onChamgeId = (e) => {
-        const regex = /^[0-9\b -]{0,13}$/;
-        if (regex.test(e.target.value)) {
-            setId(e.target.value);
-        }
+    const onChangeId = (e) => {
+        setUserId(e.target.value);
     }
 
-    const onChamgePw = (e) => {
-        setPw(e.target.value);
+    const onChangePw = (e) => {
+        setUserPw(e.target.value);
     }
 
-    const CheckLogin = () => {
-        if (id === realId) {
-            if (pw === realPw) {
-                onClose();
+    const CheckLogin = async () => {
+        const response = await client.functional.auth.signIn(
+            getConnetion(),
+            {
+                id: userId,
+                password: userPw
             }
-        } else {
-            alert('아이디 혹은 비밀번호가 일치하지 않습니다.');
-        }
-    }
+        );
+
+        setToken(response.token);
+        onClose();
+    };
     
     return (
         <Container>
@@ -59,20 +63,21 @@ const Login = ({ onClose }) => {
                 <InputForm 
                     type="text"
                     placeholder="본인 팀의 팀장 전화번호를 입력해주세요."
-                    value={id}
-                    onChange={onChamgeId}
+                    value={userId}
+                    onChange={onChangeId}
                 />
                 <SubTitle> 비밀번호 </SubTitle>
                 <InputForm 
                     type="password"
-                    value={pw}
-                    onChange={onChamgePw}
+                    value={userPw}
+                    onChange={onChangePw}
                 />
             </Body>
             <LoginBtn onClick={() => CheckLogin()}> 로그인 </LoginBtn>
         </Container>
     )
 }
+
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -113,8 +118,6 @@ const InputForm = styled.input`
     padding: 12px 0 12px 24px;
     border-radius: 6px;
     border: 1px solid #DCDFE3;
-
-    color: ();
 `;
 const Img = styled.img`
     margin-right: 32px;
@@ -139,4 +142,4 @@ const LoginBtn = styled.button`
     color: #FFFFFF;
     cursor: pointer;
 `;
-export default Login;
+export  default Login;
