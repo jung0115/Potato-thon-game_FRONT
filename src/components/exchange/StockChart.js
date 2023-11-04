@@ -5,12 +5,49 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
 
-// import client from 'gamja-backend-client';
+import client from 'gamja-backend-client';
 
 // 격자 크기
 const gridSize = 88;
 
 const StockChart = () => {
+  const host = 'https://api.miruku.dog';
+  const getConnection = () => {
+    return {
+      host: host,
+      headers: {
+      }
+    }
+  }
+  async function user() {
+    await client.functional.user.register(
+      getConnection(),
+      {
+        id: '010-0987-1234',
+        password: 'test1234'
+      }
+    )
+
+    //console.log(response);
+  }
+  async function auth() {
+    // Sign in
+    await client.functional.auth.signIn(
+        getConnection(),
+        {
+            id: '010-0987-1234', // ID
+            password: 'test1234' // Password
+        }
+    ).then(response => {
+        //response.token // JWT token
+        console.log(response.token);
+
+        //setToken(response.token);
+    });
+  }
+  //auth();
+  //user();
+
   const graphWidth = 500;
   
   // 차트 데이터 샘플
