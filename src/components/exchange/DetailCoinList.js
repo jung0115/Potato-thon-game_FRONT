@@ -1,6 +1,6 @@
 import React from "react";
-import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import closeImg from '../../assets/ic_close.png';
 
 const TitleNmae = ['시간', '현재가', '대비', '수량'];
 const Coin = [
@@ -26,10 +26,15 @@ const Coin = [
     },
 ];
 
-const DetailCoinList = ({ coinName }) => {
+const DetailCoinList = ({ coinName, onClose }) => {
     return (
         <Container>
-            <Title> {coinName} </Title>
+            <TitleContainer>
+                <Title> {coinName} </Title>
+                <CloseImg 
+                    src={closeImg}
+                    onClick={onClose} />
+            </TitleContainer>
             <Line />
             <CoinInfo>
                 <CoinInfoTitle>
@@ -86,12 +91,23 @@ const Container = styled.div`
     display: block;
     flex-direction: column;
 `;
+const TitleContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
 const Title = styled.p`
     margin: 0 auto;
     font-size: 22px;
     font-family: 'Pretendard-Bold';
     color: #FAEBD5;
     margin-left: 4px;
+`;
+const CloseImg = styled.img`
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    margin-top: 4px;
+    margin-right: 4px;
 `;
 const CoinInfo = styled.div`
     display: block;

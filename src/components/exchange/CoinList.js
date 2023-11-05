@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from "react";
 import styled from 'styled-components';
 
 const TitleName = ['종목명', '현재가', '대비', '수량'];
@@ -38,6 +38,13 @@ const Coin = [
 ];
 
 const CoinList = ({ onCoinClick }) => {
+    const [isDetailOpen, setDetailOpen] = useState(false);  
+
+    const CoinClick = (item) => {
+        setDetailOpen(true);
+        onCoinClick(item.name)
+    }
+
     return (
         <Container>
             <Title> 전체 코인 </Title>
@@ -55,7 +62,7 @@ const CoinList = ({ onCoinClick }) => {
                         const priceDiff = item.price - item.previousPrice;
                         
                         return (
-                            <CoinInfoSubContent onClick={() => onCoinClick(item.name)}>
+                            <CoinInfoSubContent onClick={() => CoinClick(item)}>
                                 <SubContent> {item.name} </SubContent>
                                 <SubContent 
                                     style={{ marginLeft: '20px' }}
