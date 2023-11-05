@@ -49,6 +49,7 @@ const PropertyTab = () => {
           {coin.map((item, idx) => {
             const fmPurchasingPrice = (item.purchasingPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
             const fmPresentPrice = (item.presentPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            const priceDiff = item.presentPrice - item.purchasingPrice;
 
             return (
               <CoinList>
@@ -58,17 +59,17 @@ const PropertyTab = () => {
                 </CoinInfo>
                 <CoinInfo 
                   style={{ marginLeft: '15px' }}
-                  fontColor={item.presentPrice - item.purchasingPrice}
+                  fontColor={priceDiff}
                 > 
                   {fmPresentPrice} 
                 </CoinInfo>
                 <CoinInfo 
-                  fontColor={item.presentPrice - item.purchasingPrice}
+                  fontColor={priceDiff}
                 >
-                  {item.presentPrice - item.purchasingPrice !== 0 ? (
+                  {priceDiff !== 0 ? (
                     <>
-                      {item.presentPrice - item.purchasingPrice > 0 ? '▲' : '▼'} {" "}
-                      {Math.abs(item.presentPrice - item.purchasingPrice)} 
+                      {priceDiff > 0 ? '▲' : '▼'} {" "}
+                      {Math.abs(priceDiff)} 
                     </>) : ('−')
                   } 
                 </CoinInfo>

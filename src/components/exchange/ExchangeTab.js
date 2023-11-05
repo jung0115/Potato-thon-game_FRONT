@@ -29,7 +29,9 @@ const ExchangeTab = () => {
         <RightContainter>
           {/* 전체 코인 or 선택한 코인 */}
           {selectedCoin ? (
-            <DetailCoinList coinName={selectedCoin}/>
+            <DetailCoinList 
+              onClose={() => setSelectedCoin(null)}
+              coinName={selectedCoin}/>
           ) : (
             <CoinList
               onCoinClick={(coinName) => setSelectedCoin(coinName)}  
