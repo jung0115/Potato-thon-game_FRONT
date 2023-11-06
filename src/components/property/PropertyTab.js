@@ -32,10 +32,10 @@ const PropertyTab = () => {
         <PossMoney> 보유 화폐 </PossMoney>
         <PossMoney 
           style={{ 
-            marginLeft: '210px',
+            marginLeft: '205px',
             left: `-${money.toString().length * 9}px`,
         }}> {money} </PossMoney>
-        <PossMoney style={{marginLeft: '225px'}}> 원 </PossMoney>
+        <PossMoney style={{marginLeft: '215px'}}> 원 </PossMoney>
       </MoneyContainer>
       
       <CoinContainer>
@@ -49,6 +49,7 @@ const PropertyTab = () => {
           {coin.map((item, idx) => {
             const fmPurchasingPrice = (item.purchasingPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
             const fmPresentPrice = (item.presentPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            const priceDiff = item.presentPrice - item.purchasingPrice;
 
             return (
               <CoinList>
@@ -58,17 +59,17 @@ const PropertyTab = () => {
                 </CoinInfo>
                 <CoinInfo 
                   style={{ marginLeft: '15px' }}
-                  fontColor={item.presentPrice - item.purchasingPrice}
+                  fontColor={priceDiff}
                 > 
                   {fmPresentPrice} 
                 </CoinInfo>
                 <CoinInfo 
-                  fontColor={item.presentPrice - item.purchasingPrice}
+                  fontColor={priceDiff}
                 >
-                  {item.presentPrice - item.purchasingPrice !== 0 ? (
+                  {priceDiff !== 0 ? (
                     <>
-                      {item.presentPrice - item.purchasingPrice > 0 ? '▲' : '▼'} {" "}
-                      {Math.abs(item.presentPrice - item.purchasingPrice)} 
+                      {priceDiff > 0 ? '▲' : '▼'} {" "}
+                      {Math.abs(priceDiff)} 
                     </>) : ('−')
                   } 
                 </CoinInfo>
@@ -89,7 +90,7 @@ const MoneyContainer = styled.div`
   position: absolute;
   display: flex;
   flex-direction: row;
-  top: 155px;
+  top: 120px;
   left: 51px;
 `;
 const MoneyImg = styled.img`
@@ -99,12 +100,12 @@ const MoneyImg = styled.img`
 const WalletIcon = styled.img`
   position: absolute;
   margin-top: 20px;
-  margin-left: 35px;
+  margin-left: 40px;
 `;
 const PossMoney = styled.text`
   position: absolute;
   margin-top: 23px;
-  margin-left: 63px;
+  margin-left: 70px;
   color: #390C0C;
   font-size: 19px;
   font-weight: 700;

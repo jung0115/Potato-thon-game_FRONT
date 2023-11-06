@@ -1,61 +1,83 @@
 import React from "react";
-import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import closeImg from '../../assets/ic_close.png';
 
-const TitleNmae = ['시간', '현재가', '대비', '잔량'];
+const TitleNmae = ['시간', '현재가', '대비', '수량'];
 const Coin = [
-    {
-        time: '14:10:00',
-        purchasingPrice: 810,
-        contrast: '▲ 23',
-        remain: 3,
-    },
-    {
-        time: '14:20:00',
-        purchasingPrice: 810,
-        contrast: '▲ 23',
-        remain: 10,
-    },
-    {
-        time: '14:30:00',
-        purchasingPrice: 810,
-        contrast: '▲ 23',
-        remain: 20,
-    },
     {
         time: '14:40:00',
         purchasingPrice: 810,
-        contrast: '▲ 23',
+        remain: 3,
+    },
+    {
+        time: '14:30:00',
+        purchasingPrice: 790,
+        remain: 10,
+    },
+    {
+        time: '14:20:00',
+        purchasingPrice: 740,
+        remain: 20,
+    },
+    {
+        time: '14:10:00',
+        purchasingPrice: 815,
         remain: 32,
     },
 ];
 
-const DetailCoinList = ({ coinName }) => {
+const DetailCoinList = ({ coinName, onClose }) => {
     return (
         <Container>
-            <Title> {coinName} </Title>
+            <TitleContainer>
+                <Title> {coinName} </Title>
+                <CloseImg 
+                    src={closeImg}
+                    onClick={onClose} />
+            </TitleContainer>
+            <Line />
             <CoinInfo>
                 <CoinInfoTitle>
                     {TitleNmae.map(item => (
                         <SubTitle> {item} </SubTitle>
                     ))}
                 </CoinInfoTitle>
-                <Line />
+                <Line style={{ margin: '10px 10px 0 10px' }} />
                 <CoinInfoContent>
                     {Coin.map((item, idx) => {
-                        const purchasinPrice = (item.purchasingPrice).toFixed(2).toLocaleString();
+                        const purchasinPrice = (item.purchasingPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                        let priceDiff = 0;
+
+                        if (idx < Coin.length - 1) {
+                            priceDiff = item.purchasingPrice - Coin[idx + 1].purchasingPrice;
+                        }
+
                         return (
                             <CoinInfoSubContent>
                                 <SubContent> {item.time} </SubContent>
-                                <SubContent style={{ marginLeft: '20px' }}> 
+                                <SubContent 
+                                    style={{ marginLeft: '20px' }}
+                                    fontColor={priceDiff}
+                                > 
                                     {purchasinPrice} 
                                 </SubContent>
-                                <SubContent style={{ marginLeft: '10px' }}> 
-                                    {item.contrast} 
+                                <SubContent 
+                                    style={{ marginLeft: '15px' }}
+                                    fontColor={priceDiff}
+                                > 
+                                    {priceDiff != 0 ? (
+                                        <>
+                                            {priceDiff > 0 ? '▲' : '▼'} {" "}
+                                            {Math.abs(priceDiff).toLocaleString()} 
+                                        </>) : ('-')
+                                    }
                                 </SubContent>
-                                <SubContent style={{ marginLeft: '5px' }}> 
-                                    {item.remain} 
-                                </SubContent>  
+                                <SubContent 
+                                    style={{ 
+                                        marginLeft: '15px',
+                                        marginRight: '8px' 
+                                    }}
+                                > {item.remain} </SubContent>  
                             </CoinInfoSubContent>      
                         )
                     })}
@@ -66,18 +88,31 @@ const DetailCoinList = ({ coinName }) => {
 }
 
 const Container = styled.div`
-    display: flex;
+    display: block;
     flex-direction: column;
-    float: right;
+`;
+const TitleContainer = styled.div`
+    display: flex;
+    flex-direction: row;
 `;
 const Title = styled.p`
-    font-size: 20px;
-    font-weight: bold;
+    margin: 0 auto;
+    font-size: 22px;
+    font-family: 'Pretendard-Bold';
     color: #FAEBD5;
+    margin-left: 4px;
+`;
+const CloseImg = styled.img`
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    margin-top: 4px;
+    margin-right: 4px;
 `;
 const CoinInfo = styled.div`
-    width: 516px;
-    height: 377px;
+    display: block;
+    flex-direction: column;
+    margin-top: 15px;
     border-radius: 20px;
     background-color: #E6E6E6;
     box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
@@ -89,25 +124,25 @@ const CoinInfoTitle = styled.div`
 `;
 const SubTitle = styled.p`
     display: flex;
-    margin: 25px 45px 10px 45px;
-    font-size: 18px;
+    margin: 25px 35px 10px 35px;
+    font-size: 16px;
     color: #666666;
+    white-space: nowrap;
+    justify-content: space-around;
 `;
 const CoinInfoContent = styled.div`
-    height: 290px;
     margin-top: 23px;
     overflow: scroll;
 `;
-
 const Line = styled.hr`
-    width: 480px;
-    display: flex;
+    height: 0.85px;
+    margin-top: 10px;
     color: #666666;
 `;
 const CoinInfoSubContent = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
     margin-left: 10px;
     cursor: pointer;
 `;
@@ -120,7 +155,10 @@ const SubContent = styled.div`
 
     font-size: 16px;
     font-weight: bold;
-    color: #666666;
+    color: ${(props) => props.fontColor > 0 ?
+        '#AA1919' : props.fontColor < 0 ? 
+        '#1F27D7' : '#666666'
+    };
 `;
 
 export default DetailCoinList;
