@@ -121,7 +121,7 @@ const TitleContainer = styled.div`
   align-items: center;
 `;
 const Title = styled.div`
-  font-size: 25px;
+  font-size: 22px;
   font-family: 'Pretendard-Bold';
   color: ${palette.question_title};
   margin-left: 4px;
