@@ -56,7 +56,10 @@ const CoinList = ({ onCoinClick }) => {
                         <SubTitle> {item} </SubTitle>
                     ))}
                 </CoinInfoTitle>
-                <Line style={{ margin: '10px 10px 0 10px' }} />
+                <Line style={{ 
+                    margin: '10px 10px 0 10px',
+                    backgroundColor: '#BBBBBB'
+                }} />
                 <CoinInfoContent>
                     {Coin.map((item, idx) => {
                         const presentPrice = (item.price).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
