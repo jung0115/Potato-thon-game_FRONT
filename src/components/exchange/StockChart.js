@@ -332,7 +332,7 @@ const StockChart = ({ onCoinClick, coinName }) => {
             <GraphStartLine
               style={{
                 marginTop: getGraphHeight((coinData[0] + coinData[1]) / 2),
-                width: getGraphLineSize(coinData[0], coinData[1]) / 2,
+                width: getGraphLineSize(coinData[0], coinData[1]) / 2 ,
                 transform: `rotate(${getGraphLineDegree(coinData[0], coinData[1])}deg)`,
                 backgroundColor: Object.values(coins[idx])[1]}}
               onClick={() => onClickCoin(idx)}/>

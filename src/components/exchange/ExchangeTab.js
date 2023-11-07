@@ -43,12 +43,13 @@ const ExchangeTab = () => {
               onCoinClick={(coinName) => setSelectedCoin(coinName)}  
             />
           )}
-          
-          {/* 도움말 */}
-          <Question/>
 
-          {/* 매수/매도 */}
-          {/*<BuyingSelling/>*/}
+          {/* 도움말 or 매수/매도 */}
+          {selectedCoin ? 
+            <BuyingSelling/>
+            :
+            <Question/>
+          }
 
         </RightContainter>
 
