@@ -1,8 +1,9 @@
 // 자산 탭
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import palette from "../../styles/colorPalatte";
 
-import moneyContainer from '../../assets/img_currency.png';
+// import moneyContainer from '../../assets/img_currency.png';
 import walletIcon from '../../assets/ic_wallet.png';
 
 const title = ["코인명", "매입가", "현재가", "대비", "수량"];
@@ -18,8 +19,8 @@ const PropertyTab = () => {
     },
     {
       name: "마이쮸코인",
-      purchasingPrice: 795.00,
-      presentPrice: 810.00,
+      purchasingPrice: 795,
+      presentPrice: 810,
       quantity: 3,
     }
   ]
@@ -27,15 +28,12 @@ const PropertyTab = () => {
   return(
     <Container>
       <MoneyContainer>
-        <MoneyImg money={money} src={moneyContainer}/>
         <WalletIcon src={walletIcon}/>
         <PossMoney> 보유 화폐 </PossMoney>
-        <PossMoney 
-          style={{ 
-            marginLeft: '205px',
-            left: `-${money.toString().length * 9}px`,
-        }}> {money} </PossMoney>
-        <PossMoney style={{marginLeft: '215px'}}> 원 </PossMoney>
+        <PossMoney style={{ marginLeft: '90px' }}> 
+          {money} 
+        </PossMoney>
+        <PossMoney style={{marginLeft: '10px'}}> 원 </PossMoney>
       </MoneyContainer>
       
       <CoinContainer>
@@ -53,18 +51,26 @@ const PropertyTab = () => {
 
             return (
               <CoinList>
-                <CoinInfo> {item.name} </CoinInfo>
-                <CoinInfo style={{ marginLeft: '15px' }}> 
+                <CoinInfo style={{ paddingLeft: '53px'}}> {item.name} </CoinInfo>
+                <CoinInfo 
+                  style={{ 
+                    textAlign: 'right',
+                    paddingRight: '100px'
+                }}> 
                   {fmPurchasingPrice}
                 </CoinInfo>
                 <CoinInfo 
-                  style={{ marginLeft: '15px' }}
+                  style={{ 
+                    textAlign: 'right',
+                    paddingRight: '190px'
+                  }}
                   fontColor={priceDiff}
                 > 
                   {fmPresentPrice} 
                 </CoinInfo>
                 <CoinInfo 
                   fontColor={priceDiff}
+                  style={{ paddingRight: '85px' }}
                 >
                   {priceDiff !== 0 ? (
                     <>
@@ -73,7 +79,7 @@ const PropertyTab = () => {
                     </>) : ('−')
                   } 
                 </CoinInfo>
-                <CoinInfo> {item.quantity} </CoinInfo>
+                <CoinInfo style={{ paddingRight: '45px'}}> {item.quantity} </CoinInfo>
               </CoinList>
             )})}
         </ListContainer>
@@ -83,41 +89,34 @@ const PropertyTab = () => {
 }
 
 const Container = styled.div`
-  
+  display: block;
+  background-color: ${palette.bg_color};
 `;
 const MoneyContainer = styled.div`
-  width: auto;
-  position: absolute;
   display: flex;
   flex-direction: row;
-  top: 120px;
-  left: 51px;
-`;
-const MoneyImg = styled.img`
-  width: auto;
-  height: 15vh;
+  margin: 13px;
+  padding: 30px;
+  align-items: center;
+  background-color: ${palette.box_bg_color};
 `;
 const WalletIcon = styled.img`
-  position: absolute;
-  margin-top: 20px;
-  margin-left: 40px;
+  width: 23px;
+  height: 23px;
+  margin-right: 10px;
 `;
 const PossMoney = styled.text`
-  position: absolute;
-  margin-top: 23px;
-  margin-left: 70px;
-  color: #390C0C;
+  color: #C8C8C8;
   font-size: 19px;
   font-weight: 700;
+  font-family: 'Pretendard-Bold';
 `;
 const CoinContainer = styled.div`
   position: relative;
   height: 65vh;
   flex-shrink: 0;
-  margin: 82px 50px;
-  border-radius: 8px;
-  background: #E6E6E6;
-  box-shadow: 0px 4px 4px 0px #666 inset, 0px 4px 4px 0px #D4D4D4 inset;
+  margin: 0 13px;
+  background-color: ${palette.box_bg_color};
   z-index: 99;
 `;
 const TitleContainer = styled.div`
@@ -127,9 +126,10 @@ const TitleContainer = styled.div`
   justify-content: space-around;
 `;
 const Title = styled.text`
-  color: #121212;
+  color: #C8C8C8;
   font-size: 20px;
   font-weight: 700;
+  font-family: 'Pretendard-Bold';
 `;
 const Line = styled.div`
   height: 1px;
@@ -144,15 +144,15 @@ const CoinList = styled.div`
   justify-content: space-around;
 `;
 const CoinInfo = styled.p`
-  color: #121212;
   font-size: 18px;
   font-weight: 700;
+  font-family: 'Pretendard-Bold';
   text-align: center;
   flex: 1;
   padding-left: 10px;
   color: ${(props) => props.fontColor > 0 ? 
     '#AA1919' : props.fontColor < 0 ? 
-    '#1F27D7' : '#121212'
+    '#1F27D7' : `#C8C8C8`
   };
 `;
 
