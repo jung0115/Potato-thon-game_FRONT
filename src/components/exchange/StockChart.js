@@ -10,10 +10,10 @@ import client from 'gamja-backend-client';
 // 격자 크기
 const gridSize = 88;
 
-const StockChart = ({ onCoinClick, coinName }) => {
-  
-  const host = 'https://api.miruku.dog';
+// api BASE URL
+const host = 'https://api.miruku.dog';
 
+const StockChart = ({ onCoinClick, coinName }) => {
   const [token, setToken] = useState(null);
 
   const getConnection = () => {
@@ -26,30 +26,20 @@ const StockChart = ({ onCoinClick, coinName }) => {
       }
     }
   }
-  /*async function user() {
-    // 회원가입
-    await client.functional.user.register(
-      getConnection(),
-      {
-        id: '010-0987-1234',
-        password: 'test1234'
-      }
-    )
-  }*/
   async function authSignIn() {
     // 로그인
     await client.functional.auth.signIn(
         getConnection(),
         {
-          id: '010-0987-1234', // ID
-          password: 'test1234' // Password
+          id: 'test', // ID
+          password: 'test' // Password
         }
     ).then(response => {
         //response.token // JWT token
         setToken(response.token);
     });
   }
-  //auth();
+  //authSignIn();
   async function coinGetGoins() {
     // 코인 종류 조회
     await client.functional.coin.getCoins(
@@ -58,35 +48,20 @@ const StockChart = ({ onCoinClick, coinName }) => {
       console.log(response);
     })
   }
-  async function coinCreateCoin() {
-    // 코인 추가
-    await client.functional.coin.manageCreateCoin(
-      getConnection(),
-      {
-        id: 'test', // ID
-        name: '테스트', // Name
-        price: '1234', // Initial price
-        minPrice: '1000', // Min price
-        maxPrice: '2000', // Max price
-        amount: '1234' // Initial amount of this coin in market
-      }
-    );
-  }
   async function coinPriceHistories() {
     // 코인 증감 기록 확인
     await client.functional.coin.price_histories.getPriceHistories(
       getConnection(),
-      'soda', // Coin ID
+      'twix', // Coin ID
       {
-        from: '2023-10-31 12:00:00', // From
-        to: '2023-10-31 12:00:00' // To
+        from: '2023-11-08 00:00:00', // From
+        to: '2023-11-08 23:59:59' // To
       }
     ).then(response => {
-        
+        console.log(response);
     });
   }
-  //coinGetGoins();
-  //coinCreateCoin();
+  coinPriceHistories();
 
   const graphWidth = 500;
   
