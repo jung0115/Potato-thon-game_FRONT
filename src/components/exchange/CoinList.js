@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from "react";
 import styled from 'styled-components';
+import palette from "../../styles/colorPalatte";
 
 const TitleName = ['종목명', '현재가', '대비', '수량'];
 
@@ -95,6 +96,7 @@ const CoinList = ({ onCoinClick }) => {
 
 const Container = styled.div`
     display: block;
+    background-color: ${palette.bg_color};
     flex-direction: column;
 `;
 const Title = styled.p`
@@ -128,10 +130,10 @@ const CoinInfoContent = styled.div`
     margin-top: 23px;
     overflow: scroll;
 `;
-const Line = styled.hr`
+const Line = styled.div`
+    background-color: ${palette.header_btm_line};
     height: 0.85px;
     margin-top: 10px;
-    color: #666666;
 `;
 const CoinInfoSubContent = styled.div`
   display: flex;
