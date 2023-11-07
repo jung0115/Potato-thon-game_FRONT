@@ -127,8 +127,8 @@ const Title = styled.div`
   margin-left: 4px;
 `;
 const HelpIcon = styled.img`
-  width: 24px;
-  height: 24px;
+  width: 21px;
+  height: 21px;
   margin-left: 7px;
 `;
 const BottomLine = styled.div`

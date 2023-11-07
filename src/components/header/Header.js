@@ -110,26 +110,19 @@ const Header = ({ exchange, property, selectExchange, selectProperty }) => {
         }
 
       </HeaderContainer>
-
-      <BottomLine/>
     </Container>
   )
 }
 
 const Container = styled.div`
   display: block;
-  background-color: ${palette.bg_color};
+  background-color: ${palette.box_bg_color};
+  margin: 0 13px 0 12px;
 `;
 
 // 헤더 내용
 const HeaderContainer = styled.div`
   display: flex;
-`;
-
-// 하단 수평바
-const BottomLine = styled.div`
-  background-color: ${palette.header_btm_line};
-  height: 4.56px;
 `;
 
 const LogoAndTitle = styled.div`
@@ -181,7 +174,7 @@ const UnselectTabBtn = styled.div`
 
 // 선택된 탭 강조 라인
 const SelectLine = styled.div`
-  width: 155px;
+  width: 130px;
   height: 9px;
   margin: 12px 0px 3px 0px;
   background-color: ${palette.orange};
@@ -191,13 +184,14 @@ const UnselectLine = styled.div`
   width: 155px;
   height: 9px;
   margin: 12px 0px 3px 0px;
-  background-color: ${palette.bg_color};
+  background-color: ${palette.box_bg_color};
 `;
 
 const UserContainer = styled.div`
   display: flex;
   margin-left: auto;
   align-items: end;
+  margin-bottom: 10px;
 `;
 
 // 로그인 버튼

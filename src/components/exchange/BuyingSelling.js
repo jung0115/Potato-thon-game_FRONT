@@ -5,9 +5,19 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
 
-const BuyingSelling = () => {
+import Loading from "./Loading";
+
+const BuyingSelling = ({ onClose }) => {
   // 주문, 판매 버튼 비활성화, 활성화 색상
   const ResultBtnColor = [palette.buy_sell_result, palette.orange];
+
+  // 로딩
+  const [isLoading, setIsLoading] = useState(false);
+
+  const closeLoading = () => {
+    setIsLoading(false);
+    onClose();
+  }
 
   // 매수, 매도 탭 선택
   const [isBuying, setIsBuying] = useState(true);
@@ -36,6 +46,16 @@ const BuyingSelling = () => {
     setIsBuying(false);
     setInputValue('');
     setResultValue(0);
+  }
+
+  // 주문하기 - 매수
+  const buyCoin = () => {
+    setIsLoading(true);
+  }
+
+  //판매하기 - 매도
+  const sellCoin = () => {
+    setIsLoading(true);
   }
 
   useEffect(() => {
@@ -120,7 +140,8 @@ const BuyingSelling = () => {
             {/* 주문하기 버튼 */}
             <SubmitBtn style={inputValue > 0 ?
               { backgroundColor: ResultBtnColor[1] }
-              : { backgroundColor: ResultBtnColor[0] }}>
+              : { backgroundColor: ResultBtnColor[0] }}
+              onClick={buyCoin}>
               주문하기
             </SubmitBtn>
 
@@ -173,15 +194,24 @@ const BuyingSelling = () => {
               </BuySellValues>
             </BuySellResultContent>
 
-            {/* 주문하기 버튼 */}
+            {/* 판매하기 버튼 */}
             <SubmitBtn style={inputValue > 0 ?
               { backgroundColor: ResultBtnColor[1] }
-              : { backgroundColor: ResultBtnColor[0] }}>
-              주문하기
+              : { backgroundColor: ResultBtnColor[0] }}
+              onClick={sellCoin}>
+              판매하기
             </SubmitBtn>
 
 
           </BuySellContainer>
+        }
+
+        {/* 로딩창 */}
+        {isLoading ?
+          <LoadingOverlay>
+            <Loading closeLoading={closeLoading}/>
+          </LoadingOverlay>  
+          : null
         }
 
       </Contents>
@@ -315,6 +345,19 @@ const SubmitBtn = styled.div`
   font-size: 23px;
   font-family: 'Pretendard-Bold';
   color: ${palette.white};
+`;
+
+const LoadingOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
 `;
 
 export default BuyingSelling;
