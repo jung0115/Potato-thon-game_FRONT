@@ -10,7 +10,8 @@ import client from 'gamja-backend-client';
 // 격자 크기
 const gridSize = 88;
 
-const StockChart = () => {
+const StockChart = ({ onCoinClick, coinName }) => {
+  
   const host = 'https://api.miruku.dog';
 
   const [token, setToken] = useState(null);
@@ -84,9 +85,8 @@ const StockChart = () => {
         
     });
   }
-  coinGetGoins();
+  //coinGetGoins();
   //coinCreateCoin();
-
 
   const graphWidth = 500;
   
@@ -168,10 +168,12 @@ const StockChart = () => {
     // 선택했던 걸 재선택하면 선택 취소
     if(index == selectCoin) {
       setSelectCoin(null);
+      onCoinClick(null);
     }
     // 아닐 경우 선택
     else {
       setSelectCoin(index);
+      onCoinClick(coins[index].name + " 코인");
     }
   }
 
@@ -310,6 +312,21 @@ const StockChart = () => {
     setTime();
   }, [minute, is10Minute, is30Minute, is1Hour]);
 
+  useEffect(() => {
+    if(coinName != null) {
+      const coinNameSub = coinName.substr(0, coinName.length - 3);
+      for(let i = 0; i < coins.length; i++) {
+        if(coinNameSub == coins[i].name) {
+          setSelectCoin(i);
+          break;
+        }
+      }
+    }
+    else {
+      setSelectCoin(null);
+    }
+  }, [coinName]);
+
   return(
     <Container>
       {/* 차트 상단 부분: 시간 간격 선택, 코인 차트별 색상 */}
@@ -393,7 +410,7 @@ const StockChart = () => {
             <GraphStartLine
               style={{
                 marginTop: getGraphHeight((coinData[0] + coinData[1]) / 2),
-                width: getGraphLineSize(coinData[0], coinData[1]) / 2,
+                width: getGraphLineSize(coinData[0], coinData[1]) / 2 ,
                 transform: `rotate(${getGraphLineDegree(coinData[0], coinData[1])}deg)`,
                 backgroundColor: Object.values(coins[idx])[1]}}
               onClick={() => onClickCoin(idx)}/>
