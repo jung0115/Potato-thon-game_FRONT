@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import palette from "../../styles/colorPalatte";
 import closeImg from '../../assets/ic_close.png';
 
 const TitleNmae = ['시간', '현재가', '대비', '수량'];
@@ -42,7 +43,10 @@ const DetailCoinList = ({ coinName, onClose }) => {
                         <SubTitle> {item} </SubTitle>
                     ))}
                 </CoinInfoTitle>
-                <Line style={{ margin: '10px 10px 0 10px' }} />
+                <Line style={{ 
+                    margin: '10px 10px 0 10px',
+                    backgroundColor: '#BBBBBB'
+                }} />
                 <CoinInfoContent>
                     {Coin.map((item, idx) => {
                         const purchasinPrice = (item.purchasingPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -134,10 +138,10 @@ const CoinInfoContent = styled.div`
     margin-top: 23px;
     overflow: scroll;
 `;
-const Line = styled.hr`
+const Line = styled.div`
+    background-color: ${palette.header_btm_line};
     height: 0.85px;
     margin-top: 10px;
-    color: #666666;
 `;
 const CoinInfoSubContent = styled.div`
     display: flex;
