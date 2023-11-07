@@ -10,7 +10,8 @@ import palette from "../../styles/colorPalatte";
 // 격자 크기
 const gridSize = 88;
 
-const StockChart = () => {
+const StockChart = ({ onCoinClick, coinName }) => {
+  
   const graphWidth = 500;
   
   // 차트 데이터 샘플
@@ -91,10 +92,12 @@ const StockChart = () => {
     // 선택했던 걸 재선택하면 선택 취소
     if(index == selectCoin) {
       setSelectCoin(null);
+      onCoinClick(null);
     }
     // 아닐 경우 선택
     else {
       setSelectCoin(index);
+      onCoinClick(coins[index].name + " 코인");
     }
   }
 
@@ -230,6 +233,21 @@ const StockChart = () => {
   useEffect(() => {
     setTime();
   }, [minute, is10Minute, is30Minute, is1Hour]);
+
+  useEffect(() => {
+    if(coinName != null) {
+      const coinNameSub = coinName.substr(0, coinName.length - 3);
+      for(let i = 0; i < coins.length; i++) {
+        if(coinNameSub == coins[i].name) {
+          setSelectCoin(i);
+          break;
+        }
+      }
+    }
+    else {
+      setSelectCoin(null);
+    }
+  }, [coinName]);
 
   return(
     <Container>
