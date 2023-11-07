@@ -1,77 +1,68 @@
-import React from 'react';
-import { useState } from "react";
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
+import closeImg from '../../assets/ic_close.png';
 
-const TitleName = ['종목명', '현재가', '대비', '수량'];
-
+const TitleNmae = ['시간', '현재가', '대비', '수량'];
 const Coin = [
     {
-        name: '마이쮸 코인',
-        price: 810,
-        previousPrice: 790,
-        quantity: 3,
+        time: '14:40:00',
+        purchasingPrice: 810,
+        remain: 3,
     },
     {
-        name: '칙촉 코인',
-        price: 1295,
-        previousPrice: 1295,
-        quantity: 10,
+        time: '14:30:00',
+        purchasingPrice: 790,
+        remain: 10,
     },
     {
-        name: '포카칩 코인',
-        price: 1920,
-        previousPrice: 790,
-        quantity: 29,
+        time: '14:20:00',
+        purchasingPrice: 740,
+        remain: 20,
     },
     {
-        name: '오감자 코인',
-        price: 1410,
-        previousPrice: 1501,
-        quantity: 5,
-    },
-    {
-        name: '꼬깔콘 코인',
-        price: 1502,
-        previousPrice: 1490,
-        quantity: 12,
+        time: '14:10:00',
+        purchasingPrice: 815,
+        remain: 32,
     },
 ];
 
-const CoinList = ({ onCoinClick }) => {
-    const [isDetailOpen, setDetailOpen] = useState(false);  
-
-    const CoinClick = (item) => {
-        setDetailOpen(true);
-        onCoinClick(item.name)
-    }
-
+const DetailCoinList = ({ coinName, onClose }) => {
     return (
         <Container>
-            <Title> 전체 코인 </Title>
+            <TitleContainer>
+                <Title> {coinName} </Title>
+                <CloseImg 
+                    src={closeImg}
+                    onClick={onClose} />
+            </TitleContainer>
             <Line />
             <CoinInfo>
                 <CoinInfoTitle>
-                    {TitleName.map(item => (
+                    {TitleNmae.map(item => (
                         <SubTitle> {item} </SubTitle>
                     ))}
                 </CoinInfoTitle>
                 <Line style={{ margin: '10px 10px 0 10px' }} />
                 <CoinInfoContent>
                     {Coin.map((item, idx) => {
-                        const presentPrice = (item.price).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-                        const priceDiff = item.price - item.previousPrice;
-                        
+                        const purchasinPrice = (item.purchasingPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                        let priceDiff = 0;
+
+                        if (idx < Coin.length - 1) {
+                            priceDiff = item.purchasingPrice - Coin[idx + 1].purchasingPrice;
+                        }
+
                         return (
-                            <CoinInfoSubContent onClick={() => CoinClick(item)}>
-                                <SubContent> {item.name} </SubContent>
+                            <CoinInfoSubContent>
+                                <SubContent> {item.time} </SubContent>
                                 <SubContent 
                                     style={{ marginLeft: '20px' }}
                                     fontColor={priceDiff}
                                 > 
-                                    {presentPrice} 
+                                    {purchasinPrice} 
                                 </SubContent>
                                 <SubContent 
-                                    style={{ marginLeft: '10px' }}
+                                    style={{ marginLeft: '15px' }}
                                     fontColor={priceDiff}
                                 > 
                                     {priceDiff != 0 ? (
@@ -79,11 +70,14 @@ const CoinList = ({ onCoinClick }) => {
                                             {priceDiff > 0 ? '▲' : '▼'} {" "}
                                             {Math.abs(priceDiff).toLocaleString()} 
                                         </>) : ('-')
-                                    } 
+                                    }
                                 </SubContent>
-                                <SubContent style={{ marginLeft: '5px' }}> 
-                                    {item.quantity} 
-                                </SubContent>  
+                                <SubContent 
+                                    style={{ 
+                                        marginLeft: '15px',
+                                        marginRight: '8px' 
+                                    }}
+                                > {item.remain} </SubContent>  
                             </CoinInfoSubContent>      
                         )
                     })}
@@ -97,12 +91,23 @@ const Container = styled.div`
     display: block;
     flex-direction: column;
 `;
+const TitleContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
 const Title = styled.p`
     margin: 0 auto;
     font-size: 22px;
     font-family: 'Pretendard-Bold';
     color: #FAEBD5;
     margin-left: 4px;
+`;
+const CloseImg = styled.img`
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    margin-top: 4px;
+    margin-right: 4px;
 `;
 const CoinInfo = styled.div`
     display: block;
@@ -123,6 +128,7 @@ const SubTitle = styled.p`
     font-size: 16px;
     color: #666666;
     white-space: nowrap;
+    justify-content: space-around;
 `;
 const CoinInfoContent = styled.div`
     margin-top: 23px;
@@ -134,12 +140,11 @@ const Line = styled.hr`
     color: #666666;
 `;
 const CoinInfoSubContent = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  margin-left: 10px;
-  text-decoration: none;
-  cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-left: 10px;
+    cursor: pointer;
 `;
 const SubContent = styled.div`
     display: flex;
@@ -156,4 +161,4 @@ const SubContent = styled.div`
     };
 `;
 
-export default CoinList;
+export default DetailCoinList;
