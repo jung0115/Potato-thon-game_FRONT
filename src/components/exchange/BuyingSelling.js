@@ -80,7 +80,7 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
         console.log(user);
     });
   }
-  getOwnCoin();
+  //getOwnCoin();
   
   // 코인 매수 -------------------------------------------------------------------
   async function buyCoinApi() {
