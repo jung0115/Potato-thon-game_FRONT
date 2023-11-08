@@ -342,7 +342,7 @@ const StockChart = ({ onCoinClick, coinName }) => {
   const getGraphLineSize = (cost1, cost2) => {
     const graphHeight = Math.abs(cost1 - cost2);
     const size = Math.sqrt(Math.pow(graphWidth, 2) + Math.pow(graphHeight, 2));
-    return size / 500 * (gridSize + 1);
+    return size / 500 * (gridSize + 1) + 2;
   }
 
   // 그래프 꺾은 선 각도 계산 ---------------------------------------------------------------------------------------------------------
@@ -366,29 +366,30 @@ const StockChart = ({ onCoinClick, coinName }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
-    // 1분마다 현재 시간을 업데이트
+    // 10초마다 현재 시간을 업데이트
     const interval = setInterval(() => {
       setCurrentTime(new Date());
-    }, 60000);
+    }, 10000);
 
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
-    // 1분마다 시간 체크해서 api 호출
-    let currentMinute = currentTime.getMinutes();
-    // 10분 단위
-    if(is10Minute && currentTime % 10 == 0) {
+    // 10초마다 시간 체크해서 해당되는 시간에만 api 호출
+    // 너무 자주 api 호출하면 fetch 오류 발생
+    const currentMinute = currentTime.getMinutes();
+    // 10분 단위 => NN:00, NN:10, NN:20 ...
+    if(is10Minute && currentMinute % 10 == 0) {
       setTime();
     } 
 
-    // 30분 단위
-    else if(is30Minute && currentTime % 30 == 0) {
+    // 30분 단위 => NN:00, NN:30
+    else if(is30Minute && currentMinute % 30 == 0) {
       setTime();
     }
 
-    // 1시간 단위
-    else if(is1Hour && currentTime % 60 == 0) {
+    // 1시간 단위 => NN:00
+    else if(is1Hour && currentMinute % 60 == 0) {
       setTime();
     }
     
@@ -742,7 +743,8 @@ const GraphLine = styled.div`
   height: 3px;
   transform-origin: top left;
   position: absolute;
-  margin-left: ${gridSize / 2 + 0.5}px;
+  margin-left: ${gridSize / 2 - 1}px;
+  left: 1px;
   z-index: 10;
   border-radius: 10px;
   cursor: pointer;
