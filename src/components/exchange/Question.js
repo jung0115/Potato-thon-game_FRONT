@@ -109,7 +109,6 @@ const Question = () => {
     // 10분 내에 답변된 질문이 있는지 확인
     if(qnaList.length > 0) {
       const minute = Math.floor((new Date() - new Date(qnaList[0].answeredAt)) / (1000 * 60));
-      console.log(minute);
       if(minute <= 10) setIsNewAnswer(true);
       else setIsNewAnswer(false);
     }
