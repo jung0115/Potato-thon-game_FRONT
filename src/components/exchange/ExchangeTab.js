@@ -1,5 +1,5 @@
 // 거래소 탭
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
@@ -13,6 +13,10 @@ import DetailCoinList from "./DetailCoinList";
 // 메인 > 거래소 탭
 const ExchangeTab = () => {
   const [selectedCoin, setSelectedCoin] = useState(null);
+
+  useEffect(() => {
+  }, [selectedCoin]);
+
   return(
     <Container>
       {/*<Title>실시간 주식 차트</Title>*/}
@@ -21,7 +25,9 @@ const ExchangeTab = () => {
         {/* 좌측 components */}
         <LeftContainter>
           {/* 주식 차트 */}
-          <StockChart/>
+          <StockChart
+            onCoinClick={(coinName) => setSelectedCoin(coinName)}
+            coinName={selectedCoin} />
 
         </LeftContainter>
 
@@ -37,12 +43,14 @@ const ExchangeTab = () => {
               onCoinClick={(coinName) => setSelectedCoin(coinName)}  
             />
           )}
-          
-          {/* 도움말 */}
-          <Question/>
 
-          {/* 매수/매도 */}
-          {/*<BuyingSelling/>*/}
+          {/* 도움말 or 매수/매도 */}
+          {selectedCoin ? 
+            <BuyingSelling
+              onClose={() => setSelectedCoin(null)}/>
+            :
+            <Question/>
+          }
 
         </RightContainter>
 
