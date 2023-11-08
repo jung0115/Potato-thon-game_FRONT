@@ -161,6 +161,7 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
   // 주문하기 - 매수
   const buyCoin = () => {
     setIsLoading(true);
+    
   }
 
   //판매하기 - 매도
@@ -324,7 +325,9 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
         {/* 로딩창 */}
         {isLoading ?
           <LoadingOverlay>
-            <Loading closeLoading={closeLoading}/>
+            <Loading
+              closeLoading={closeLoading}
+              time={400}/>
           </LoadingOverlay>  
           : null
         }
