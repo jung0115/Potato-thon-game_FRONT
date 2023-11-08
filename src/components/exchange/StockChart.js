@@ -398,8 +398,8 @@ const StockChart = ({ onCoinClick, coinName }) => {
     setTime();
   }, [is10Minute, is30Minute, is1Hour, chartWidth]);
 
-  /*useEffect(() => {
-  }, [coinDatas]);*/
+  useEffect(() => {
+  }, [coinDatas]);
 
   useEffect(() => {
     if(coinName != null) {
@@ -500,9 +500,9 @@ const StockChart = ({ onCoinClick, coinName }) => {
             <GraphStartLine
               key={coin.id}
               style={{
-                marginTop: getGraphHeight((coinDatas[coin.id][0] + coinDatas[coin.id][1]) / 2),
-                width: getGraphLineSize(coinDatas[coin.id][0], coinDatas[coin.id][1]) / 2 ,
-                transform: `rotate(${getGraphLineDegree(coinDatas[coin.id][0], coinDatas[coin.id][1])}deg)`,
+                marginTop: getGraphHeight((Number(coinDatas[coin.id][0]) + Number(coinDatas[coin.id][1])) / 2),
+                width: getGraphLineSize(Number(coinDatas[coin.id][0]), Number(coinDatas[coin.id][1])) / 2 ,
+                transform: `rotate(${getGraphLineDegree(Number(coinDatas[coin.id][0]), Number(coinDatas[coin.id][1]))}deg)`,
                 backgroundColor: coin.color}}
               onClick={() => onClickCoin(idx)}/>
             : null
