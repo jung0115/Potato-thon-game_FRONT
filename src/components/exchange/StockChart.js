@@ -362,8 +362,37 @@ const StockChart = ({ onCoinClick, coinName }) => {
   }, []);
 
   // 1분마다 체크 ---------------------------------------------------------------------------------------------------------
- 
-  setInterval(setTime, 60000);
+  //setInterval(setTime, 60000);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    // 1분마다 현재 시간을 업데이트
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    // 1분마다 시간 체크해서 api 호출
+    let currentMinute = currentTime.getMinutes();
+    // 10분 단위
+    if(is10Minute && currentTime % 10 == 0) {
+      setTime();
+    } 
+
+    // 30분 단위
+    else if(is30Minute && currentTime % 30 == 0) {
+      setTime();
+    }
+
+    // 1시간 단위
+    else if(is1Hour && currentTime % 60 == 0) {
+      setTime();
+    }
+    
+  }, [currentTime]);
 
   useEffect(() => {
     setTime();
