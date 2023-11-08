@@ -1,6 +1,7 @@
 // 매수/매도
 import React from "react";
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
@@ -12,60 +13,91 @@ import client from 'gamja-backend-client';
 // api BASE URL
 const host = 'https://api.miruku.dog';
 
-const BuyingSelling = ({ onClose, coinName }) => {
-  const [token, setToken] = useState(null);
-  const [coinId, setCoinId] = useState(null);
-  const [remainAmount, setRemainAmount] = useState(0); // 잔여 코인
-  const [ownAmount, setOwnAmount] = useState(0);       // 사용자가 가지고 있는 코인량
+const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
+  const [cookies] = useCookies(['token']);
+  //const [token, setToken] = useState(null);
+
+  const [remainAmount, setRemainAmount] = useState(_remainAmount); // 잔여 코인
+  const [ownAmount, setOwnAmount] = useState(0);                   // 사용자 보유 코인
+  const [currentPrice, setCurrentPrice] = useState(_currentPrice); // 현재 코인 가격
 
   const getConnection = () => {
     return {
       host: host,
       headers: {
-        ...token ? {
-          'Authorization': `Bearer ${token}`
+        ...cookies.token ? {
+          'Authorization': `Bearer ${cookies.token}`
         } : null
       }
     }
   }
 
-  // 로그인 ---------------------------------------------------------------------------------------------------------
-  async function authSignIn() {
-    await client.functional.auth.signIn(
-        getConnection(),
-        {
-          id: '010-0987-1234',
-          password: 'test1234'
-        }
-    ).then(response => {
-        //response.token // JWT token
-        setToken(response.token);
-        //console.log(response.token);
-    });
-  }
-  authSignIn();
-
   // 코인 종류 조회 ---------------------------------------------------------------------------------------------------------
-  // 코인 id, 잔여 개수 조회
+  // 잔여 개수 조회
   async function coinGetCoins() {
     await client.functional.coin.getCoins(
       getConnection()
     ).then(response => {
-      //console.log(response.coins);
-      setCoinId(null);
       setRemainAmount(0);
-      const coinNameSub = coinName.substr(0, coinName.length - 3);
       for(let i = 0; i < response.coins.length; i++) {
-        if(response.coins[i].name == coinNameSub) {
-          setCoinId(response.coins[i].id);
+        if(response.coins[i].id == _coinId) {
           setRemainAmount(Number(response.coins[i].amount));
+          //console.log(remainAmount);
         }
       }
-      //console.log(coinId);
-      //console.log(remainAmount);
     })
   }
-  coinGetCoins();
+
+  // 현재 코인의 가격 확인 ---------------------------------------------------------------------------------------------------------
+  async function getCoinPrice() {
+    if(_coinId != null) {
+      const currentDate = new Date(); // 현재 시간
+      const pastDate = new Date();
+      pastDate.setMinutes(currentDate.getMinutes() - 1);
+
+      await client.functional.coin.price_histories.getPriceHistories(
+        getConnection(),
+        _coinId, // Coin ID
+        {
+          from: pastDate.toString(), // From
+          to: currentDate.toString() // To
+        }
+      ).then(response => {
+        //console.log(response.histories);
+        setCurrentPrice(response.histories[0].price);
+        //console.log(currentPrice);
+      });
+    }
+  }
+
+  // 사용자 보유 코인 조회 ----------------------------------------------------------------------
+  async function getOwnCoin() {
+    // Get user
+    await client.functional.user.me.getMyUser(
+      getConnection()
+      ).then((response) => {
+        const user = response.user; // My user
+        console.log(user);
+    });
+  }
+  getOwnCoin();
+  
+  // 코인 매수 -------------------------------------------------------------------
+  async function buyCoinApi() {
+    if(_coinId != null && currentPrice > 0) {
+      getCoinPrice();
+      // Buy coin
+      await client.functional.market.coin.buy(
+        getConnection(),
+        _coinId, // Coin ID
+        {
+          amount: "1", // Amount
+          price: currentPrice.toString(), // Price (400 if it does not equal to real price)
+        }
+      );
+    }
+  }
+  //buyCoinApi();
 
   // 주문, 판매 버튼 비활성화, 활성화 색상
   const ResultBtnColor = [palette.buy_sell_result, palette.orange];
@@ -137,7 +169,12 @@ const BuyingSelling = ({ onClose, coinName }) => {
   }
 
   useEffect(() => {
-  }, [inputValue, remainAmount]);
+  }, [inputValue]);
+
+  useEffect(() => {
+    getCoinPrice();
+    
+  }, [isBuying]);
 
   return(
     <Container>
