@@ -7,8 +7,10 @@ import palette from "../../styles/colorPalatte";
 
 import client from 'gamja-backend-client';
 
-// 격자 크기
+// UI에 보이는 격자 크기
 const gridSize = 88;
+// 실제 수치의 격자 크기 (가격 값)
+const graphWidth = 500;
 
 // api BASE URL
 const host = 'https://api.miruku.dog';
@@ -26,52 +28,56 @@ const StockChart = ({ onCoinClick, coinName }) => {
       }
     }
   }
+  // 로그인 ---------------------------------------------------------------------------------------------------------
   async function authSignIn() {
-    // 로그인
     await client.functional.auth.signIn(
         getConnection(),
         {
-          id: 'test', // ID
-          password: 'test' // Password
+          id: '010-0987-1234',
+          password: 'test1234'
         }
     ).then(response => {
         //response.token // JWT token
         setToken(response.token);
+        //console.log(response.token);
     });
   }
   //authSignIn();
+  // 코인 종류 조회 ---------------------------------------------------------------------------------------------------------
   async function coinGetGoins() {
-    // 코인 종류 조회
     await client.functional.coin.getCoins(
       getConnection()
     ).then(response => {
       console.log(response);
     })
   }
-  async function coinPriceHistories() {
-    // 코인 증감 기록 확인
+  // 코인 증감 기록 확인 ---------------------------------------------------------------------------------------------------------
+  async function coinPriceHistories(coinId, currentDate, pastDate) {
     await client.functional.coin.price_histories.getPriceHistories(
       getConnection(),
-      'twix', // Coin ID
+      coinId, // Coin ID
       {
-        from: '2023-11-08 00:00:00', // From
-        to: '2023-11-08 23:59:59' // To
+        from: pastDate.toString(), // From
+        to: currentDate.toString() // To
       }
     ).then(response => {
-        console.log(response);
+      //console.log(response.histories);
+      //console.log(new Date(response.histories[0].timestamp));
+      setCoinHistoryDatas(coinId, response.histories);
     });
   }
-  coinPriceHistories();
+  //coinPriceHistories();
+  //coinGetGoins();
 
-  const graphWidth = 500;
-  
+  // 데이터 ---------------------------------------------------------------------------------------------------------
   // 차트 데이터 샘플
-  const coinDatas = [[2000, 1000, 2000, 1200, 3000, 2400, 2764, 2182, 1629, 1000, 1100, 1238, 2826],
+  /*const coinDatas = [[1000, 1000, 2000, 1200, 3000, 2400, 2764, 2182, 1629, 1000, 1100, 1238, 2826],
     [2100, 900, 2030, 1510, 2300, 2510, 804, 1452, 1429, 1030, 1110, 1263, 1826],
     [500, 1000, 1500, 2000, 2500, 3000, 2500, 2000, 1500, 1000, 500, 1000, 1500],
     [1900, 1300, 1523, 1342, 920, 2512, 1000, 1472, 2451, 2030, 1610, 1293, 1836],
     [1300, 2300, 2340, 1242, 1242, 2553, 1425, 525, 731, 1999, 1340, 1253, 1264],
-    [800, 1040, 1010, 1610, 2230, 2140, 1222, 1232, 899, 1652, 1610, 1223, 1562]];
+    [800, 1040, 1010, 1610, 2230, 2140, 1222, 1232, 899, 1652, 1610, 1223, 1562]];*/
+  const [coinDatas, setCoinData] = useState({});
   //console.log(Math.sqrt(Math.pow(gridSize + 1, 2) + Math.pow(coinDatas.ohyes[0] - coinDatas.ohyes[1], 2)));
 
   // 가로 너비
@@ -79,8 +85,9 @@ const StockChart = ({ onCoinClick, coinName }) => {
   const [chartWidth, setChartWidth] = useState(Math.max(minWidth, Math.round(window.innerWidth / 3.5 * 2.5 / (gridSize + 1)) * (gridSize + 1) - (gridSize * 2.5 + 2)));
 
   // 코인별 색상
-  const coins = [{"name": "오예스 미니", "color": palette.ohyes}, {"name": "하리보", "color": palette.haribo}, {"name": "칙촉", "color": palette.chikchok},
-  {"name": "트윅스 미니스", "color": palette.twix}, {"name": "오리온 카스타드", "color": palette.castad}, {"name": "ABC 초콜릿", "color": palette.abcchoco}];
+  const coins = [{"name": "오예스 미니", "id": "ohyes", "color": palette.ohyes}, {"name": "하리보", "id": "haribo", "color": palette.haribo},
+  {"name": "칙촉", "id": "chikchok", "color": palette.chikchok}, {"name": "트윅스 미니스", "id": "twix", "color": palette.twix},
+  {"name": "오리온 카스타드", "id": "castad", "color": palette.castad}, {"name": "ABC 초콜릿", "id": "abcchoco", "color": palette.abcchoco}];
 
   // 시간
   const [hour, setHour] = useState(0);
@@ -93,52 +100,117 @@ const StockChart = ({ onCoinClick, coinName }) => {
   // 코인차트 선택
   const [selectCoin, setSelectCoin] = useState(null);
   
-  // 현재 시간 가져오기
+  // 현재 시간 가져오기 ---------------------------------------------------------------------------------------------------------
   const setTime = () => {
-    const date = new Date();
-    let presentHour = date.getHours();
-    let presentMinute = date.getMinutes();
+    const currentDate = new Date(); // 현재 시간
+    const pastDate = new Date(); // 그래프 시작 시간
+
+    const subTime = (chartWidth - gridSize/2 - 1) / (gridSize + 1) + 1;
+
+    let currentHour = currentDate.getHours();
+    let currentMinute = currentDate.getMinutes();
 
     // 10분 단위
     if(is10Minute) {
-      presentMinute -= presentMinute % 10;
+      currentMinute -= currentMinute % 10;
+
+      currentDate.setMinutes(currentMinute);
+      pastDate.setMinutes(currentMinute - (subTime * 10) - 1); // 현재로부터 subTime * 10분 전
+      // 코인 증감 데이터 세팅
+      setCoinData({});
+      for(let i = 0; i < coins.length; i++) {
+        coinPriceHistories(coins[i].id, currentDate, pastDate);
+      }
     }
     // 30분 단위
     else if(is30Minute) {
-      if(presentMinute >= 30) presentMinute = 30;
-      else presentMinute = 0;
+      if(currentMinute >= 30) currentMinute = 30;
+      else currentMinute = 0;
+
+      currentDate.setMinutes(currentMinute);
+      pastDate.setMinutes(currentMinute - (subTime * 30) - 1); // 현재로부터 subTime * 30분 전
+      // 코인 증감 데이터 세팅
+      setCoinData({});
+      for(let i = 0; i < coins.length; i++) {
+        coinPriceHistories(coins[i].id, currentDate, pastDate);
+      }
     }
     // 1시간 단위
     else if(is1Hour) {
-      presentMinute = 0;
+      currentMinute = 0;
+
+      currentDate.setMinutes(currentMinute);
+      pastDate.setMinutes(currentMinute);
+      pastDate.setHours(currentHour - subTime - 1); // 현재로부터 subTime시간 전
+      // 코인 증감 데이터 세팅
+      setCoinData({});
+      for(let i = 0; i < coins.length; i++) {
+        coinPriceHistories(coins[i].id, currentDate, pastDate);
+      }
     }
 
-    setHour(presentHour);
-    setMinute(presentMinute);
+    setHour(currentHour);
+    setMinute(currentMinute);
   }
 
-  // 10분 단위 선택
+  // 코인 가격 데이터 정리 ---------------------------------------------------------------------------------------------------------
+  const setCoinHistoryDatas = (coinId, histories) => {
+    // 10분 단위
+    if(is10Minute) {
+      const data = [];
+      for(let i = 0; i < histories.length; i += 10) {
+        data.unshift(histories[i].price);
+      }
+      setCoinData((currentData) => {
+        return {...currentData, [coinId]: data };
+      });
+    }
+
+    // 30분 단위
+    else if(is30Minute) {
+      const data = [];
+      for(let i = 0; i < histories.length; i += 30) {
+        data.unshift(histories[i].price);
+      }
+      setCoinData((currentData) => {
+        return {...currentData, [coinId]: data };
+      });
+    }
+
+    // 1시간 단위
+    else if(is1Hour) {
+      const data = [];
+      for(let i = 0; i < histories.length; i += 60) {
+        data.unshift(histories[i].price);
+      }
+      setCoinData((currentData) => {
+        return {...currentData, [coinId]: data };
+      });
+    }
+  }
+
+  // 10분 단위 선택 ---------------------------------------------------------------------------------------------------------
   const onClick10m = () => {
     set10Minute(true);
     set30Minute(false);
     set1Hour(false);
   }
 
-  // 20분 단위 선택
+  // 20분 단위 선택 ---------------------------------------------------------------------------------------------------------
   const onClick30m = () => {
     set10Minute(false);
     set30Minute(true);
     set1Hour(false);
   }
 
-  // 30분 단위 선택
+  // 30분 단위 선택 ---------------------------------------------------------------------------------------------------------
   const onClick1h = () => {
     set10Minute(false);
     set30Minute(false);
     set1Hour(true);
   }
 
-  // 코인 그래프 선택
+  // 코인 그래프 선택 ---------------------------------------------------------------------------------------------------------
   const onClickCoin = (index) => {
     // 선택했던 걸 재선택하면 선택 취소
     if(index == selectCoin) {
@@ -152,13 +224,13 @@ const StockChart = ({ onCoinClick, coinName }) => {
     }
   }
 
-  // 화면 크기 변할 때마다 가로길이 가져오기
+  // 화면 크기 변할 때마다 가로길이 가져오기 ---------------------------------------------------------------------------------------------------------
   const handleResize = () => {
     let newWidth = Math.round(window.innerWidth / 3.5 * 2.5 / (gridSize + 1)) * (gridSize + 1) - (gridSize * 2.5 + 2);
     setChartWidth(Math.max(newWidth, minWidth));
   };
 
-  // 가로선 삽입
+  // 가로선 삽입 ---------------------------------------------------------------------------------------------------------
   const setHorizonLines = () => {
     let lines = [];
 
@@ -175,7 +247,7 @@ const StockChart = ({ onCoinClick, coinName }) => {
     return lines;
   }
 
-  // 세로선 삽입
+  // 세로선 삽입 ---------------------------------------------------------------------------------------------------------
   const setVerticalLines = () => {
     let lines = [];
 
@@ -192,7 +264,8 @@ const StockChart = ({ onCoinClick, coinName }) => {
         
         if(m < 0) {
           m *= -1;
-          h -= Math.floor(m/60) + 1;
+          h -= Math.floor(m/60);
+          if(m % 60 != 0) h--;
           m = (60 - (m % 60)) % 60;
         }
         else {
@@ -206,9 +279,12 @@ const StockChart = ({ onCoinClick, coinName }) => {
 
         if(m < 0) {
           m *= -1;
-          h -= Math.floor(m/60) + 1;
+          h -= Math.floor(m/60);
+          if(m % 60 != 0) h--;
         }
-        h -= Math.floor(m/60);
+        else {
+          h -= Math.floor(m/60);
+        }
         m %= 60;
       }
       // 40분 단위
@@ -221,6 +297,7 @@ const StockChart = ({ onCoinClick, coinName }) => {
         h = (24 + h) % 24;
       }
 
+      // 수직 격자선, 꺾은선 그래프 넣기 ---------------------------------------------------------------------------------------------------------
       lines.push(
         <GridVertical>
           {/* 수직 격자선 */}
@@ -233,18 +310,20 @@ const StockChart = ({ onCoinClick, coinName }) => {
           {/* 꺾은선 그래프 */}
           {/* 선택된 코인이거나, 아무 코인도 선택되지 않은 경우에만 보여줄 것 */}
           <GraphLines>
-            {coinDatas.map((coinData, idx) => (
-              selectCoin == idx || selectCoin == null ?
+            {Object.keys(coinDatas).length != 0 && coinDatas != null ? coins.map((coin, idx) => (
+              (selectCoin == idx || selectCoin == null) && coinDatas[coin.id] !== undefined ?
               <GraphLine
+                key={coin.id}
                 style={{
-                marginTop: getGraphHeight(coinData[index]),
-                width: getGraphLineSize(coinData[index], coinData[index + 1]),
-                transform: `rotate(${getGraphLineDegree(coinData[index], coinData[index + 1])}deg)`,
-                backgroundColor: Object.values(coins[idx])[1]}}
+                  marginTop: getGraphHeight(coinDatas[coin.id][index]),
+                  width: getGraphLineSize(coinDatas[coin.id][index], coinDatas[coin.id][index + 1]),
+                  transform: `rotate(${getGraphLineDegree(coinDatas[coin.id][index], coinDatas[coin.id][index + 1])}deg)`,
+                  backgroundColor: coin.color}}
                 onClick={() => onClickCoin(idx)}/>
-                : null
-            ))}
+              : null
+            )) : null}
           </GraphLines>
+
         </GridVertical>
       );
     }
@@ -252,27 +331,28 @@ const StockChart = ({ onCoinClick, coinName }) => {
     return lines;
   }
 
-  // 그래프 높이(?) 계산
+  // 그래프 높이(?) 계산 ---------------------------------------------------------------------------------------------------------
   // 현재 코인값을 그래프 길이에 비례해서...
   const getGraphHeight = (cost1) => {
     const top = 3000 - cost1;
     return top / 500 * (gridSize + 1);
   }
 
-  // 그래프 꺾은 선 길이 계산
+  // 그래프 꺾은 선 길이 계산 ---------------------------------------------------------------------------------------------------------
   const getGraphLineSize = (cost1, cost2) => {
     const graphHeight = Math.abs(cost1 - cost2);
     const size = Math.sqrt(Math.pow(graphWidth, 2) + Math.pow(graphHeight, 2));
     return size / 500 * (gridSize + 1);
   }
 
-  // 그래프 꺾은 선 각도 계산
+  // 그래프 꺾은 선 각도 계산 ---------------------------------------------------------------------------------------------------------
   const getGraphLineDegree = (cost1, cost2) => {
     const graphHeight = Math.abs(cost1 - cost2);
     const degree = Math.atan(graphHeight / graphWidth) * 180 / Math.PI;
     return degree * Math.sign(cost1 - cost2);
   }
 
+  // 화면 크기 변할 때마다 호출 ---------------------------------------------------------------------------------------------------------
   useEffect(() => {
     window.addEventListener("resize", handleResize);
     return () => {
@@ -281,11 +361,16 @@ const StockChart = ({ onCoinClick, coinName }) => {
     };
   }, []);
 
-  setInterval(setTime, 10000);
+  // 1분마다 체크 ---------------------------------------------------------------------------------------------------------
+ 
+  setInterval(setTime, 60000);
 
   useEffect(() => {
     setTime();
-  }, [minute, is10Minute, is30Minute, is1Hour]);
+  }, [is10Minute, is30Minute, is1Hour, chartWidth]);
+
+  /*useEffect(() => {
+  }, [coinDatas]);*/
 
   useEffect(() => {
     if(coinName != null) {
@@ -301,7 +386,8 @@ const StockChart = ({ onCoinClick, coinName }) => {
       setSelectCoin(null);
     }
   }, [coinName]);
-
+  
+  // ---------------------------------------------------------------------------------------------------------
   return(
     <Container>
       {/* 차트 상단 부분: 시간 간격 선택, 코인 차트별 색상 */}
@@ -380,17 +466,18 @@ const StockChart = ({ onCoinClick, coinName }) => {
         <GraphLineContainer>
           {/* 맨 왼쪽 반쪽짜리 선 */}
           {/* 선택된 코인이거나, 아무 코인도 선택되지 않은 경우에만 보여줄 것 */}
-          {coinDatas.map((coinData, idx) => (
-            selectCoin == idx || selectCoin == null ?
+          {Object.keys(coinDatas).length != 0 && coinDatas != null ? coins.map((coin, idx) => (
+              (selectCoin == idx || selectCoin == null) && coinDatas[coin.id] !== undefined ?
             <GraphStartLine
+              key={coin.id}
               style={{
-                marginTop: getGraphHeight((coinData[0] + coinData[1]) / 2),
-                width: getGraphLineSize(coinData[0], coinData[1]) / 2 ,
-                transform: `rotate(${getGraphLineDegree(coinData[0], coinData[1])}deg)`,
-                backgroundColor: Object.values(coins[idx])[1]}}
+                marginTop: getGraphHeight((coinDatas[coin.id][0] + coinDatas[coin.id][1]) / 2),
+                width: getGraphLineSize(coinDatas[coin.id][0], coinDatas[coin.id][1]) / 2 ,
+                transform: `rotate(${getGraphLineDegree(coinDatas[coin.id][0], coinDatas[coin.id][1])}deg)`,
+                backgroundColor: coin.color}}
               onClick={() => onClickCoin(idx)}/>
             : null
-          ))}
+          )): null}
           {/* 나머지 선은 수직 격자에 겹쳐서*/}
         </GraphLineContainer>
 
