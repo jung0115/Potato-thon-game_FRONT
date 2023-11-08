@@ -3,12 +3,15 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import cancel from '../contents/cancel.svg';
 import client from 'gamja-backend-client';
+import { useAuth } from "../components/Context";
 
 const Login = ({ onClose }) => {
     const [userId, setUserId] = useState('');
     const [userPw, setUserPw] = useState('');
     const [userName, setUserName] = useState('');
     const [token, setToken] = useState(null);
+
+    const { login } = useAuth();
 
     const host = 'https://api.miruku.dog';
 
@@ -41,6 +44,7 @@ const Login = ({ onClose }) => {
                     ).then(response => {
                         const user = response.user;
                         setUserName(user.id);
+                        login(user);
                     });
                 } catch (error) {
                     console.error("사용자 정보 가져오기 오류: ", error);
@@ -48,7 +52,7 @@ const Login = ({ onClose }) => {
             };
             getMyUser();
         }
-    }, [token]);
+    }, [token, login]);
 
     const onChangeId = (e) => {
         setUserId(e.target.value);
