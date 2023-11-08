@@ -124,8 +124,7 @@ const StockChart = ({ onCoinClick, coinName }) => {
     }
     // 30분 단위
     else if(is30Minute) {
-      if(currentMinute >= 30) currentMinute = 30;
-      else currentMinute = 0;
+      currentMinute -= currentMinute % 10;
 
       currentDate.setMinutes(currentMinute);
       pastDate.setMinutes(currentMinute - (subTime * 30) - 1); // 현재로부터 subTime * 30분 전
@@ -137,7 +136,7 @@ const StockChart = ({ onCoinClick, coinName }) => {
     }
     // 1시간 단위
     else if(is1Hour) {
-      currentMinute = 0;
+      currentMinute -= currentMinute % 10;
 
       currentDate.setMinutes(currentMinute);
       pastDate.setMinutes(currentMinute);
@@ -287,9 +286,8 @@ const StockChart = ({ onCoinClick, coinName }) => {
         }
         m %= 60;
       }
-      // 40분 단위
+      // 1시간 단위
       else if(is1Hour) {
-        m = 0;
         h = (h - i) % 24;
       }
 
