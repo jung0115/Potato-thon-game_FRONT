@@ -7,7 +7,65 @@ import palette from "../../styles/colorPalatte";
 
 import Loading from "./Loading";
 
-const BuyingSelling = ({ onClose }) => {
+import client from 'gamja-backend-client';
+
+// api BASE URL
+const host = 'https://api.miruku.dog';
+
+const BuyingSelling = ({ onClose, coinName }) => {
+  const [token, setToken] = useState(null);
+  const [coinId, setCoinId] = useState(null);
+  const [remainAmount, setRemainAmount] = useState(0);
+
+  const getConnection = () => {
+    return {
+      host: host,
+      headers: {
+        ...token ? {
+          'Authorization': `Bearer ${token}`
+        } : null
+      }
+    }
+  }
+
+  // 로그인 ---------------------------------------------------------------------------------------------------------
+  async function authSignIn() {
+    await client.functional.auth.signIn(
+        getConnection(),
+        {
+          id: '010-0987-1234',
+          password: 'test1234'
+        }
+    ).then(response => {
+        //response.token // JWT token
+        setToken(response.token);
+        //console.log(response.token);
+    });
+  }
+  //authSignIn();
+
+  // 코인 종류 조회 ---------------------------------------------------------------------------------------------------------
+  // 코인 id, 잔여 개수 조회
+  async function coinGetCoins() {
+    await client.functional.coin.getCoins(
+      getConnection()
+    ).then(response => {
+      //console.log(response.coins);
+      setCoinId(null);
+      setRemainAmount(0);
+      const coinNameSub = coinName.substr(0, coinName.length - 3);
+      for(let i = 0; i < response.coins.length; i++) {
+        if(response.coins[i].name == coinNameSub) {
+          setCoinId(response.coins[i].id);
+          setRemainAmount(Number(response.coins[i].amount));
+        }
+      }
+      //console.log(coinId);
+      //console.log(remainAmount);
+    })
+  }
+  coinGetCoins();
+
   // 주문, 판매 버튼 비활성화, 활성화 색상
   const ResultBtnColor = [palette.buy_sell_result, palette.orange];
 
@@ -31,7 +89,12 @@ const BuyingSelling = ({ onClose }) => {
   const handleInputChange = (e) => {
     const value = e.target.value.replace(/[^0-9]/g, '');
     const integerValue = parseInt(value, 10);
-    if(integerValue >= 0) setInputValue(integerValue);
+    if(integerValue >= 0) {
+      // 잔여 수량보다 많은 값을 입력할 경우 => 잔여 수량 값을 보여주기
+      if(integerValue > remainAmount) setInputValue(remainAmount);
+      // 잔여 수량보다 적은 값을 입력할 경우 => 그대로 보여주기
+      else setInputValue(integerValue);
+    }
     else setInputValue('');
   }
 
@@ -59,8 +122,8 @@ const BuyingSelling = ({ onClose }) => {
   }
 
   useEffect(() => {
-  }, [inputValue]);
-  
+  }, [inputValue, remainAmount]);
+
   return(
     <Container>
       <Title>매수/매도</Title>
@@ -233,6 +296,7 @@ const Title = styled.div`
   color: ${palette.sub_title};
   padding-bottom: 12px;
   padding-left: 2px;
+  cursor: default;
 `;
 
 const Contents = styled.div`
@@ -252,6 +316,7 @@ const SelectTab = styled.div`
   color: ${palette.select_buy_sell_text};
   font-size: 21px;
   font-family: 'Pretendard-Bold';
+  cursor: pointer;
 `;
 const UnselectRightTab = styled.div`
   flex: 1;
@@ -262,6 +327,7 @@ const UnselectRightTab = styled.div`
   font-size: 21px;
   font-family: 'Pretendard-Bold';
   border-radius: 0px 8px 0px 0px;
+  cursor: pointer;
 `;
 const UnselectLeftTab = styled.div`
   flex: 1;
@@ -272,6 +338,7 @@ const UnselectLeftTab = styled.div`
   font-size: 21px;
   font-family: 'Pretendard-Bold';
   border-radius: 8px 0px 0px 0px;
+  cursor: pointer;
 `;
 
 const BuySellContainer = styled.div`
@@ -293,11 +360,13 @@ const BuySellLabel = styled.div`
   font-size: 18px;
   font-family: 'Pretendard-Bold';
   color: ${palette.white};
+  cursor: default;
 `;
 const BuySellResultLabel = styled.div`
   font-size: 18px;
   font-family: 'Pretendard-Bold';
   color: ${palette.buy_sell_result};
+  cursor: default;
 `;
 const BuySellValues = styled.div`
   margin-left: auto;
@@ -345,6 +414,7 @@ const SubmitBtn = styled.div`
   font-size: 23px;
   font-family: 'Pretendard-Bold';
   color: ${palette.white};
+  cursor: pointer;
 `;
 
 const LoadingOverlay = styled.div`

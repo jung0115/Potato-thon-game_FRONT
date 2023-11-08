@@ -44,7 +44,7 @@ const StockChart = ({ onCoinClick, coinName }) => {
   }
   //authSignIn();
   // 코인 종류 조회 ---------------------------------------------------------------------------------------------------------
-  async function coinGetGoins() {
+  async function coinGetCoins() {
     await client.functional.coin.getCoins(
       getConnection()
     ).then(response => {
@@ -67,16 +67,9 @@ const StockChart = ({ onCoinClick, coinName }) => {
     });
   }
   //coinPriceHistories();
-  //coinGetGoins();
+  //coinGetCoins();
 
   // 데이터 ---------------------------------------------------------------------------------------------------------
-  // 차트 데이터 샘플
-  /*const coinDatas = [[1000, 1000, 2000, 1200, 3000, 2400, 2764, 2182, 1629, 1000, 1100, 1238, 2826],
-    [2100, 900, 2030, 1510, 2300, 2510, 804, 1452, 1429, 1030, 1110, 1263, 1826],
-    [500, 1000, 1500, 2000, 2500, 3000, 2500, 2000, 1500, 1000, 500, 1000, 1500],
-    [1900, 1300, 1523, 1342, 920, 2512, 1000, 1472, 2451, 2030, 1610, 1293, 1836],
-    [1300, 2300, 2340, 1242, 1242, 2553, 1425, 525, 731, 1999, 1340, 1253, 1264],
-    [800, 1040, 1010, 1610, 2230, 2140, 1222, 1232, 899, 1652, 1610, 1223, 1562]];*/
   const [coinDatas, setCoinData] = useState({});
   //console.log(Math.sqrt(Math.pow(gridSize + 1, 2) + Math.pow(coinDatas.ohyes[0] - coinDatas.ohyes[1], 2)));
 
@@ -538,6 +531,7 @@ const TimeTitle = styled.div`
   font-family: 'Pretendard-Bold';
   color: ${palette.time_title};
   margin-right: 21px;
+  cursor: default;
 `;
 // 시간 선택창
 const TimeBtns = styled.div`
@@ -691,12 +685,14 @@ const GridVerticalRangeText = styled.div`
   font-family: 'Pretendard-Regular';
   color: ${palette.grid_range};
   margin: 9px auto 0px auto;
+  cursor: default;
 `;
 const GridVerticalRangeEndText = styled.div`
   font-size: 18px;
   font-family: 'Pretendard-Regular';
   color: ${palette.grid_range};
   margin: 9px 84.5px 0px auto;
+  cursor: default;
 `;
 
 // 격자 가로선 범위 -----------------------------------------------------------------------
@@ -712,6 +708,7 @@ const GridHorizonRangeText = styled.div`
   font-family: 'Pretendard-Regular';
   color: ${palette.grid_range};
   margin: auto 0px auto 9px;
+  cursor: default;
 `;
 
 // 꺾은선 그래프 -----------------------------------------------------------------------
