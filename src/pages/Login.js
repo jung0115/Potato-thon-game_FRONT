@@ -1,9 +1,12 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { Cookies } from "react-cookie";
 import styled from "styled-components";
-import cancel from '../contents/cancel.svg';
 import client from 'gamja-backend-client';
+
 import { useAuth } from "../components/Context";
+
+import cancel from '../contents/cancel.svg';
 
 const Login = ({ onClose }) => {
     const [userId, setUserId] = useState('');
@@ -12,6 +15,7 @@ const Login = ({ onClose }) => {
     const [token, setToken] = useState(null);
 
     const { login } = useAuth();
+    const cookies = new Cookies();
 
     const host = 'https://api.miruku.dog';
 
@@ -26,6 +30,10 @@ const Login = ({ onClose }) => {
         }
     }
 
+    const setCookie = (name, value, option) => {
+        return cookies.set(name, value, {...option});
+    }
+
     useEffect(() => {
         if (userId.length === 11) {
             setUserId(userId.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
@@ -37,6 +45,10 @@ const Login = ({ onClose }) => {
 
     useEffect(() => {
         if (token) {
+            setCookie("token", `${token}`, {
+                path: '/',
+                sameSite: 'strict'
+            });
             const getMyUser = async () => {
                 try {
                     await client.functional.user.me.getMyUser(
@@ -85,6 +97,7 @@ const Login = ({ onClose }) => {
     
     const CheckLogin = () => {
         console.log(userName);
+        console.log(token);
         onClose(userName);
     };
 

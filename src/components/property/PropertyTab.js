@@ -10,7 +10,6 @@ import potatoImg from '../../contents/img_potato_angry.png';
 const title = ["코인명", "매입가", "현재가", "대비", "수량"];
 
 const PropertyTab = () => {
-  const [money, setMoney] = useState(0);
   const { user } = useAuth();
   const coin = [
     {
@@ -32,60 +31,61 @@ const PropertyTab = () => {
       { user ? (
         <>
           <MoneyContainer>
-        <WalletIcon src={walletIcon}/>
-        <PossMoney> 보유 화폐 </PossMoney>
-          <PossMoney style={{ marginLeft: '90px' }}> 
-            {user.balance} 
-          </PossMoney>
-          <PossMoney style={{marginLeft: '10px'}}> 원 </PossMoney>
-        </MoneyContainer>
+            <WalletIcon src={walletIcon}/>
+            <PossMoney> 보유 화폐 </PossMoney>
+            <PossMoney style={{ marginLeft: '90px' }}> 
+              {user.balance} 
+            </PossMoney>
+            <PossMoney style={{marginLeft: '10px'}}> 원 </PossMoney>
+          </MoneyContainer>
         
-        <CoinContainer>
-          <TitleContainer>
-            {title.map((item) => (
-              <Title> {item} </Title>
-            ))}
-          </TitleContainer>
-          <Line/>
-          <ListContainer>
-            {coin.map((item, idx) => {
-              const fmPurchasingPrice = (item.purchasingPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-              const fmPresentPrice = (item.presentPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-              const priceDiff = item.presentPrice - item.purchasingPrice;
+          <CoinContainer>
+            <TitleContainer>
+              {title.map((item) => (
+                <Title> {item} </Title>
+              ))}
+            </TitleContainer>
+            <Line/>
+            <ListContainer>
+              {coin.map((item, idx) => {
+                const fmPurchasingPrice = (item.purchasingPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                const fmPresentPrice = (item.presentPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                const priceDiff = item.presentPrice - item.purchasingPrice;
 
-              return (
-                <CoinList>
-                  <CoinInfo style={{ paddingLeft: '43px'}}> {item.name} </CoinInfo>
-                  <CoinInfo 
-                    style={{ 
-                      textAlign: 'right',
-                      paddingRight: '75px'
-                    }}> 
-                      {fmPurchasingPrice}
-                  </CoinInfo>
-                  <CoinInfo 
-                    style={{ 
-                      textAlign: 'right',
-                      paddingRight: '135px'
-                    }}
-                    fontColor={priceDiff}
-                  > 
-                    {fmPresentPrice} 
-                  </CoinInfo>
-                  <CoinInfo 
-                    fontColor={priceDiff}
-                    style={{ paddingRight: '57px' }}
-                  >
-                    {priceDiff !== 0 ? (
-                      <>
-                        {priceDiff > 0 ? '▲' : '▼'} {" "}
-                        {Math.abs(priceDiff)} 
-                      </>) : ('−')
-                    } 
-                  </CoinInfo>
-                  <CoinInfo style={{ paddingRight: '32px'}}> {item.quantity} </CoinInfo>
-                </CoinList>
-              )})}
+                return (
+                  <CoinList>
+                    <CoinInfo style={{ paddingLeft: '43px'}}> {item.name} </CoinInfo>
+                    <CoinInfo 
+                      style={{ 
+                        textAlign: 'right',
+                        paddingRight: '75px'
+                      }}> 
+                        {fmPurchasingPrice}
+                    </CoinInfo>
+                    <CoinInfo 
+                      style={{ 
+                        textAlign: 'right',
+                        paddingRight: '135px'
+                      }}
+                      fontColor={priceDiff}
+                    > 
+                      {fmPresentPrice} 
+                    </CoinInfo>
+                    <CoinInfo 
+                      fontColor={priceDiff}
+                      style={{ paddingRight: '57px' }}
+                    >
+                      {priceDiff !== 0 ? (
+                        <>
+                          {priceDiff > 0 ? '▲' : '▼'} {" "}
+                          {Math.abs(priceDiff)} 
+                        </>) : ('−')
+                      } 
+                    </CoinInfo>
+                    <CoinInfo style={{ paddingRight: '32px'}}> {item.quantity} </CoinInfo>
+                  </CoinList>
+                )
+              })}
             </ListContainer>
           </CoinContainer>
         </>
