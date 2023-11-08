@@ -147,6 +147,7 @@ const PotatoTitle = styled.div`
   color: ${palette.white};
   font-family: 'Pretendard-ExtraBold';
   margin: auto 179px 25px 0px;
+  cursor: default;
 `;
 
 const TabContainer = styled.div`
@@ -168,6 +169,7 @@ const SelectTabBtn = styled.div`
   font-weight: 600;
   color: ${palette.orange};
   font-family: 'Pretendard-Bold';
+  cursor: pointer;
 `;
 // 선택되지 않은 탭 버튼
 const UnselectTabBtn = styled.div`
@@ -175,6 +177,7 @@ const UnselectTabBtn = styled.div`
   font-weight: 600;
   color: ${palette.white};
   font-family: 'Pretendard-Bold';
+  cursor: pointer;
 `;
 
 // 선택된 탭 강조 라인
