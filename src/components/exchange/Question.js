@@ -1,6 +1,7 @@
 // 도움말
 import React from "react";
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
@@ -9,7 +10,110 @@ import helpIcon from "../../contents/ic_question_help.png";
 import submitIcon from "../../contents/ic_question_submit.png";
 import checkNewIcon from "../../contents/ic_question_check.png";
 
+import Loading from "./Loading";
+
+import client from 'gamja-backend-client';
+
+// api BASE URL
+const host = 'https://api.miruku.dog';
+
 const Question = () => {
+  const [cookies] = useCookies(['token']);
+  const [qnaList, setQnaList] = useState([]);
+  const [isNewAnswer, setIsNewAnswer] = useState(false);
+
+  // 로딩
+  const [isLoading, setIsLoading] = useState(false);
+
+  const closeLoading = () => {
+    setIsLoading(false);
+  }
+
+  const [inputQuestion, setInputQuestion] = useState("");
+
+  const handleInputChange = (e) => {
+    setInputQuestion(e.target.value);
+  };
+
+  const getConnection = () => {
+    return {
+      host: host,
+      headers: {
+        ...cookies.token ? {
+          'Authorization': `Bearer ${cookies.token}`
+        } : null
+      }
+    }
+  }
+
+  // 질문 생성 --------------------------------------------------------------------------------------------
+  async function createQna() {
+    if(inputQuestion.length > 0) {
+      setIsLoading(true);
+      await client.functional.qna.create(
+        getConnection(),
+        {
+          question: inputQuestion, // Question
+        }
+      );
+      setInputQuestion('');
+    }
+  }
+  
+  //createQna();
+  // 답변 완료된 질문 --------------------------------------------------------------------------------------------
+  async function getAllQnA() {
+    await client.functional.qna.answered.listAnswered(
+      getConnection()
+      ).then((response) => {
+        //console.log(response.qna);
+        const sortedItems = [...response.qna];
+        sortedItems.sort((a, b) => b.answeredAt.localeCompare(a.answeredAt));
+        setQnaList([...response.qna]);
+
+        
+    });
+  }
+  // 답변 안 한 질문 --------------------------------------------------------------------------------------------
+  async function getNonAnswerQnA() {
+    await client.functional.qna.not_answered.manageListNotAnswered(
+      getConnection()
+      ).then((response) => {
+        console.log(response.qna);
+    });
+  }
+  //getNonAnswerQnA();
+  // 답변 --------------------------------------------------------------------------------------------
+  async function answerQna() {
+    await client.functional.qna.answer.manageAnswer(
+      getConnection(),
+      '46e70e92-8da6-4c78-8258-7283f913eb0b',
+      {
+        answer: "도움말 답변 6:21", // Answer
+      }
+    );
+  }
+  
+  useEffect(() => {
+    getAllQnA();
+
+    // 5초마다 질문 리스트 업데이트
+    const interval = setInterval(() => {
+      getAllQnA();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    // 10분 내에 답변된 질문이 있는지 확인
+    if(qnaList.length > 0) {
+      const minute = Math.floor((new Date() - new Date(qnaList[0].answeredAt)) / (1000 * 60));
+      if(minute < 10) setIsNewAnswer(true);
+      else setIsNewAnswer(false);
+    }
+  }, [qnaList]);
+
   return(
     <Container>
       {/* 설명 */}
@@ -22,90 +126,62 @@ const Question = () => {
 
       {/* 질문 요청 */}
       <QuestionContainer>
-        <QuestionInput type="text" placeholder="감자톤 주식 게임 관련 질문만 작성부탁드립니다" />
-        <QuestionSubmitBtn src={submitIcon}/>
+        <QuestionInput
+          type="text"
+          placeholder="감자톤 주식 게임 관련 질문만 작성부탁드립니다"
+          value={inputQuestion}
+          onChange={handleInputChange}/>
+        <QuestionSubmitBtn
+          src={submitIcon}
+          onClick={createQna}/>
       </QuestionContainer>
 
       <QnaListAll>
         {/* 질문답변 리스트 */}
         <QnaListContainer>
-          <QnaList>
-            <QnaItemContainer>
-              <QnaQuestion>
-                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
-              </QnaQuestion>
-              <QnaAnswer>
-                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
-              </QnaAnswer>
-            </QnaItemContainer>
-            <QnaItemContainer>
-              <QnaQuestion>
-                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
-              </QnaQuestion>
-              <QnaAnswer>
-                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
-              </QnaAnswer>
-            </QnaItemContainer>
-            <QnaItemContainer>
-              <QnaQuestion>
-                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
-              </QnaQuestion>
-              <QnaAnswer>
-                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
-              </QnaAnswer>
-            </QnaItemContainer>
-            <QnaItemContainer>
-              <QnaQuestion>
-                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
-              </QnaQuestion>
-              <QnaAnswer>
-                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
-              </QnaAnswer>
-            </QnaItemContainer>
-            <QnaItemContainer>
-              <QnaQuestion>
-                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
-              </QnaQuestion>
-              <QnaAnswer>
-                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
-              </QnaAnswer>
-            </QnaItemContainer>
-            <QnaItemContainer>
-              <QnaQuestion>
-                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
-              </QnaQuestion>
-              <QnaAnswer>
-                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
-              </QnaAnswer>
-            </QnaItemContainer>
-            <QnaItemContainer>
-              <QnaQuestion>
-                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
-              </QnaQuestion>
-              <QnaAnswer>
-                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
-              </QnaAnswer>
-            </QnaItemContainer>
-            <QnaItemContainer>
-              <QnaQuestion>
-                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
-              </QnaQuestion>
-              <QnaAnswer>
-                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
-              </QnaAnswer>
-            </QnaItemContainer>
+          <QnaList
+            style={
+              isNewAnswer ? {
+                paddingTop: 35,
+                height: 145.75,
+              } : {
+                paddingTop: 0,
+                height: 180.75,
+              }
+            }>
+            {qnaList.map((qna, idx) => (
+              <QnaItemContainer
+                key={idx}>
+                <QnaQuestion>
+                  Q. {qna.question}
+                </QnaQuestion>
+                <QnaAnswer>
+                  A. {qna.answer}
+                </QnaAnswer>
+              </QnaItemContainer>
+            ))}
           </QnaList>
         </QnaListContainer>
 
         {/* 새롭게 답변이 달린 질문 알림 */}
-        <NewQnaContainer>
-          <NewNoitceText>답변이 달린 질문이 있어요</NewNoitceText>
-          <CheckNewNotice>
-            <CheckNewText>읽음으로 표시하기</CheckNewText>
+        {isNewAnswer ? 
+          <NewQnaContainer>
+            <NewNoitceText>최근 10분 이내 답변이 달린 질문이 있어요</NewNoitceText>
             <CheckNewIcon src={checkNewIcon}/>
-          </CheckNewNotice>
-        </NewQnaContainer>
+          </NewQnaContainer>
+          : null
+        }
       </QnaListAll>
+
+        {/* 로딩창 */}
+        {isLoading ?
+          <LoadingOverlay>
+            <Loading
+              closeLoading={closeLoading}
+              time={200}/>
+          </LoadingOverlay>  
+          : null
+        }
 
     </Container>
   );
@@ -125,6 +201,7 @@ const Title = styled.div`
   font-family: 'Pretendard-Bold';
   color: ${palette.question_title};
   margin-left: 4px;
+  cursor: default;
 `;
 const HelpIcon = styled.img`
   width: 21px;
@@ -173,7 +250,7 @@ const QnaListContainer = styled.div`
 `;
 const NewQnaContainer = styled.div`
   display: flex;
-  width: 326.52px;
+  
   background-color: ${palette.new_qna_bg};
   border-radius: 7px 0px 10px 10px;
   margin-left: 10px;
@@ -186,6 +263,7 @@ const NewNoitceText = styled.div`
   font-family: 'Pretendard-Medium';
   color: ${palette.white};
   margin: 12px 0px 7.5px 9px;
+  cursor: default;
 `;
 const CheckNewNotice = styled.div`
   margin-left: auto;
@@ -200,12 +278,10 @@ const CheckNewText = styled.div`
 const CheckNewIcon = styled.img`
   width: 25.328px;
   height: 24.12px;
-  margin: 3px 7.5px 6.5px 0px;
+  margin: 3px 7.5px 6.5px 6px;
 `;
 
 const QnaList = styled.div`
-  height: 145.75px;
-  padding-top: 35px;
   overflow-y: auto;
   &::-webkit-scrollbar {
     width: 8px;
@@ -232,6 +308,19 @@ const QnaAnswer = styled.div`
   font-size: 12px;
   font-family: 'Pretendard-Regular';
   color: ${palette.qna_item_text};
+`;
+
+const LoadingOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
 `;
 
 export default Question;

@@ -105,8 +105,6 @@ const StockChart = ({ onCoinClick, coinName }) => {
 
     // 10분 단위
     if(is10Minute) {
-      currentMinute -= currentMinute % 10;
-
       currentDate.setMinutes(currentMinute);
       pastDate.setMinutes(currentMinute - (subTime * 10) - 1); // 현재로부터 subTime * 10분 전
       // 코인 증감 데이터 세팅
@@ -117,8 +115,6 @@ const StockChart = ({ onCoinClick, coinName }) => {
     }
     // 30분 단위
     else if(is30Minute) {
-      currentMinute -= currentMinute % 10;
-
       currentDate.setMinutes(currentMinute);
       pastDate.setMinutes(currentMinute - (subTime * 30) - 1); // 현재로부터 subTime * 30분 전
       // 코인 증감 데이터 세팅
@@ -129,8 +125,6 @@ const StockChart = ({ onCoinClick, coinName }) => {
     }
     // 1시간 단위
     else if(is1Hour) {
-      currentMinute -= currentMinute % 10;
-
       currentDate.setMinutes(currentMinute);
       pastDate.setMinutes(currentMinute);
       pastDate.setHours(currentHour - subTime - 1); // 현재로부터 subTime시간 전
@@ -357,32 +351,21 @@ const StockChart = ({ onCoinClick, coinName }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
-    // 10초마다 현재 시간을 업데이트
+    // 1초마다 현재 시간을 업데이트
     const interval = setInterval(() => {
       setCurrentTime(new Date());
-    }, 10000);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
-    // 10초마다 시간 체크해서 해당되는 시간에만 api 호출
+    // 1분마다 코인 증감 데이터 조회 api 호출
     // 너무 자주 api 호출하면 fetch 오류 발생
-    const currentMinute = currentTime.getMinutes();
-    // 10분 단위 => NN:00, NN:10, NN:20 ...
-    if(is10Minute && currentMinute % 10 == 0) {
+    const currentSecond = currentTime.getSeconds();
+    if(currentSecond == 0) {
       setTime();
     } 
-
-    // 30분 단위 => NN:00, NN:30
-    else if(is30Minute && currentMinute % 30 == 0) {
-      setTime();
-    }
-
-    // 1시간 단위 => NN:00
-    else if(is1Hour && currentMinute % 60 == 0) {
-      setTime();
-    }
     
   }, [currentTime]);
 
