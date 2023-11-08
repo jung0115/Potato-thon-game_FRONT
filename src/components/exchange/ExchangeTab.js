@@ -112,7 +112,7 @@ const ExchangeTab = () => {
           )}
 
           {/* 도움말 or 매수/매도 */}
-          {selectedCoin ? 
+          {selectedCoin && (cookies.token != null) ? 
             <BuyingSelling
               onClose={() => setSelectedCoin(null)}
               _coinId={coinId}

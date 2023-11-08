@@ -1,6 +1,7 @@
 // 도움말
 import React from "react";
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
@@ -9,7 +10,75 @@ import helpIcon from "../../contents/ic_question_help.png";
 import submitIcon from "../../contents/ic_question_submit.png";
 import checkNewIcon from "../../contents/ic_question_check.png";
 
+import client from 'gamja-backend-client';
+
+// api BASE URL
+const host = 'https://api.miruku.dog';
+
 const Question = () => {
+  const [cookies] = useCookies(['token']);
+  const [qnaList, setQnaList] = useState([]);
+
+  const getConnection = () => {
+    return {
+      host: host,
+      headers: {
+        ...cookies.token ? {
+          'Authorization': `Bearer ${cookies.token}`
+        } : null
+      }
+    }
+  }
+
+  // 질문 생성 --------------------------------------------------------------------------------------------
+  async function createQna() {
+    await client.functional.qna.create(
+      getConnection(),
+      {
+        question: "이거 어떻게 해요?", // Question
+      }
+    );
+  }
+  //createQna();
+  // 답변 완료된 질문 --------------------------------------------------------------------------------------------
+  async function getAllQnA() {
+    await client.functional.qna.answered.listAnswered(
+      getConnection()
+      ).then((response) => {
+        //console.log(response.qna);
+        setQnaList([...response.qna]);
+        console.log(qnaList);
+    });
+  }
+  // 답변 안 한 질문 --------------------------------------------------------------------------------------------
+  async function getNonAnswerQnA() {
+    await client.functional.qna.not_answered.manageListNotAnswered(
+      getConnection()
+      ).then((response) => {
+        console.log(response.qna);
+    });
+  }
+  //getNonAnswerQnA();
+  // 답변 --------------------------------------------------------------------------------------------
+  async function answerQna() {
+    await client.functional.qna.answer.manageAnswer(
+      getConnection(),
+      '162eb540-257e-49e6-9638-dfa40563338c',
+      {
+        answer: "감자감자", // Answer
+      }
+    );
+  }
+
+  useEffect(() => {
+    // 5초마다 현재 시간을 업데이트
+    const interval = setInterval(() => {
+      getAllQnA();
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return(
     <Container>
       {/* 설명 */}
@@ -30,80 +99,24 @@ const Question = () => {
         {/* 질문답변 리스트 */}
         <QnaListContainer>
           <QnaList>
-            <QnaItemContainer>
-              <QnaQuestion>
-                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
-              </QnaQuestion>
-              <QnaAnswer>
-                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
-              </QnaAnswer>
-            </QnaItemContainer>
-            <QnaItemContainer>
-              <QnaQuestion>
-                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
-              </QnaQuestion>
-              <QnaAnswer>
-                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
-              </QnaAnswer>
-            </QnaItemContainer>
-            <QnaItemContainer>
-              <QnaQuestion>
-                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
-              </QnaQuestion>
-              <QnaAnswer>
-                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
-              </QnaAnswer>
-            </QnaItemContainer>
-            <QnaItemContainer>
-              <QnaQuestion>
-                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
-              </QnaQuestion>
-              <QnaAnswer>
-                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
-              </QnaAnswer>
-            </QnaItemContainer>
-            <QnaItemContainer>
-              <QnaQuestion>
-                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
-              </QnaQuestion>
-              <QnaAnswer>
-                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
-              </QnaAnswer>
-            </QnaItemContainer>
-            <QnaItemContainer>
-              <QnaQuestion>
-                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
-              </QnaQuestion>
-              <QnaAnswer>
-                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
-              </QnaAnswer>
-            </QnaItemContainer>
-            <QnaItemContainer>
-              <QnaQuestion>
-                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
-              </QnaQuestion>
-              <QnaAnswer>
-                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
-              </QnaAnswer>
-            </QnaItemContainer>
-            <QnaItemContainer>
-              <QnaQuestion>
-                Q. 원하는 코인의 시간대 별 정보를 보고 싶어요!
-              </QnaQuestion>
-              <QnaAnswer>
-                A. 실시간 차트에서 보고자 하는 코인의 선을 클릭하거나 우측의 전체 코인 창에서 코인을 클릭해 주세요!
-              </QnaAnswer>
-            </QnaItemContainer>
+            {qnaList.map((qna, idx) => (
+              <QnaItemContainer
+                key={idx}>
+                <QnaQuestion>
+                  Q. {qna.question}
+                </QnaQuestion>
+                <QnaAnswer>
+                  A. {qna.answer}
+                </QnaAnswer>
+              </QnaItemContainer>
+            ))}
           </QnaList>
         </QnaListContainer>
 
         {/* 새롭게 답변이 달린 질문 알림 */}
         <NewQnaContainer>
-          <NewNoitceText>답변이 달린 질문이 있어요</NewNoitceText>
-          <CheckNewNotice>
-            <CheckNewText>읽음으로 표시하기</CheckNewText>
-            <CheckNewIcon src={checkNewIcon}/>
-          </CheckNewNotice>
+          <NewNoitceText>최근 10분 이내 답변이 달린 질문이 있어요</NewNoitceText>
+          <CheckNewIcon src={checkNewIcon}/>
         </NewQnaContainer>
       </QnaListAll>
 
@@ -173,7 +186,7 @@ const QnaListContainer = styled.div`
 `;
 const NewQnaContainer = styled.div`
   display: flex;
-  width: 326.52px;
+  
   background-color: ${palette.new_qna_bg};
   border-radius: 7px 0px 10px 10px;
   margin-left: 10px;
@@ -200,7 +213,7 @@ const CheckNewText = styled.div`
 const CheckNewIcon = styled.img`
   width: 25.328px;
   height: 24.12px;
-  margin: 3px 7.5px 6.5px 0px;
+  margin: 3px 7.5px 6.5px 6px;
 `;
 
 const QnaList = styled.div`

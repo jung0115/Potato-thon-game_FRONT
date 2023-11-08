@@ -351,10 +351,10 @@ const StockChart = ({ onCoinClick, coinName }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
-    // 10초마다 현재 시간을 업데이트
+    // 1초마다 현재 시간을 업데이트
     const interval = setInterval(() => {
       setCurrentTime(new Date());
-    }, 10000);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, []);
