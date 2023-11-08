@@ -15,7 +15,8 @@ const host = 'https://api.miruku.dog';
 const BuyingSelling = ({ onClose, coinName }) => {
   const [token, setToken] = useState(null);
   const [coinId, setCoinId] = useState(null);
-  const [remainAmount, setRemainAmount] = useState(0);
+  const [remainAmount, setRemainAmount] = useState(0); // 잔여 코인
+  const [ownAmount, setOwnAmount] = useState(0);       // 사용자가 가지고 있는 코인량
 
   const getConnection = () => {
     return {
@@ -42,7 +43,7 @@ const BuyingSelling = ({ onClose, coinName }) => {
         //console.log(response.token);
     });
   }
-  //authSignIn();
+  authSignIn();
 
   // 코인 종류 조회 ---------------------------------------------------------------------------------------------------------
   // 코인 id, 잔여 개수 조회
@@ -86,13 +87,27 @@ const BuyingSelling = ({ onClose, coinName }) => {
   // 매수, 매도 수량 숫자만 입력 가능하도록
   const [inputValue, setInputValue] = useState('');
 
-  const handleInputChange = (e) => {
+  // 매수 코인 입력 handle
+  const handleBuyInputChange = (e) => {
     const value = e.target.value.replace(/[^0-9]/g, '');
     const integerValue = parseInt(value, 10);
     if(integerValue >= 0) {
       // 잔여 수량보다 많은 값을 입력할 경우 => 잔여 수량 값을 보여주기
       if(integerValue > remainAmount) setInputValue(remainAmount);
       // 잔여 수량보다 적은 값을 입력할 경우 => 그대로 보여주기
+      else setInputValue(integerValue);
+    }
+    else setInputValue('');
+  }
+
+  // 매도 코인 입력 handle
+  const handleSellInputChange = (e) => {
+    const value = e.target.value.replace(/[^0-9]/g, '');
+    const integerValue = parseInt(value, 10);
+    if(integerValue >= 0) {
+      // 사용자 보유 수량보다 많은 값을 입력할 경우 => 사용자 보유 수량 값을 보여주기
+      if(integerValue > ownAmount) setInputValue(ownAmount);
+      // 사용자 보유 수량보다 적은 값을 입력할 경우 => 그대로 보여주기
       else setInputValue(integerValue);
     }
     else setInputValue('');
@@ -185,7 +200,7 @@ const BuyingSelling = ({ onClose, coinName }) => {
                   type="text"
                   placeholder="매수할 수량을 입력해주세요."
                   value={inputValue}
-                  onChange={handleInputChange} />
+                  onChange={handleBuyInputChange} />
                 <BuySellMeasure>coin</BuySellMeasure>
               </BuySellValues>
             </BuySellContent>
@@ -242,7 +257,7 @@ const BuyingSelling = ({ onClose, coinName }) => {
                   type="text"
                   placeholder="매도할 수량을 입력해주세요."
                   value={inputValue}
-                  onChange={handleInputChange} />
+                  onChange={handleSellInputChange} />
                 <BuySellMeasure>coin</BuySellMeasure>
               </BuySellValues>
             </BuySellContent>
