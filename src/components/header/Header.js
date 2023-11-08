@@ -15,7 +15,7 @@ const Header = ({ exchange, property, selectExchange, selectProperty }) => {
   const [isExchangeHover, setExchangeHover] = useState(false); // 거래소 탭 마우스 hover
   const [isPropertyHover, setPropertyHover] = useState(false); // 자산 탭 마우스 hover
   const [isSelectLogin, setSelectLogin] = useState(false);     // 로그인 버튼 선택 유무
-  const name = "";
+  const [teamName, setTeamName] = useState('');
     
   // 거래소탭 선택
   const onClickExchange = () => {
@@ -29,6 +29,11 @@ const Header = ({ exchange, property, selectExchange, selectProperty }) => {
     setExchange(false);
     setProperty(true);
     selectProperty();
+  }
+
+  const loginClose = (teamName) => {
+    setSelectLogin(false);
+    setTeamName(teamName);
   }
 
   // 탭 선택 변할 때마다 새로고침
@@ -84,9 +89,9 @@ const Header = ({ exchange, property, selectExchange, selectProperty }) => {
         </TabContainer>
 
         {/* 로그인 버튼 or 사용자명 */}
-        {name.length > 0 ?
+        {teamName.length > 0 ?
           <UserContainer>
-            <UserName>{name} 팀</UserName>
+            <UserName> {teamName} 팀 </UserName>
             <UserProfile src={profile}/>
           </UserContainer>
           :
@@ -95,7 +100,7 @@ const Header = ({ exchange, property, selectExchange, selectProperty }) => {
               <>
                 <SelectLoginBtn>로그인</SelectLoginBtn>
                 <LoginOverlay>
-                  <Login onClose={() => setSelectLogin(false)}/>
+                  <Login onClose={loginClose}/>
                 </LoginOverlay>
               </>
             ) 
@@ -230,8 +235,10 @@ const UserName = styled.div`
 `;
 // 사용자 프로필
 const UserProfile = styled.img`
-  width: 63px;
-  height: 63px;
+  /* width: 63px;
+  height: 63px; */
+  width: 48px;
+  height: 48px;
   margin: 20px 20px 20px 0px;
 `;
 
