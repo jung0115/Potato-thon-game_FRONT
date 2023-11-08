@@ -47,7 +47,8 @@ const ExchangeTab = () => {
           {/* 도움말 or 매수/매도 */}
           {selectedCoin ? 
             <BuyingSelling
-              onClose={() => setSelectedCoin(null)}/>
+              onClose={() => setSelectedCoin(null)}
+              coinName={selectedCoin}/>
             :
             <Question/>
           }
