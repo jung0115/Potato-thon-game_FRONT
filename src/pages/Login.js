@@ -1,3 +1,4 @@
+import React from "react";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import cancel from '../contents/cancel.svg';
@@ -6,19 +7,23 @@ import client from 'gamja-backend-client';
 const Login = ({ onClose }) => {
     const [userId, setUserId] = useState('');
     const [userPw, setUserPw] = useState('');
+    const [userName, setUserName] = useState('');
     const [token, setToken] = useState(null);
 
     const host = 'https://api.miruku.dog';
-    const getConnetion = () => {
+
+    const getConnection = () => {
         return {
             host: host,
-            header: {
+            headers: {
+                ...token ? {
+                'Authorization': `Bearer ${token}`
+                } : null
             }
         }
     }
 
     useEffect(() => {
-        console.log(userId);
         if (userId.length === 11) {
             setUserId(userId.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
         }
@@ -26,6 +31,24 @@ const Login = ({ onClose }) => {
             setUserId(userId.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
         }
     }, [userId]);
+
+    useEffect(() => {
+        if (token) {
+            const getMyUser = async () => {
+                try {
+                    await client.functional.user.me.getMyUser(
+                        getConnection()
+                    ).then(response => {
+                        const user = response.user;
+                        setUserName(user.id);
+                    });
+                } catch (error) {
+                    console.error("사용자 정보 가져오기 오류: ", error);
+                }
+            };
+            getMyUser();
+        }
+    }, [token]);
 
     const onChangeId = (e) => {
         setUserId(e.target.value);
@@ -35,19 +58,32 @@ const Login = ({ onClose }) => {
         setUserPw(e.target.value);
     }
 
-    const CheckLogin = async () => {
-        const response = await client.functional.auth.signIn(
-            getConnetion(),
-            {
-                id: userId,
-                password: userPw
-            }
-        );
-
-        setToken(response.token);
-        onClose();
-    };
+    const authSignIn = async () => {
+        if (!userId || !userPw) {
+            // 입력 필드에 값이 없으면 요청을 보내지 않음
+            return;
+        }
+        try {
+            await client.functional.auth.signIn(
+                getConnection(),
+                {
+                    id: userId, 
+                    password: userPw
+                }
+            ).then(response => {
+                setToken(response.token);
+            });
+        } catch (error) {
+            console.error("로그인 에러: ", error);
+        }
+    }
+    authSignIn();
     
+    const CheckLogin = () => {
+        console.log(userName);
+        onClose(userName);
+    };
+
     return (
         <Container>
             <Header>

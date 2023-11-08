@@ -51,18 +51,18 @@ const PropertyTab = () => {
 
             return (
               <CoinList>
-                <CoinInfo style={{ paddingLeft: '53px'}}> {item.name} </CoinInfo>
+                <CoinInfo style={{ paddingLeft: '43px'}}> {item.name} </CoinInfo>
                 <CoinInfo 
                   style={{ 
                     textAlign: 'right',
-                    paddingRight: '100px'
+                    paddingRight: '75px'
                 }}> 
                   {fmPurchasingPrice}
                 </CoinInfo>
                 <CoinInfo 
                   style={{ 
                     textAlign: 'right',
-                    paddingRight: '190px'
+                    paddingRight: '135px'
                   }}
                   fontColor={priceDiff}
                 > 
@@ -70,7 +70,7 @@ const PropertyTab = () => {
                 </CoinInfo>
                 <CoinInfo 
                   fontColor={priceDiff}
-                  style={{ paddingRight: '85px' }}
+                  style={{ paddingRight: '57px' }}
                 >
                   {priceDiff !== 0 ? (
                     <>
@@ -79,7 +79,7 @@ const PropertyTab = () => {
                     </>) : ('−')
                   } 
                 </CoinInfo>
-                <CoinInfo style={{ paddingRight: '45px'}}> {item.quantity} </CoinInfo>
+                <CoinInfo style={{ paddingRight: '32px'}}> {item.quantity} </CoinInfo>
               </CoinList>
             )})}
         </ListContainer>
@@ -144,6 +144,7 @@ const CoinList = styled.div`
   justify-content: space-around;
 `;
 const CoinInfo = styled.p`
+  position: relative;
   font-size: 18px;
   font-weight: 700;
   font-family: 'Pretendard-Bold';
@@ -152,7 +153,7 @@ const CoinInfo = styled.p`
   padding-left: 10px;
   color: ${(props) => props.fontColor > 0 ? 
     '#AA1919' : props.fontColor < 0 ? 
-    '#1F27D7' : `#C8C8C8`
+    '#010CFF' : `#C8C8C8`
   };
 `;
 
