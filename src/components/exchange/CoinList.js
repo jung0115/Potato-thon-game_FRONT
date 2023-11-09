@@ -1,50 +1,89 @@
-import React from 'react';
-import { useState } from "react";
+import React, { useEffect, useState } from 'react';
+
 import styled from 'styled-components';
 import palette from "../../styles/colorPalatte";
 
+import client from 'gamja-backend-client';
+
 const TitleName = ['종목명', '현재가', '대비', '수량'];
 
-const Coin = [
-    {
-        name: '마이쮸 코인',
-        price: 810,
-        previousPrice: 790,
-        quantity: 3,
-    },
-    {
-        name: '칙촉 코인',
-        price: 1295,
-        previousPrice: 1295,
-        quantity: 10,
-    },
-    {
-        name: '포카칩 코인',
-        price: 1920,
-        previousPrice: 790,
-        quantity: 29,
-    },
-    {
-        name: '오감자 코인',
-        price: 1410,
-        previousPrice: 1501,
-        quantity: 5,
-    },
-    {
-        name: '꼬깔콘 코인',
-        price: 1502,
-        previousPrice: 1490,
-        quantity: 12,
-    },
-];
+const host = 'https://api.miruku.dog';
 
 const CoinList = ({ onCoinClick }) => {
     const [isDetailOpen, setDetailOpen] = useState(false);  
+    const [present, setPresent] = useState(new Date());
+    const [token, setToken] = useState(null);
+    const [coins, setCoins] = useState([]);
+    const [priceDiffs, setPriceDiffs] = useState({});
 
     const CoinClick = (item) => {
         setDetailOpen(true);
-        onCoinClick(item.name)
+        onCoinClick(item.name + " 코인");
     }
+    
+    const getConnection = () => {
+        return {
+            host: host,
+            headers: {
+                ...token ? {
+                'Authorization': `Bearer ${token}`
+                } : null
+            }
+        }
+    }
+    
+    const getCoins = async () => {
+        await client.functional.coin.getCoins(
+            getConnection()
+        ).then(response => {
+            setCoins(response.coins);
+        });
+    }
+
+    const coinHistories = async (coinId) => {
+        const currentDate = new Date();
+        const pastDate = new Date();
+        pastDate.setMinutes(currentDate.getMinutes() - 10);
+
+        await client.functional.coin.price_histories.getPriceHistories(
+            getConnection(),
+            coinId,
+            {
+                from: pastDate.toString(),
+                to: currentDate.toString()
+            }
+        ).then(response => {
+            const historyPrice = response.histories;
+            console.log(historyPrice);
+            
+            if (historyPrice.length >= 2) {
+                const previousPrice = historyPrice[historyPrice.length - 2].price;
+                const currentPrice = historyPrice[historyPrice.length - 1].price;
+
+                setPriceDiffs(prev => ({
+                    ...prev,
+                    [coinId]: currentPrice - previousPrice
+                }));
+            }
+        });
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await getCoins();
+
+            coins.forEach(coin => {
+                coinHistories(coin.id);
+            });
+        };
+        fetchData();
+
+        const interval = setInterval(() => {
+            fetchData();
+        }, 600000);
+
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <Container>
@@ -61,9 +100,9 @@ const CoinList = ({ onCoinClick }) => {
                     backgroundColor: '#BBBBBB'
                 }} />
                 <CoinInfoContent>
-                    {Coin.map((item, idx) => {
-                        const presentPrice = (item.price).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-                        const priceDiff = item.price - item.previousPrice;
+                    {coins.map((item, idx) => {
+                        const presentPrice = (item.price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                        const priceDiff = priceDiffs[item.id] || 0;
                         
                         return (
                             <CoinInfoSubContent onClick={() => CoinClick(item)}>
@@ -86,7 +125,7 @@ const CoinList = ({ onCoinClick }) => {
                                     } 
                                 </SubContent>
                                 <SubContent style={{ marginLeft: '5px' }}> 
-                                    {item.quantity} 
+                                    {item.amount} 
                                 </SubContent>  
                             </CoinInfoSubContent>      
                         )
@@ -153,7 +192,7 @@ const SubContent = styled.div`
     text-align: center;
     flex: 1;
 
-    font-size: 16px;
+    font-size: 14.6px;
     font-weight: bold;
     color: ${(props) => props.fontColor > 0 ?
         '#AA1919' : props.fontColor < 0 ? 
