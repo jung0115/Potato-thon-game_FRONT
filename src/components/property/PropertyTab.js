@@ -2,88 +2,130 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
+import { useAuth } from "../Context";
+import { useCookies } from "react-cookie";
 
-// import moneyContainer from '../../assets/img_currency.png';
+import client from 'gamja-backend-client';
+
 import walletIcon from '../../assets/ic_wallet.png';
+import potatoImg from '../../contents/img_potato_angry.png';
 
 const title = ["코인명", "매입가", "현재가", "대비", "수량"];
 
+const host = 'https://api.miruku.dog';
+
 const PropertyTab = () => {
-  const [money, setMoney] = useState(0);
-  const coin = [
-    {
-      name: "칙촉코인",
-      purchasingPrice: 1395,
-      presentPrice: 1295,
-      quantity: 1,
-    },
-    {
-      name: "마이쮸코인",
-      purchasingPrice: 795,
-      presentPrice: 810,
-      quantity: 3,
+  const [cookies] = useCookies(['token']);
+  const [coins, setCoins] = useState([]);
+  const [allCoins, setAllCoins] = useState([]);
+  const { user } = useAuth();
+  
+  const getConnection = () => {
+    return {
+        host: host,
+        headers: {
+            ...cookies.token ? {
+            'Authorization': `Bearer ${cookies.token}`
+            } : null
+        }
     }
-  ]
+}
+
+  const getMyCoins = async () => {
+    await client.functional.user.me.coins.getMyCoins(
+      getConnection()
+    ).then(response => {
+      const coin = response.coins.filter(coin => coin.amount > 0);
+      setCoins(coin);
+    });
+  }
+
+  const getCoins = async () => {
+    await client.functional.coin.getCoins(
+        getConnection()
+    ).then(response => {
+      const allcoin = response.coins;
+      const myCoin = coins.map(coin => coin.name);
+      setAllCoins(allcoin.filter(coin => myCoin.includes(coin.name)));
+    });
+  }
+
+  useEffect(() => {
+    if (user) {
+      getMyCoins();
+      getCoins();
+    }
+  }, [coins]);
 
   return(
     <Container>
-      <MoneyContainer>
-        <WalletIcon src={walletIcon}/>
-        <PossMoney> 보유 화폐 </PossMoney>
-        <PossMoney style={{ marginLeft: '90px' }}> 
-          {money} 
-        </PossMoney>
-        <PossMoney style={{marginLeft: '10px'}}> 원 </PossMoney>
-      </MoneyContainer>
-      
-      <CoinContainer>
-        <TitleContainer>
-          {title.map((item) => (
-            <Title> {item} </Title>
-          ))}
-        </TitleContainer>
-        <Line/>
-        <ListContainer>
-          {coin.map((item, idx) => {
-            const fmPurchasingPrice = (item.purchasingPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            const fmPresentPrice = (item.presentPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            const priceDiff = item.presentPrice - item.purchasingPrice;
+      { user ? (
+        <>
+          <MoneyContainer>
+            <WalletIcon src={walletIcon}/>
+            <PossMoney> 보유 화폐 </PossMoney>
+            <PossMoney style={{ marginLeft: '90px' }}> 
+              {(user.balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            </PossMoney>
+            <PossMoney style={{marginLeft: '10px'}}> 원 </PossMoney>
+          </MoneyContainer>
+        
+          <CoinContainer>
+            <TitleContainer>
+              {title.map((item) => (
+                <Title> {item} </Title>
+              ))}
+            </TitleContainer>
+            <Line/>
+            <ListContainer>
+              {coins.map((item, idx) => {
+                const fmPurchasingPrice = (item.lastPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                const fmPresentPrice = allCoins[idx] ? (allCoins[idx].price || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '';
+                const priceDiff = allCoins[idx] ? (allCoins[idx].price || 0) - item.lastPrice : 0;
 
-            return (
-              <CoinList>
-                <CoinInfo style={{ paddingLeft: '53px'}}> {item.name} </CoinInfo>
-                <CoinInfo 
-                  style={{ 
-                    textAlign: 'right',
-                    paddingRight: '100px'
-                }}> 
-                  {fmPurchasingPrice}
-                </CoinInfo>
-                <CoinInfo 
-                  style={{ 
-                    textAlign: 'right',
-                    paddingRight: '190px'
-                  }}
-                  fontColor={priceDiff}
-                > 
-                  {fmPresentPrice} 
-                </CoinInfo>
-                <CoinInfo 
-                  fontColor={priceDiff}
-                  style={{ paddingRight: '85px' }}
-                >
-                  {priceDiff !== 0 ? (
-                    <>
-                      {priceDiff > 0 ? '▲' : '▼'} {" "}
-                      {Math.abs(priceDiff)} 
-                    </>) : ('−')
-                  } 
-                </CoinInfo>
-                <CoinInfo style={{ paddingRight: '45px'}}> {item.quantity} </CoinInfo>
-              </CoinList>
-            )})}
-        </ListContainer>
-      </CoinContainer>
+                return (
+                  <CoinList>
+                    <CoinInfo style={{ paddingLeft: '43px'}}> {item.name} </CoinInfo>
+                    <CoinInfo 
+                      style={{ 
+                        textAlign: 'right',
+                        paddingRight: '75px'
+                      }}> 
+                        {fmPurchasingPrice}
+                    </CoinInfo>
+                    <CoinInfo 
+                      style={{ 
+                        textAlign: 'right',
+                        paddingRight: '155px'
+                      }}
+                      fontColor={priceDiff}
+                    > 
+                      {fmPresentPrice} 
+                    </CoinInfo>
+                    <CoinInfo 
+                      fontColor={priceDiff}
+                      style={{ paddingRight: '65px' }}
+                    >
+                      {priceDiff !== 0 ? (
+                        <>
+                          {priceDiff > 0 ? '▲' : '▼'} {" "}
+                          {Math.abs(priceDiff).toLocaleString()} 
+                        </>) : ('−')
+                      } 
+                    </CoinInfo>
+                    <CoinInfo style={{ paddingRight: '32px'}}> {item.amount} </CoinInfo>
+                  </CoinList>
+                )
+              })}
+            </ListContainer>
+          </CoinContainer>
+        </>
+      ) : (
+        <NoticePage> 
+          <NoticeImg src={potatoImg}/>
+          <NoticeText> 로그인 후 이용 가능합니다. </NoticeText>
+        </NoticePage>
+      )}
     </Container>
   );
 }
@@ -144,6 +186,7 @@ const CoinList = styled.div`
   justify-content: space-around;
 `;
 const CoinInfo = styled.p`
+  position: relative;
   font-size: 18px;
   font-weight: 700;
   font-family: 'Pretendard-Bold';
@@ -154,6 +197,26 @@ const CoinInfo = styled.p`
     '#AA1919' : props.fontColor < 0 ? 
     '#1F27D7' : `#C8C8C8`
   };
+`;
+const NoticePage = styled.div`
+  height: 83vh;
+  display: flex;
+  flex-direction: column;
+  background-color: ${palette.box_bg_color};
+  margin: 13px;
+  align-items: center;
+  justify-content: center;
+`;
+const NoticeImg = styled.img`
+  width: 100px;
+  height: 100px;
+`;
+const NoticeText = styled.p`
+  margin-top: 30px;
+  color: ${palette.white};
+  font-size: 18px;
+  font-family: 'Pretendard-Regular';
+  text-align: center;
 `;
 
 export default PropertyTab;

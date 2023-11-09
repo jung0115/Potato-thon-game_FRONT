@@ -1,24 +1,40 @@
+import React from "react";
 import { useState, useEffect } from "react";
+import { Cookies } from "react-cookie";
 import styled from "styled-components";
-import cancel from '../contents/cancel.svg';
 import client from 'gamja-backend-client';
+
+import { useAuth } from "../components/Context";
+
+import cancel from '../contents/cancel.svg';
 
 const Login = ({ onClose }) => {
     const [userId, setUserId] = useState('');
     const [userPw, setUserPw] = useState('');
+    const [user, setUser] = useState('');
     const [token, setToken] = useState(null);
 
+    const { login } = useAuth();
+    const cookies = new Cookies();
+
     const host = 'https://api.miruku.dog';
-    const getConnetion = () => {
+
+    const getConnection = () => {
         return {
             host: host,
-            header: {
+            headers: {
+                ...token ? {
+                'Authorization': `Bearer ${token}`
+                } : null
             }
         }
     }
 
+    const setCookie = (name, value, option) => {
+        return cookies.set(name, value, {...option});
+    }
+
     useEffect(() => {
-        console.log(userId);
         if (userId.length === 11) {
             setUserId(userId.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
         }
@@ -26,6 +42,29 @@ const Login = ({ onClose }) => {
             setUserId(userId.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
         }
     }, [userId]);
+
+    useEffect(() => {
+        if (token) {
+            setCookie("token", `${token}`, {
+                path: '/',
+                sameSite: 'strict'
+            });
+            const getMyUser = async () => {
+                try {
+                    await client.functional.user.me.getMyUser(
+                        getConnection()
+                    ).then(response => {
+                        const user = response.user;
+                        // setUserName(user.name);
+                        setUser(user);
+                    });
+                } catch (error) {
+                    console.error("사용자 정보 가져오기 오류: ", error);
+                }
+            };
+            getMyUser();
+        }
+    }, [token, login]);
 
     const onChangeId = (e) => {
         setUserId(e.target.value);
@@ -35,26 +74,41 @@ const Login = ({ onClose }) => {
         setUserPw(e.target.value);
     }
 
-    const CheckLogin = async () => {
-        const response = await client.functional.auth.signIn(
-            getConnetion(),
-            {
-                id: userId,
-                password: userPw
-            }
-        );
-
-        setToken(response.token);
-        onClose();
-    };
+    const authSignIn = async () => {
+        if (!userId || !userPw) {
+            // 입력 필드에 값이 없으면 요청을 보내지 않음
+            return;
+        }
+        try {
+            await client.functional.auth.signIn(
+                getConnection(),
+                {
+                    id: userId, 
+                    password: userPw
+                }
+            ).then(response => {
+                setToken(response.token);
+            });
+        } catch (error) {
+            console.error("로그인 에러: ", error);
+        }
+    }
+    authSignIn();
     
+    const CheckLogin = () => {
+        console.log(user.name);
+        console.log(token);
+        onClose(user.name);
+        login(user);
+    };
+
     return (
         <Container>
             <Header>
                 <Title> 로그인 </Title>
                 <Img 
                     src={cancel}
-                    onClick={() => onClose()}
+                    onClick={() => onClose('')}
                 />
             </Header>
             <Line/>
