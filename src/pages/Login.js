@@ -11,7 +11,7 @@ import cancel from '../contents/cancel.svg';
 const Login = ({ onClose }) => {
     const [userId, setUserId] = useState('');
     const [userPw, setUserPw] = useState('');
-    const [userName, setUserName] = useState('');
+    const [user, setUser] = useState('');
     const [token, setToken] = useState(null);
 
     const { login } = useAuth();
@@ -55,8 +55,8 @@ const Login = ({ onClose }) => {
                         getConnection()
                     ).then(response => {
                         const user = response.user;
-                        setUserName(user.name);
-                        login(user);
+                        // setUserName(user.name);
+                        setUser(user);
                     });
                 } catch (error) {
                     console.error("사용자 정보 가져오기 오류: ", error);
@@ -96,9 +96,10 @@ const Login = ({ onClose }) => {
     authSignIn();
     
     const CheckLogin = () => {
-        console.log(userName);
+        console.log(user.name);
         console.log(token);
-        onClose(userName);
+        onClose(user.name);
+        login(user);
     };
 
     return (
