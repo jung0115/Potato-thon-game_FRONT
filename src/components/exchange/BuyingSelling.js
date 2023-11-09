@@ -214,7 +214,7 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
               <BuySellLabel>매수 가능</BuySellLabel>
 
               <BuySellValues>
-                <BuySellNumber>29</BuySellNumber>
+                <BuySellNumber>{remainAmount}</BuySellNumber>
                 <BuySellMeasure>coin</BuySellMeasure>
               </BuySellValues>
             </BuySellContent>
@@ -224,7 +224,7 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
               <BuySellLabel>1 coin 당</BuySellLabel>
 
               <BuySellValues>
-                <BuySellNumber>1,920</BuySellNumber>
+                <BuySellNumber>{Number(currentPrice).toLocaleString()}</BuySellNumber>
                 <BuySellMeasure>원</BuySellMeasure>
               </BuySellValues>
             </BuySellContent>
@@ -248,7 +248,7 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
               <BuySellResultLabel>매수 금액</BuySellResultLabel>
 
               <BuySellValues>
-                <BuySellNumber>{resultValue}</BuySellNumber>
+                <BuySellNumber>{Number(currentPrice).toLocaleString()}</BuySellNumber>
                 <BuySellResultMeasure>원</BuySellResultMeasure>
               </BuySellValues>
             </BuySellResultContent>
@@ -281,7 +281,7 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
               <BuySellLabel>1 coin 당</BuySellLabel>
 
               <BuySellValues>
-                <BuySellNumber>1,920</BuySellNumber>
+                <BuySellNumber>{currentPrice.toLocaleString('ko-KR')}</BuySellNumber>
                 <BuySellMeasure>원</BuySellMeasure>
               </BuySellValues>
             </BuySellContent>
