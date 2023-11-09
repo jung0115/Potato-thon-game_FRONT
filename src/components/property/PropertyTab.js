@@ -17,6 +17,7 @@ const host = 'https://api.miruku.dog';
 const PropertyTab = () => {
   const [cookies] = useCookies(['token']);
   const [coins, setCoins] = useState([]);
+  const [allCoins, setAllCoins] = useState([]);
   const { user } = useAuth();
   
   const getConnection = () => {
@@ -30,7 +31,7 @@ const PropertyTab = () => {
     }
 }
 
-  const getCoins = async () => {
+  const getMyCoins = async () => {
     await client.functional.user.me.coins.getMyCoins(
       getConnection()
     ).then(response => {
@@ -39,8 +40,21 @@ const PropertyTab = () => {
     });
   }
 
+  const getCoins = async () => {
+    await client.functional.coin.getCoins(
+        getConnection()
+    ).then(response => {
+      const allcoin = response.coins;
+      const myCoin = coins.map(coin => coin.name);
+      setAllCoins(allcoin.filter(coin => myCoin.includes(coin.name)));
+    });
+  }
+  console.log(coins);
+  console.log(allCoins);
+
   useEffect(() => {
     if (user) {
+      getMyCoins();
       getCoins();
     }
   }, [user]);
@@ -67,9 +81,9 @@ const PropertyTab = () => {
             <Line/>
             <ListContainer>
               {coins.map((item, idx) => {
-                const fmPurchasingPrice = (item.price);
-                const fmPresentPrice = (item.presentPrice);
-                const priceDiff = item.presentPrice - item.purchasingPrice;
+                const fmPurchasingPrice = (item.lastPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');;
+                const fmPresentPrice = (allCoins[idx].price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                const priceDiff = allCoins[idx].price - item.lastPrice;
 
                 return (
                   <CoinList>
@@ -84,7 +98,7 @@ const PropertyTab = () => {
                     <CoinInfo 
                       style={{ 
                         textAlign: 'right',
-                        paddingRight: '135px'
+                        paddingRight: '155px'
                       }}
                       fontColor={priceDiff}
                     > 
@@ -92,12 +106,12 @@ const PropertyTab = () => {
                     </CoinInfo>
                     <CoinInfo 
                       fontColor={priceDiff}
-                      style={{ paddingRight: '57px' }}
+                      style={{ paddingRight: '65px' }}
                     >
                       {priceDiff !== 0 ? (
                         <>
                           {priceDiff > 0 ? '▲' : '▼'} {" "}
-                          {Math.abs(priceDiff)} 
+                          {Math.abs(priceDiff).toLocaleString()} 
                         </>) : ('−')
                       } 
                     </CoinInfo>
@@ -183,7 +197,7 @@ const CoinInfo = styled.p`
   padding-left: 10px;
   color: ${(props) => props.fontColor > 0 ? 
     '#AA1919' : props.fontColor < 0 ? 
-    '#010CFF' : `#C8C8C8`
+    '#1F27D7' : `#C8C8C8`
   };
 `;
 const NoticePage = styled.div`
