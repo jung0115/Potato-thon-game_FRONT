@@ -170,6 +170,7 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
   }
 
   useEffect(() => {
+    setResultValue(Number(inputValue) * Number(currentPrice));
   }, [inputValue]);
 
   useEffect(() => {
@@ -248,7 +249,7 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
               <BuySellResultLabel>매수 금액</BuySellResultLabel>
 
               <BuySellValues>
-                <BuySellNumber>{Number(currentPrice).toLocaleString()}</BuySellNumber>
+                <BuySellNumber>{resultValue.toLocaleString()}</BuySellNumber>
                 <BuySellResultMeasure>원</BuySellResultMeasure>
               </BuySellValues>
             </BuySellResultContent>
@@ -281,7 +282,7 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
               <BuySellLabel>1 coin 당</BuySellLabel>
 
               <BuySellValues>
-                <BuySellNumber>{currentPrice.toLocaleString('ko-KR')}</BuySellNumber>
+                <BuySellNumber>{Number(currentPrice).toLocaleString()}</BuySellNumber>
                 <BuySellMeasure>원</BuySellMeasure>
               </BuySellValues>
             </BuySellContent>
@@ -305,7 +306,7 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
               <BuySellResultLabel>매도 금액</BuySellResultLabel>
 
               <BuySellValues>
-                <BuySellNumber>{resultValue}</BuySellNumber>
+                <BuySellNumber>{resultValue.toLocaleString()}</BuySellNumber>
                 <BuySellResultMeasure>원</BuySellResultMeasure>
               </BuySellValues>
             </BuySellResultContent>
