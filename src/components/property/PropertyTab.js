@@ -49,15 +49,13 @@ const PropertyTab = () => {
       setAllCoins(allcoin.filter(coin => myCoin.includes(coin.name)));
     });
   }
-  console.log(coins);
-  console.log(allCoins);
 
   useEffect(() => {
     if (user) {
       getMyCoins();
       getCoins();
     }
-  }, [user]);
+  }, [coins]);
 
   return(
     <Container>
@@ -67,7 +65,7 @@ const PropertyTab = () => {
             <WalletIcon src={walletIcon}/>
             <PossMoney> 보유 화폐 </PossMoney>
             <PossMoney style={{ marginLeft: '90px' }}> 
-              {user.balance} 
+              {(user.balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </PossMoney>
             <PossMoney style={{marginLeft: '10px'}}> 원 </PossMoney>
           </MoneyContainer>
@@ -81,9 +79,9 @@ const PropertyTab = () => {
             <Line/>
             <ListContainer>
               {coins.map((item, idx) => {
-                const fmPurchasingPrice = (item.lastPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');;
-                const fmPresentPrice = (allCoins[idx].price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-                const priceDiff = allCoins[idx].price - item.lastPrice;
+                const fmPurchasingPrice = (item.lastPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                const fmPresentPrice = allCoins[idx] ? (allCoins[idx].price || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '';
+                const priceDiff = allCoins[idx] ? (allCoins[idx].price || 0) - item.lastPrice : 0;
 
                 return (
                   <CoinList>

@@ -47,27 +47,45 @@ const DetailCoinList = ({ coinName, onClose }) => {
         //   console.log(remainAmount);
         })
     }
-    //   console.log(coinName);
-      // 현재 코인 가격
+
+    // 현재 코인 가격
     async function getCoinPrice() {
         if(coinId != null) {
             const currentDate = new Date(); // 현재 시간
             const pastDate = new Date();
-            pastDate.setMinutes(currentDate.getMinutes() - 5);
+            pastDate.setMinutes(currentDate.getMinutes() - 11);
         
             await client.functional.coin.price_histories.getPriceHistories(
                 getConnection(),
                 coinId, // Coin ID
                 {
-                from: pastDate.toString(), // From
-                to: currentDate.toString() // To
+                    from: pastDate.toString(), // From
+                    to: currentDate.toString() // To
                 }
             ).then(response => {
-                // console.log(response.histories);
                 setCurrentPrice(response.histories);
                 console.log(currentPrice);
             });
         }
+    }
+
+    const priceDifferencesCal = () => {
+        const priceDifferences = [];
+        
+        for (let idx = 0; idx < currentPrice.length; idx++) {
+            const presentPrice = currentPrice[idx].price;
+            let previousPrice = 0;
+            
+            if (idx < currentPrice.length - 1) {
+                previousPrice = currentPrice[idx + 1].price;
+            }
+            
+            const priceDiff = presentPrice - previousPrice;
+            
+            priceDifferences.push(priceDiff);
+        }
+        
+        return priceDifferences;
     }
 
     // 1분마다 체크 ---------------------------------------------------------------------------------------------------------
@@ -98,8 +116,6 @@ const DetailCoinList = ({ coinName, onClose }) => {
     }, [coinName]);
 
     useEffect(() => {
-        //console.log(coinId);
-        //console.log(remainAmount);
         getCoinPrice();
     }, [coinId, remainAmount]);
 
@@ -123,15 +139,16 @@ const DetailCoinList = ({ coinName, onClose }) => {
                     backgroundColor: '#BBBBBB'
                 }} />
                 <CoinInfoContent>
-                    {currentPrice.map((item, idx) => {
+                    {currentPrice.slice(0, 10).map((item, idx) => {
                         const presentPrice = item.price;
-                        let previousPrice = 0;
+                        const priceDifferences = priceDifferencesCal();
+                        const priceDiff = priceDifferences[idx];
 
-                        if (idx < currentPrice.length - 1) {
-                            previousPrice = currentPrice[idx + 1].price;
-                        }
+                        // if (idx < currentPrice.length - 1) {
+                        //     previousPrice = currentPrice[idx + 1].price;
+                        // }
 
-                        const priceDiff = presentPrice - previousPrice;
+                        // const priceDiff = presentPrice - previousPrice;
 
                         const fmTimestamp = (timestamp) => {
                             const date = new Date(timestamp);
@@ -200,7 +217,9 @@ const CloseImg = styled.img`
     margin-right: 4px;
 `;
 const CoinInfo = styled.div`
-    display: block;
+    display: flex;
+    height: 40vh;
+    overflow: hidden;
     flex-direction: column;
     margin-top: 15px;
     border-radius: 20px;
@@ -234,7 +253,6 @@ const CoinInfoSubContent = styled.div`
     flex-direction: row;
     justify-content: space-between;
     margin-left: 10px;
-    cursor: pointer;
 `;
 const SubContent = styled.div`
     display: flex;

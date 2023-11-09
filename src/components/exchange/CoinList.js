@@ -31,7 +31,7 @@ const CoinList = ({ onCoinClick }) => {
             }
         }
     }
-    
+
     const getCoins = async () => {
         await client.functional.coin.getCoins(
             getConnection()
@@ -170,7 +170,9 @@ const Title = styled.p`
     margin-left: 4px;
 `;
 const CoinInfo = styled.div`
-    display: block;
+    display: flex;
+    height: 40vh;
+    overflow: hidden;
     flex-direction: column;
     margin-top: 15px;
     border-radius: 20px;
@@ -188,6 +190,7 @@ const SubTitle = styled.p`
     font-size: 16px;
     color: #666666;
     white-space: nowrap;
+    justify-content: space-around;
 `;
 const CoinInfoContent = styled.div`
     margin-top: 23px;
@@ -199,12 +202,11 @@ const Line = styled.div`
     margin-top: 10px;
 `;
 const CoinInfoSubContent = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  margin-left: 10px;
-  text-decoration: none;
-  cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    margin-left: 10px;
+    text-decoration: none;
+    cursor: pointer;
 `;
 const SubContent = styled.div`
     display: flex;
