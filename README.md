@@ -27,11 +27,5 @@
 ---
 
 ### 🛠️ Tech Stack
-**Design**  
-<a href="https://www.figma.com/" target="_blank" rel="noreferrer"> <img src="http://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white" alt="figma" height="24"/> </a> <!-- Figma -->  
-**Frontend**  
 <a href="https://reactjs.org/" target="_blank" rel="noreferrer"> <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="react" height="24"/> </a> <!--React -->
 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="http://img.shields.io/badge/-Javascript-f7e018?style=for-the-badge&logo=javascript&logoColor=black" alt="javascript" height="24"/> </a> <!-- JavaScript -->    
-**Server**  
-<a href="https://spring.io/projects/spring-boot" target="_blank" rel="noreferrer"> <img src="http://img.shields.io/badge/-springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" alt="springboot" height="24"/> </a> <!-- SpringBoot -->
-<a href="https://kotlinlang.org" target="_blank" rel="noreferrer"> <img src="http://img.shields.io/badge/-Kotlin-7f52ff?style=for-the-badge&logo=Kotlin&logoColor=white" alt="kotlin" height="24"/> </a> <!-- Kotlin -->  
