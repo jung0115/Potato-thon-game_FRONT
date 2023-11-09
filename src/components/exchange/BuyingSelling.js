@@ -83,7 +83,7 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
         console.log(response);
     });
   }
-  //getOwnMoney()
+  getOwnMoney()
   // 사용자 보유 코인 조회 ----------------------------------------------------------------------
   async function getOwnCoin() {
     // Get user
@@ -95,7 +95,7 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
         console.log(response);
     });
   }
-  //getOwnCoin();
+  getOwnCoin();
   
   // 코인 매수 -------------------------------------------------------------------
   async function buyCoinApi() {
@@ -120,7 +120,7 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
       // Buy coin
       await client.functional.market.coin.sell(
         getConnection(),
-        'abcchoco', // Coin ID
+        _coinId, // Coin ID
         {
           amount: "1", // Amount
           price: currentPrice.toString(), // Price (400 if it does not equal to real price)
