@@ -55,7 +55,7 @@ const Login = ({ onClose }) => {
                         getConnection()
                     ).then(response => {
                         const user = response.user;
-                        setUserName(user.id);
+                        setUserName(user.name);
                         login(user);
                     });
                 } catch (error) {
@@ -107,7 +107,7 @@ const Login = ({ onClose }) => {
                 <Title> 로그인 </Title>
                 <Img 
                     src={cancel}
-                    onClick={() => onClose()}
+                    onClick={() => onClose('')}
                 />
             </Header>
             <Line/>
