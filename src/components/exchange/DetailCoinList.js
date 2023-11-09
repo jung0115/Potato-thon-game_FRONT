@@ -42,34 +42,33 @@ const DetailCoinList = ({ coinName, onClose }) => {
               setRemainAmount(Number(response.coins[i].amount));
               getCoinPrice();
             }
-          }
+            }
         //   console.log(coinId);
         //   console.log(remainAmount);
         })
-      }
+    }
     //   console.log(coinName);
       // 현재 코인 가격
-      async function getCoinPrice() {
+    async function getCoinPrice() {
         if(coinId != null) {
-          const currentDate = new Date(); // 현재 시간
-          const pastDate = new Date();
-          pastDate.setMinutes(currentDate.getMinutes() - 5);
-    
-          await client.functional.coin.price_histories.getPriceHistories(
-            getConnection(),
-            coinId, // Coin ID
-            {
-              from: pastDate.toString(), // From
-              to: currentDate.toString() // To
-            }
-          ).then(response => {
-            // console.log(response.histories);
-            setCurrentPrice(response.histories);
-            console.log(currentPrice);
-          });
+            const currentDate = new Date(); // 현재 시간
+            const pastDate = new Date();
+            pastDate.setMinutes(currentDate.getMinutes() - 5);
+        
+            await client.functional.coin.price_histories.getPriceHistories(
+                getConnection(),
+                coinId, // Coin ID
+                {
+                from: pastDate.toString(), // From
+                to: currentDate.toString() // To
+                }
+            ).then(response => {
+                // console.log(response.histories);
+                setCurrentPrice(response.histories);
+                console.log(currentPrice);
+            });
         }
-      }
-    //   coinGetCoins();
+    }
 
     useEffect(() => {
         if (coinName != null) coinGetCoins();

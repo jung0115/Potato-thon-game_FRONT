@@ -20,7 +20,7 @@ const CoinList = ({ onCoinClick }) => {
         setDetailOpen(true);
         onCoinClick(item.name + " 코인");
     }
-
+    
     const getConnection = () => {
         return {
             host: host,
@@ -31,7 +31,7 @@ const CoinList = ({ onCoinClick }) => {
             }
         }
     }
-
+    
     const getCoins = async () => {
         await client.functional.coin.getCoins(
             getConnection()
