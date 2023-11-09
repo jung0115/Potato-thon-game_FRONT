@@ -31,7 +31,7 @@ const CoinList = ({ onCoinClick }) => {
             }
         }
     }
-    
+
     const getCoins = async () => {
         await client.functional.coin.getCoins(
             getConnection()
@@ -56,34 +56,55 @@ const CoinList = ({ onCoinClick }) => {
             const historyPrice = response.histories;
             console.log(historyPrice);
             
+            // 가격 대비 세팅
             if (historyPrice.length >= 2) {
                 const previousPrice = historyPrice[historyPrice.length - 2].price;
                 const currentPrice = historyPrice[historyPrice.length - 1].price;
 
-                setPriceDiffs(prev => ({
-                    ...prev,
-                    [coinId]: currentPrice - previousPrice
-                }));
+                setPriceDiffs((prev) => {
+                    return {...prev, [coinId]: currentPrice - previousPrice };
+                });
             }
         });
     }
 
+    
+    // 최초 접속 시, 코인 리스트 가져오기
     useEffect(() => {
-        const fetchData = async () => {
-            await getCoins();
+        getCoins();
+    }, []);
 
-            coins.forEach(coin => {
-                coinHistories(coin.id);
-            });
-        };
-        fetchData();
+    // 코인 리스트 가져오면 코인별 가격, 대비 등 데이터 가져오기
+    useEffect(() => {
+        coins.forEach(coin => {
+            coinHistories(coin.id);
+        });
+    }, [coins]);
 
+    // 1분마다 체크 ---------------------------------------------------------------------------------------------------------
+    //setInterval(setTime, 60000);
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    useEffect(() => {
+        // 1초마다 현재 시간을 업데이트
         const interval = setInterval(() => {
-            fetchData();
-        }, 600000);
+        setCurrentTime(new Date());
+        }, 1000);
 
         return () => clearInterval(interval);
     }, []);
+
+    useEffect(() => {
+        // 1분마다 코인 증감 데이터 조회 api 호출
+        // 너무 자주 api 호출하면 fetch 오류 발생
+        const currentSecond = currentTime.getSeconds();
+        if(currentSecond == 0) {
+            coins.forEach(coin => {
+                coinHistories(coin.id);
+            });
+        } 
+        
+    }, [currentTime]);
 
     return (
         <Container>
@@ -149,7 +170,9 @@ const Title = styled.p`
     margin-left: 4px;
 `;
 const CoinInfo = styled.div`
-    display: block;
+    display: flex;
+    height: 40vh;
+    overflow: hidden;
     flex-direction: column;
     margin-top: 15px;
     border-radius: 20px;
@@ -167,6 +190,7 @@ const SubTitle = styled.p`
     font-size: 16px;
     color: #666666;
     white-space: nowrap;
+    justify-content: space-around;
 `;
 const CoinInfoContent = styled.div`
     margin-top: 23px;
@@ -178,12 +202,11 @@ const Line = styled.div`
     margin-top: 10px;
 `;
 const CoinInfoSubContent = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  margin-left: 10px;
-  text-decoration: none;
-  cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    margin-left: 10px;
+    text-decoration: none;
+    cursor: pointer;
 `;
 const SubContent = styled.div`
     display: flex;
