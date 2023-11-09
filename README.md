@@ -1,4 +1,4 @@
-![Cover](https://github.com/jung0115/Potato-thon-game_FRONT/assets/76805879/0e09b257-09d7-4b1f-bc21-8e598340813a)
+<!-- ![Cover](https://github.com/jung0115/Potato-thon-game_FRONT/assets/76805879/0e09b257-09d7-4b1f-bc21-8e598340813a) -->
 
 ## 감자톤 주식 게임 Web Frontend
 
