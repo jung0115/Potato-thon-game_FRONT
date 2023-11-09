@@ -20,6 +20,16 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
   const [remainAmount, setRemainAmount] = useState(_remainAmount); // 잔여 코인
   const [ownAmount, setOwnAmount] = useState(0);                   // 사용자 보유 코인
   const [currentPrice, setCurrentPrice] = useState(_currentPrice); // 현재 코인 가격
+  const [ownMoney, setOwnMoney] = useState(0);                     // 사용자 보유 화폐(원)
+
+  // 주문, 판매 버튼 비활성화, 활성화 색상
+  const ResultBtnColor = [palette.buy_sell_result, palette.orange];
+  
+  const [isLoading, setIsLoading] = useState(false); // 로딩
+
+  const [isBuying, setIsBuying] = useState(true); // 매수, 매도 탭 선택
+  const [resultValue, setResultValue] = useState(0); // 매수, 매도할 금액
+  const [inputValue, setInputValue] = useState(''); // 매수, 매도 수량 (숫자만 입력 가능)
 
   const getConnection = () => {
     return {
@@ -78,9 +88,9 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
     await client.functional.user.me.getMyUser(
       getConnection()
       ).then((response) => {
-        const user = response.user; // My user
-        console.log(user);
-        console.log(response);
+        // 사용자 보유 화폐
+        setOwnMoney(response.user.balance);
+        console.log(response.user);
     });
   }
   getOwnMoney()
@@ -90,65 +100,64 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
     await client.functional.user.me.coins.getMyCoins(
       getConnection()
       ).then((response) => {
-        //const user = response.user; // My user
-        //console.log(user);
-        console.log(response);
+        // response.coins;
+        // console.log(response);
+        setOwnAmount(0);
+        for(let i = 0; i < response.coins.length; i++) {
+          if(response.coins[i].id == _coinId) {
+            setOwnAmount(Number(response.coins[i].amount));
+            //console.log(ownAmount);
+          }
+        }
     });
   }
-  getOwnCoin();
   
   // 코인 매수 -------------------------------------------------------------------
   async function buyCoinApi() {
     if(_coinId != null && currentPrice > 0) {
       getCoinPrice();
+      coinGetCoins();
+      setResultValue(Number(inputValue) * Number(currentPrice));
       // Buy coin
       await client.functional.market.coin.buy(
         getConnection(),
         _coinId, // Coin ID
         {
-          amount: "1", // Amount
+          amount: inputValue.toString(), // Amount
           price: currentPrice.toString(), // Price (400 if it does not equal to real price)
         }
-      );
+      ).catch(error => {
+        console.error('Error during buy:', error);
+      });
     }
   }
   //buyCoinApi();
 
+  // 코인 매도 -------------------------------------------------------------------
   async function sellCoinApi() {
     if(_coinId != null && currentPrice > 0) {
       getCoinPrice();
+      coinGetCoins();
+      setResultValue(Number(inputValue) * Number(currentPrice));
       // Buy coin
       await client.functional.market.coin.sell(
         getConnection(),
         _coinId, // Coin ID
         {
-          amount: "1", // Amount
+          amount: inputValue.toString(), // Amount
           price: currentPrice.toString(), // Price (400 if it does not equal to real price)
         }
-      );
+      ).catch(error => {
+        console.error('Error during sell:', error);
+      });
     }
   }
   //sellCoinApi();
-
-  // 주문, 판매 버튼 비활성화, 활성화 색상
-  const ResultBtnColor = [palette.buy_sell_result, palette.orange];
-
-  // 로딩
-  const [isLoading, setIsLoading] = useState(false);
 
   const closeLoading = () => {
     setIsLoading(false);
     onClose();
   }
-
-  // 매수, 매도 탭 선택
-  const [isBuying, setIsBuying] = useState(true);
-  
-  // 매수, 매도할 금액
-  const [resultValue, setResultValue] = useState(0);
-
-  // 매수, 매도 수량 숫자만 입력 가능하도록
-  const [inputValue, setInputValue] = useState('');
 
   // 매수 코인 입력 handle
   const handleBuyInputChange = (e) => {
@@ -181,23 +190,36 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
     setIsBuying(true);
     setInputValue('');
     setResultValue(0);
+    getCoinPrice(); // 현재 코인 가격 조회
+    coinGetCoins(); // 잔여 코인 개수 조회
   }
   // 매도 탭 선택
   const onClickSellTab = () => {
     setIsBuying(false);
     setInputValue('');
     setResultValue(0);
+    getCoinPrice(); // 현재 코인 가격 조회
+    getOwnCoin(); // 사용자 보유 코인 개수 조회
   }
 
   // 주문하기 - 매수
   const buyCoin = () => {
-    setIsLoading(true);
-    
+    // 사용자가 보유한 화폐로 구매 가능한지 확인
+    // 구매 가능
+    if(resultValue <= ownMoney) {
+      setIsLoading(true);
+      buyCoinApi();
+    }
+    // 구매 불가
+    else {
+      alert('보유하신 화폐로 구매가 불가능합니다!');
+    }
   }
 
   //판매하기 - 매도
   const sellCoin = () => {
     setIsLoading(true);
+    sellCoinApi();
   }
 
   useEffect(() => {
@@ -208,6 +230,17 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
     getCoinPrice();
     
   }, [isBuying]);
+
+  useEffect(() => {
+    setRemainAmount(_remainAmount);
+  }, [_remainAmount]);
+
+  useEffect(() => {
+    setCurrentPrice(_currentPrice);
+  }, [_currentPrice]);
+  
+  useEffect(() => {
+  }, [currentPrice, remainAmount, ownAmount, ownMoney]);
 
   return(
     <Container>
@@ -303,7 +336,7 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
               <BuySellLabel>매도 가능</BuySellLabel>
 
               <BuySellValues>
-                <BuySellNumber>29</BuySellNumber>
+                <BuySellNumber>{ownAmount}</BuySellNumber>
                 <BuySellMeasure>coin</BuySellMeasure>
               </BuySellValues>
             </BuySellContent>

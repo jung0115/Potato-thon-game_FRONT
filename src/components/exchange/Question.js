@@ -53,15 +53,23 @@ const Question = () => {
 
   // 질문 생성 --------------------------------------------------------------------------------------------
   async function createQna() {
+    
     if(inputQuestion.length > 0) {
-      setIsLoading(true);
-      await client.functional.qna.create(
-        getConnection(),
-        {
-          question: inputQuestion, // Question
-        }
-      );
-      setInputQuestion('');
+      // 로그인 안 한 상태
+      if(!cookies.token) {
+        alert("질문하기는 로그인 후에 사용할 수 있습니다!");
+      }
+      // 로그인 된 상태
+      else {
+        setIsLoading(true);
+        await client.functional.qna.create(
+          getConnection(),
+          {
+            question: inputQuestion, // Question
+          }
+        );
+        setInputQuestion('');
+      }
     }
   }
   
@@ -75,8 +83,6 @@ const Question = () => {
         const sortedItems = [...response.qna];
         sortedItems.sort((a, b) => b.answeredAt.localeCompare(a.answeredAt));
         setQnaList([...response.qna]);
-
-        
     });
   }
   // 답변 안 한 질문 --------------------------------------------------------------------------------------------
