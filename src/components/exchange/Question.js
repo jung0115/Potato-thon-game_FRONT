@@ -32,7 +32,12 @@ const Question = () => {
   const [inputQuestion, setInputQuestion] = useState("");
 
   const handleInputChange = (e) => {
-    setInputQuestion(e.target.value);
+    let input = e.target.value;
+    // 500자를 초과하면 뒤에 글자 자르기
+    if(input.length >= 500) {
+      input = input.substr(0, 501);
+    }
+    setInputQuestion(input);
   };
 
   const getConnection = () => {
@@ -223,13 +228,15 @@ const QuestionContainer = styled.div`
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.45) inset;
 `;
 const QuestionInput = styled.input`
-  width: 300px;
+  flex: 1;
+  width: auto;
   background-color: #00000000;
   border: none;
   font-size: 14px;
   font-family: 'Pretendard-Regular';
   color: ${palette.black};
-  margin: 12px 0px 9px 0px;
+  margin: 12px 17px 9px 0px;
+  /* overflow: auto; */
 `;
 const QuestionSubmitBtn = styled.img`
   width: 15.808px;
@@ -250,7 +257,6 @@ const QnaListContainer = styled.div`
 `;
 const NewQnaContainer = styled.div`
   display: flex;
-  
   background-color: ${palette.new_qna_bg};
   border-radius: 7px 0px 10px 10px;
   margin-left: 10px;
