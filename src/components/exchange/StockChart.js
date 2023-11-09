@@ -17,7 +17,7 @@ const host = 'https://api.miruku.dog';
 
 const StockChart = ({ onCoinClick, coinName }) => {
   const [token, setToken] = useState(null);
-
+  
   const getConnection = () => {
     return {
       host: host,
@@ -67,12 +67,11 @@ const StockChart = ({ onCoinClick, coinName }) => {
     });
   }
   //coinPriceHistories();
-  //coinGetCoins();
+  // coinGetCoins();
 
   // 데이터 ---------------------------------------------------------------------------------------------------------
   const [coinDatas, setCoinData] = useState({});
   //console.log(Math.sqrt(Math.pow(gridSize + 1, 2) + Math.pow(coinDatas.ohyes[0] - coinDatas.ohyes[1], 2)));
-
   // 가로 너비
   const minWidth = (gridSize * 9.5) + 10;
   const [chartWidth, setChartWidth] = useState(Math.max(minWidth, Math.round(window.innerWidth / 3.5 * 2.5 / (gridSize + 1)) * (gridSize + 1) - (gridSize * 2.5 + 2)));

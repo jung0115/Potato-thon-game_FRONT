@@ -13,9 +13,10 @@ import DetailCoinList from "./DetailCoinList";
 // 메인 > 거래소 탭
 const ExchangeTab = () => {
   const [selectedCoin, setSelectedCoin] = useState(null);
+  const [coinDatas, setCoinDatas] = useState([]);
 
-  useEffect(() => {
-  }, [selectedCoin]);
+  // useEffect(() => {
+  // }, [selectedCoin]);
 
   return(
     <Container>
@@ -27,7 +28,8 @@ const ExchangeTab = () => {
           {/* 주식 차트 */}
           <StockChart
             onCoinClick={(coinName) => setSelectedCoin(coinName)}
-            coinName={selectedCoin} />
+            coinName={selectedCoin} 
+          />
 
         </LeftContainter>
 
