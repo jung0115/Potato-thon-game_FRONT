@@ -40,7 +40,7 @@ const DetailCoinList = ({ coinName, onClose }) => {
             if(response.coins[i].name == coinNameSub) {
               setCoinId(response.coins[i].id);
               setRemainAmount(Number(response.coins[i].amount));
-              getCoinPrice();
+              //getCoinPrice();
             }
             }
         //   console.log(coinId);
@@ -70,15 +70,38 @@ const DetailCoinList = ({ coinName, onClose }) => {
         }
     }
 
+    // 1분마다 체크 ---------------------------------------------------------------------------------------------------------
+    //setInterval(setTime, 60000);
+    const [currentTime, setCurrentTime] = useState(new Date());
+
     useEffect(() => {
-        if (coinName != null) coinGetCoins();
-    
+        // 1초마다 현재 시간을 업데이트
         const interval = setInterval(() => {
-          if (coinName != null)  coinGetCoins()
+        setCurrentTime(new Date());
         }, 1000);
-    
+
         return () => clearInterval(interval);
     }, []);
+
+    useEffect(() => {
+        // 1분마다 코인 증감 데이터 조회 api 호출
+        // 너무 자주 api 호출하면 fetch 오류 발생
+        const currentSecond = currentTime.getSeconds();
+        if(currentSecond == 0) {
+            if (coinName != null) coinGetCoins();
+        } 
+    }, [currentTime]);
+
+    // 코인 선택 시, 코인 정보 가져오기
+    useEffect(() => {
+        if (coinName != null) coinGetCoins();
+    }, [coinName]);
+
+    useEffect(() => {
+        //console.log(coinId);
+        //console.log(remainAmount);
+        getCoinPrice();
+    }, [coinId, remainAmount]);
 
     return (
         <Container>
