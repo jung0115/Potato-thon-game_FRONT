@@ -42,11 +42,13 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
       for(let i = 0; i < response.coins.length; i++) {
         if(response.coins[i].id == _coinId) {
           setRemainAmount(Number(response.coins[i].amount));
-          //console.log(remainAmount);
+          console.log(remainAmount);
         }
       }
     })
   }
+
+  //coinGetCoins()
 
   // 현재 코인의 가격 확인 ---------------------------------------------------------------------------------------------------------
   async function getCoinPrice() {
@@ -70,14 +72,27 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
     }
   }
 
-  // 사용자 보유 코인 조회 ----------------------------------------------------------------------
-  async function getOwnCoin() {
+  // 사용자 보유 화폐 조회 ----------------------------------------------------------------------
+  async function getOwnMoney() {
     // Get user
     await client.functional.user.me.getMyUser(
       getConnection()
       ).then((response) => {
         const user = response.user; // My user
         console.log(user);
+        console.log(response);
+    });
+  }
+  //getOwnMoney()
+  // 사용자 보유 코인 조회 ----------------------------------------------------------------------
+  async function getOwnCoin() {
+    // Get user
+    await client.functional.user.me.coins.getMyCoins(
+      getConnection()
+      ).then((response) => {
+        //const user = response.user; // My user
+        //console.log(user);
+        console.log(response);
     });
   }
   //getOwnCoin();
@@ -98,6 +113,22 @@ const BuyingSelling = ({ onClose, _coinId, _remainAmount, _currentPrice }) => {
     }
   }
   //buyCoinApi();
+
+  async function sellCoinApi() {
+    if(_coinId != null && currentPrice > 0) {
+      getCoinPrice();
+      // Buy coin
+      await client.functional.market.coin.sell(
+        getConnection(),
+        'abcchoco', // Coin ID
+        {
+          amount: "1", // Amount
+          price: currentPrice.toString(), // Price (400 if it does not equal to real price)
+        }
+      );
+    }
+  }
+  //sellCoinApi();
 
   // 주문, 판매 버튼 비활성화, 활성화 색상
   const ResultBtnColor = [palette.buy_sell_result, palette.orange];
