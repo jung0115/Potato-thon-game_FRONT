@@ -40,13 +40,23 @@ const Header = ({ exchange, property, selectExchange, selectProperty }) => {
   useEffect(() => {
   }, [isExchange, isProperty]);
 
+  // 사이트명, 로고 선택 시 페이지 새로고치
+  const handleRefresh = () => {
+    window.location.reload();
+  };
+
   return(
     <Container>
       <HeaderContainer>
         {/* 감자톤 로고 + 서비스명 */}
         <LogoAndTitle>
-          <PotatoLogo src={logo}/>
-          <PotatoTitle>POTATO THON</PotatoTitle>
+          <PotatoLogo
+            src={logo}
+            onClick={handleRefresh}/>
+          <PotatoTitle
+             onClick={handleRefresh}>
+              POTATO THON
+          </PotatoTitle>
         </LogoAndTitle>
 
         <TabContainer>
@@ -140,6 +150,7 @@ const PotatoLogo = styled.img`
   width: 52px;
   height: 58px;
   margin: 20px 5px 21px 15px;
+  cursor: pointer;
 `;
 // 사이트명
 const PotatoTitle = styled.div`
@@ -147,7 +158,7 @@ const PotatoTitle = styled.div`
   color: ${palette.white};
   font-family: 'Pretendard-ExtraBold';
   margin: auto 179px 25px 0px;
-  cursor: default;
+  cursor: pointer;
 `;
 
 const TabContainer = styled.div`

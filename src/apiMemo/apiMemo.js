@@ -19,6 +19,7 @@ async function user() {
   await client.functional.user.register(
     getConnection(),
     {
+      name: '뼈다귀감자탕',
       id: '010-0987-1234',
       password: 'test1234'
     }

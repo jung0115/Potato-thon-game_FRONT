@@ -24,6 +24,7 @@ const ExchangeTab = () => {
   const [coinId, setCoinId] = useState(null);
   const [remainAmount, setRemainAmount] = useState(0); // 잔여 코인 
   const [currentPrice, setCurrentPrice] = useState(0); // 현재 가격
+  
 
   const getConnection = () => {
     return {
@@ -46,15 +47,13 @@ const ExchangeTab = () => {
       setCoinId(null);
       setRemainAmount(0);
       const coinNameSub = selectedCoin.substr(0, selectedCoin.length - 3);
+      //console.log(coinNameSub);
       for(let i = 0; i < response.coins.length; i++) {
         if(response.coins[i].name == coinNameSub) {
           setCoinId(response.coins[i].id);
           setRemainAmount(Number(response.coins[i].amount));
-          getCoinPrice();
         }
       }
-      //console.log(coinId);
-      //console.log(remainAmount);
     })
   }
 
@@ -81,8 +80,20 @@ const ExchangeTab = () => {
   }
 
   useEffect(() => {
+    console.log(selectedCoin);
     if(selectedCoin != null) coinGetCoins();
+    //console.log(selectedCoin);
   }, [selectedCoin]);
+
+  useEffect(() => {
+    //console.log(coinId);
+    //console.log(remainAmount);
+    getCoinPrice();
+  }, [coinId, remainAmount]);
+
+  useEffect(() => {
+    //console.log(currentPrice);
+  }, [currentPrice]);
 
   return(
     <Container>
