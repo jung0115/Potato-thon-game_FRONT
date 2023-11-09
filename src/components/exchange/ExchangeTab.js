@@ -161,7 +161,7 @@ const Title = styled.div`
 // 내용
 const Contents = styled.div`
   display: flex;
-  padding: 21px 21px 10px 12px;
+  padding: 13px 21px 10px 12px;
 `;
 
 // 좌측 내용: 주식 차트
