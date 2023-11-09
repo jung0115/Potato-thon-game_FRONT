@@ -65,7 +65,7 @@ const PropertyTab = () => {
             <WalletIcon src={walletIcon}/>
             <PossMoney> 보유 화폐 </PossMoney>
             <PossMoney style={{ marginLeft: '90px' }}> 
-              {user.balance} 
+              {(user.balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </PossMoney>
             <PossMoney style={{marginLeft: '10px'}}> 원 </PossMoney>
           </MoneyContainer>
