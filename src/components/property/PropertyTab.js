@@ -3,28 +3,47 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
 import { useAuth } from "../Context";
+import { useCookies } from "react-cookie";
+
+import client from 'gamja-backend-client';
 
 import walletIcon from '../../assets/ic_wallet.png';
 import potatoImg from '../../contents/img_potato_angry.png';
 
 const title = ["코인명", "매입가", "현재가", "대비", "수량"];
 
+const host = 'https://api.miruku.dog';
+
 const PropertyTab = () => {
+  const [cookies] = useCookies(['token']);
+  const [coins, setCoins] = useState([]);
   const { user } = useAuth();
-  const coin = [
-    {
-      name: "칙촉코인",
-      purchasingPrice: 1395,
-      presentPrice: 1295,
-      quantity: 1,
-    },
-    {
-      name: "마이쮸코인",
-      purchasingPrice: 795,
-      presentPrice: 810,
-      quantity: 3,
+  
+  const getConnection = () => {
+    return {
+        host: host,
+        headers: {
+            ...cookies.token ? {
+            'Authorization': `Bearer ${cookies.token}`
+            } : null
+        }
     }
-  ]
+}
+
+  const getCoins = async () => {
+    await client.functional.user.me.coins.getMyCoins(
+      getConnection()
+    ).then(response => {
+      const coin = response.coins.filter(coin => coin.amount > 0);
+      setCoins(coin);
+    });
+  }
+
+  useEffect(() => {
+    if (user) {
+      getCoins();
+    }
+  }, [user]);
 
   return(
     <Container>
@@ -47,9 +66,9 @@ const PropertyTab = () => {
             </TitleContainer>
             <Line/>
             <ListContainer>
-              {coin.map((item, idx) => {
-                const fmPurchasingPrice = (item.purchasingPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-                const fmPresentPrice = (item.presentPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+              {coins.map((item, idx) => {
+                const fmPurchasingPrice = (item.price);
+                const fmPresentPrice = (item.presentPrice);
                 const priceDiff = item.presentPrice - item.purchasingPrice;
 
                 return (
@@ -82,7 +101,7 @@ const PropertyTab = () => {
                         </>) : ('−')
                       } 
                     </CoinInfo>
-                    <CoinInfo style={{ paddingRight: '32px'}}> {item.quantity} </CoinInfo>
+                    <CoinInfo style={{ paddingRight: '32px'}}> {item.amount} </CoinInfo>
                   </CoinList>
                 )
               })}

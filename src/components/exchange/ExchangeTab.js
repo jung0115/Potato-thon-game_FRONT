@@ -19,6 +19,9 @@ const host = 'https://api.miruku.dog';
 // 메인 > 거래소 탭
 const ExchangeTab = () => {
   const [selectedCoin, setSelectedCoin] = useState(null);
+  //const [coinDatas, setCoinDatas] = useState([]);
+
+  
   const [cookies] = useCookies(['token']);
 
   const [coinId, setCoinId] = useState(null);
@@ -105,7 +108,8 @@ const ExchangeTab = () => {
           {/* 주식 차트 */}
           <StockChart
             onCoinClick={(coinName) => setSelectedCoin(coinName)}
-            coinName={selectedCoin} />
+            coinName={selectedCoin} 
+          />
 
         </LeftContainter>
 
