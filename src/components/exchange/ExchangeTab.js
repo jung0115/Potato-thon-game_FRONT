@@ -19,12 +19,9 @@ const host = 'https://api.miruku.dog';
 // 메인 > 거래소 탭
 const ExchangeTab = () => {
   const [selectedCoin, setSelectedCoin] = useState(null);
-<<<<<<< HEAD
-  const [coinDatas, setCoinDatas] = useState([]);
+  //const [coinDatas, setCoinDatas] = useState([]);
 
-  // useEffect(() => {
-  // }, [selectedCoin]);
-=======
+  
   const [cookies] = useCookies(['token']);
 
   const [coinId, setCoinId] = useState(null);
@@ -90,7 +87,6 @@ const ExchangeTab = () => {
     if(selectedCoin != null) coinGetCoins();
     //console.log(selectedCoin);
   }, [selectedCoin]);
->>>>>>> api/#31/buying_selling
 
   useEffect(() => {
     //console.log(coinId);
