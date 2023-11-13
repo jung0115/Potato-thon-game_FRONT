@@ -262,7 +262,7 @@ const SubContent = styled.div`
     flex: 1;
 
     font-size: 16px;
-    font-weight: bold;
+    font-family: 'Pretendard-Bold';
     color: ${(props) => props.fontColor > 0 ?
         '#AA1919' : props.fontColor < 0 ? 
         '#1F27D7' : '#666666'
