@@ -21,7 +21,6 @@ const ExchangeTab = () => {
   const [selectedCoin, setSelectedCoin] = useState(null);
   //const [coinDatas, setCoinDatas] = useState([]);
 
-  
   const [cookies] = useCookies(['token']);
 
   const [coinId, setCoinId] = useState(null);
@@ -39,6 +38,15 @@ const ExchangeTab = () => {
       }
     }
   }
+
+  async function coinGetGoins() {
+    await client.functional.coin.getCoins(
+      getConnection()
+    ).then(response => {
+      console.log(response);
+    })
+  }
+  coinGetGoins();
 
   // 코인 종류 조회 ---------------------------------------------------------------------------------------------------------
   // 코인 id, 잔여 개수 조회
