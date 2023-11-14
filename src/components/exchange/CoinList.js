@@ -171,7 +171,6 @@ const Title = styled.p`
 `;
 const CoinInfo = styled.div`
     display: flex;
-    height: 40vh;
     overflow: hidden;
     flex-direction: column;
     margin-top: 15px;
@@ -216,7 +215,7 @@ const SubContent = styled.div`
     flex: 1;
 
     font-size: 14.6px;
-    font-weight: bold;
+    font-family: 'Pretendard-Bold';
     color: ${(props) => props.fontColor > 0 ?
         '#AA1919' : props.fontColor < 0 ? 
         '#1F27D7' : '#666666'
