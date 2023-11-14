@@ -19,6 +19,8 @@ const Login = ({ onClose }) => {
 
     const host = 'https://api.miruku.dog';
 
+    const isInputCheck = userId  && userPw;
+
     const getConnection = () => {
         return {
             host: host,
@@ -33,15 +35,6 @@ const Login = ({ onClose }) => {
     const setCookie = (name, value, option) => {
         return cookies.set(name, value, {...option});
     }
-
-    useEffect(() => {
-        if (userId.length === 11) {
-            setUserId(userId.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
-        }
-        else if (userId.length === 13) {
-            setUserId(userId.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
-        }
-    }, [userId]);
 
     useEffect(() => {
         if (token) {
@@ -105,29 +98,37 @@ const Login = ({ onClose }) => {
     return (
         <Container>
             <Header>
-                <Title> 로그인 </Title>
-                <Img 
-                    src={cancel}
-                    onClick={() => onClose('')}
-                />
+                <TitleContainer>
+                    <Title> 감자톤 주식 게임에 어서오세요! </Title>
+                    <SubTitle> 로그인 이후, 모든 기능을 이용할 수 있어요. </SubTitle>
+                </TitleContainer>
+                {!isInputCheck && 
+                    <Img 
+                        src={cancel}
+                        onClick={() => onClose('')}
+                    />
+                }
             </Header>
-            <Line/>
+            {/* <Line/> */}
             <Body>
-                <SubTitle> 아이디 </SubTitle>
+                <BodyTitle> 아이디 </BodyTitle>
                 <InputForm 
                     type="text"
-                    placeholder="본인 팀의 팀장 전화번호를 입력해주세요."
+                    placeholder="본인의 팀명을 작성해주세요."
                     value={userId}
                     onChange={onChangeId}
                 />
-                <SubTitle> 비밀번호 </SubTitle>
+                <BodyTitle> 비밀번호 </BodyTitle>
                 <InputForm 
                     type="password"
                     value={userPw}
                     onChange={onChangePw}
                 />
             </Body>
-            <LoginBtn onClick={() => CheckLogin()}> 로그인 </LoginBtn>
+            <LoginBtn 
+                onClick={() => CheckLogin()}
+                isInputCheck={isInputCheck}
+            > 로그인 </LoginBtn>
         </Container>
     )
 }
@@ -135,63 +136,70 @@ const Login = ({ onClose }) => {
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    width: 668px;
-    height: 472px;
+    width: 588px;
+    height: 496px;
     border-radius: 20px;
     background-color: #FFFFFF;
+    box-shadow: 0px 12px 20px 0px rgba(0, 0, 0, 0.07);
 `;
 const Header = styled.div`
     display: flex;
     flex-direction: row;
 `;
-const Body = styled.div`
-    margin-top: 39px;
-    margin-left: 40px;
+const TitleContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin: 28px 0 0 45px;
 `;
 const Title = styled.p`
-    margin: 0 auto;
-    margin-top: 9px;
-    margin-left: 312px;
-
-    text-align: center;
     font-size: 25px;
-    font-weight: 700;
+    font-family: 'Pretendard-Bold';
     line-height: 150%; /* 37.5px */
+    margin-bottom: 12px;
     color: #212224;
 `;
 const SubTitle = styled.p`
-    margin: 0 0 8px 0;
+    font-size: 18px;
+    color: '#4D5359';
+    font-family: 'Pretendard-SemiBold';
+    margin: 0 auto;
+`;
+const Body = styled.div`
+    margin-top: 45px;
+    margin-left: 60px;
+`;
+const BodyTitle = styled.div`
+    /* margin: 0 0 4px 0; */
     font-size: 16px;
-    font-weight: 700;
+    font-family: 'Pretendard-SemiBold';
     line-height: 150%; /* 24px */
     color: #212224;
 `;
 const InputForm = styled.input`
-    width: 565px;
-    margin: 0 0 40px 0;
+    width: 419px;
+    margin: 8px 0 15px 0;
     padding: 12px 0 12px 24px;
     border-radius: 6px;
-    border: 1px solid #DCDFE3;
+    border: 1px solid #FF7710;
 `;
 const Img = styled.img`
-    margin-right: 32px;
+    position: absolute;
+    margin: 28px 20px 80px 528px;
+    float: right;
     cursor: pointer;
 `;
-const Line = styled.hr`
-    width: 99.5%;
-    height: 0.5px;
-    flex-shrink: 0;
-    color: #DCDFE3;
-`;
 const LoginBtn = styled.button`
-    width: 384px;
-    padding: 17px 0;
-    margin-left: 146px;
+    width: 362px;
+    padding: 13px 28px;
+    margin: 45px auto;
     border-radius: 8px;
-    background-color: #7B5F49;
+    border: none;
+    justify-content: center;
+    align-items: center;
+    background-color: ${(props) => props.isInputCheck ? '#8A6123' : ' #C8B28F'};
 
     font-size: 20px;
-    font-weight: 700;
+    font-family: 'Pretendard-SemiBold';
     line-height: 150%; /* 30px */
     color: #FFFFFF;
     cursor: pointer;

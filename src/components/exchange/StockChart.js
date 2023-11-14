@@ -236,16 +236,25 @@ const StockChart = ({ onCoinClick, coinName }) => {
   const setVerticalLines = () => {
     let lines = [];
 
+    // 그래프 길이보다 코인 증감기록 시간이 짧을 때 => 남은 공간을 --:--로 비워두기 위한 계산
+    const countTime = Object.keys(coinDatas).length != 0 && coinDatas["abcchoco"]
+      ? coinDatas["abcchoco"].length
+      : ((chartWidth - gridSize/2 - 1) / (gridSize + 1));
+    const shortTime = ((chartWidth + gridSize/2) / (gridSize + 1)) - countTime;
+    //console.log(((chartWidth + gridSize/2) / (gridSize + 1)));
+
     let index = 0;
     for(let i = (chartWidth - gridSize/2 - 1) / (gridSize + 1); i >= 1; i--) {
       index++;
+      
+      const num = i - shortTime - 1;
 
       let h = hour;
       let m = minute;
 
       // 10분 단위
       if(is10Minute) {
-        m -= 10 * i;
+        m -= 10 * num;
         
         if(m < 0) {
           m *= -1;
@@ -260,7 +269,7 @@ const StockChart = ({ onCoinClick, coinName }) => {
       }
       // 30분 단위
       else if(is30Minute) {
-        m -= 30 * i;
+        m -= 30 * num;
 
         if(m < 0) {
           m *= -1;
@@ -274,7 +283,7 @@ const StockChart = ({ onCoinClick, coinName }) => {
       }
       // 1시간 단위
       else if(is1Hour) {
-        h = (h - i) % 24;
+        h = (h - num) % 24;
       }
 
       if(h <= 0) {
@@ -288,7 +297,15 @@ const StockChart = ({ onCoinClick, coinName }) => {
           <GridVerticalContents>
             <GridVerticalLine/>
             <GridVerticalRange/>
-            <GridVerticalRangeText>{String(h).padStart(2, "0")}:{String(m).padStart(2, "0")}</GridVerticalRangeText>
+            {index < countTime ?
+              <GridVerticalRangeText>
+                {String(h).padStart(2, "0")}:{String(m).padStart(2, "0")}
+              </GridVerticalRangeText>
+              :
+              <GridVerticalRangeText>
+                --:--
+              </GridVerticalRangeText>
+            }
           </GridVerticalContents>
 
           {/* 꺾은선 그래프 */}
@@ -461,7 +478,18 @@ const StockChart = ({ onCoinClick, coinName }) => {
           <GridVertical>
             <GridVerticalEnd/>
             <GridVerticalRangeEnd/>
-            <GridVerticalRangeEndText>{String(hour).padStart(2, "0")}:{String(minute).padStart(2, "0")}</GridVerticalRangeEndText>
+            {(Object.keys(coinDatas).length != 0  && coinDatas != null)
+              && coinDatas["abcchoco"]
+              && ((chartWidth + gridSize/2) / (gridSize + 1)) < coinDatas['abcchoco'].length
+              ?
+              <GridVerticalRangeEndText>
+                {String(hour).padStart(2, "0")}:{String(minute).padStart(2, "0")}
+              </GridVerticalRangeEndText>
+              :
+              <GridVerticalRangeEndText>
+                --:--
+              </GridVerticalRangeEndText>
+            }
           </GridVertical>
         </GridVerticalContainer>
 

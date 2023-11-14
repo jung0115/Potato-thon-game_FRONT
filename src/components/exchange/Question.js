@@ -98,12 +98,13 @@ const Question = () => {
   async function answerQna() {
     await client.functional.qna.answer.manageAnswer(
       getConnection(),
-      '46e70e92-8da6-4c78-8258-7283f913eb0b',
+      '1c171a7c-9e4f-42c8-9e70-9ea652bb19e2',
       {
-        answer: "도움말 답변 6:21", // Answer
+        answer: "도움말 답변 19:53", // Answer
       }
     );
   }
+  //answerQna();
   
   useEffect(() => {
     getAllQnA();
@@ -130,10 +131,10 @@ const Question = () => {
       {/* 설명 */}
       <TitleContainer>
         <Title>도움말</Title>
-        <HelpIcon src={helpIcon}/>
+        {/*<HelpIcon src={helpIcon}/>*/}
       </TitleContainer>
 
-      <BottomLine/>
+      {/*<BottomLine/>*/}
 
       {/* 질문 요청 */}
       <QuestionContainer>
@@ -177,7 +178,7 @@ const Question = () => {
         {/* 새롭게 답변이 달린 질문 알림 */}
         {isNewAnswer ? 
           <NewQnaContainer>
-            <NewNoitceText>최근 10분 이내 답변이 달린 질문이 있어요</NewNoitceText>
+            <NewNoitceText>새로운 답변이 올라왔습니다</NewNoitceText>
             <CheckNewIcon src={checkNewIcon}/>
           </NewQnaContainer>
           : null
@@ -290,7 +291,7 @@ const CheckNewText = styled.div`
 const CheckNewIcon = styled.img`
   width: 25.328px;
   height: 24.12px;
-  margin: 3px 7.5px 6.5px 6px;
+  margin: 3px 7.5px 6.5px 130px;
 `;
 
 const QnaList = styled.div`
