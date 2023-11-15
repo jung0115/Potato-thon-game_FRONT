@@ -1,6 +1,6 @@
 ![Cover](https://github.com/jung0115/Potato-thon-game_FRONT/assets/76805879/dc618c0a-f64f-44b3-998f-b4c63a6a4782)
 
-## 감자톤 주식 게임 Web Frontend
+## [감자톤 주식 게임](https://gamjas.pages.dev/) Web Frontend
 
 ```
 🥔 2023 한림대 x 강원대 멋쟁이사자처럼 연합 해커톤 주식 게임 웹 사이트
