@@ -170,6 +170,7 @@ const Title = styled.p`
     margin-left: 4px;
 `;
 const CoinInfo = styled.div`
+    height: 36vh;
     display: flex;
     overflow: hidden;
     flex-direction: column;
@@ -193,7 +194,7 @@ const SubTitle = styled.p`
 `;
 const CoinInfoContent = styled.div`
     margin-top: 23px;
-    overflow: scroll;
+    overflow-y: scroll;
 `;
 const Line = styled.div`
     background-color: ${palette.header_btm_line};

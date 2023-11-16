@@ -218,7 +218,7 @@ const CloseImg = styled.img`
 `;
 const CoinInfo = styled.div`
     display: flex;
-    height: 40vh;
+    height: 36vh;
     overflow: hidden;
     flex-direction: column;
     margin-top: 15px;
@@ -241,7 +241,7 @@ const SubTitle = styled.p`
 `;
 const CoinInfoContent = styled.div`
     margin-top: 23px;
-    overflow: scroll;
+    overflow-y: scroll;
 `;
 const Line = styled.div`
     background-color: ${palette.header_btm_line};
