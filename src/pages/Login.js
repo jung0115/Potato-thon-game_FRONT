@@ -42,13 +42,13 @@ const Login = ({ onClose }) => {
                 path: '/',
                 sameSite: 'strict'
             });
+
             const getMyUser = async () => {
                 try {
                     await client.functional.user.me.getMyUser(
                         getConnection()
                     ).then(response => {
                         const user = response.user;
-                        // setUserName(user.name);
                         setUser(user);
                     });
                 } catch (error) {
@@ -57,7 +57,7 @@ const Login = ({ onClose }) => {
             };
             getMyUser();
         }
-    }, [token, login]);
+    }, [token]);
 
     const onChangeId = (e) => {
         setUserId(e.target.value);
@@ -86,8 +86,12 @@ const Login = ({ onClose }) => {
             console.error("로그인 에러: ", error);
         }
     }
-    authSignIn();
     
+    useEffect(() => {
+        // authSignIn 함수를 여기서 호출하여 로그인 시도
+        authSignIn();
+    }, [userId, userPw]);
+
     const CheckLogin = () => {
         console.log(user.name);
         console.log(token);
