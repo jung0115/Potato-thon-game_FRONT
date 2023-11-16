@@ -22,14 +22,14 @@ const PropertyTab = () => {
   
   const getConnection = () => {
     return {
-        host: host,
-        headers: {
-            ...cookies.token ? {
-            'Authorization': `Bearer ${cookies.token}`
-            } : null
-        }
+      host: host,
+      headers: {
+        ...cookies.token ? {
+          'Authorization': `Bearer ${cookies.token}`
+        } : null
+      }
     }
-}
+  }
 
   const getMyCoins = async () => {
     await client.functional.user.me.coins.getMyCoins(
