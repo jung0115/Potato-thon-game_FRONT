@@ -1,6 +1,9 @@
 // 헤더
 import React from "react";
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import { useAuth } from "../../components/Context";
+import client from 'gamja-backend-client';
 
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
@@ -9,6 +12,8 @@ import Login from '../../pages/Login';
 import logo from "../../contents/logo.png";
 import profile from "../../contents/profile.png";
 
+const host = 'https://api.miruku.dog';
+
 const Header = ({ exchange, property, selectExchange, selectProperty }) => {
   const [isExchange, setExchange] = useState(exchange);  // 헤더에서 거래소 탭 선택 유무
   const [isProperty, setProperty] = useState(property);  // 헤더에서 자산 탭 선택 유무
@@ -16,6 +21,8 @@ const Header = ({ exchange, property, selectExchange, selectProperty }) => {
   const [isPropertyHover, setPropertyHover] = useState(false); // 자산 탭 마우스 hover
   const [isSelectLogin, setSelectLogin] = useState(false);     // 로그인 버튼 선택 유무
   const [teamName, setTeamName] = useState('');
+  const [cookies] = useCookies(['token']);
+  const { user } = useAuth();
     
   // 거래소탭 선택
   const onClickExchange = () => {
@@ -33,8 +40,54 @@ const Header = ({ exchange, property, selectExchange, selectProperty }) => {
 
   const loginClose = (teamName) => {
     setSelectLogin(false);
-    setTeamName(teamName);
+    setTeamName(teamName || '');
   }
+
+  const getConnection = () => {
+    return {
+      host: host,
+      headers: {
+        ...cookies.token ? {
+          'Authorization': `Bearer ${cookies.token}`
+        } : null
+      }
+    }
+  }
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const { token } = cookies;
+
+        if (token) {
+          const connection = getConnection();
+          const getMyUser = async () => {
+            try {
+              await client.functional.user.me.getMyUser(
+                getConnection()
+              ).then(response => {
+                const userName = response.user.name;
+                setTeamName(userName);
+              });
+            } catch (error) {
+              console.error("사용자 정보 가져오기 오류: ", error);
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error checking login status:", error);
+      }
+    };
+
+    checkLoginStatus();
+  }, [cookies.token]);
+
+  useEffect(() => {
+    // 로그인된 사용자가 있다면 teamName을 설정
+    if (user) {
+      setTeamName(user.name);
+    }
+  }, [user]);
 
   // 탭 선택 변할 때마다 새로고침
   useEffect(() => {
