@@ -57,14 +57,14 @@ const PropertyTab = () => {
     ).then(response => {
       const coin = response.coins.filter(coin => coin.amount > 0);
       setCoins(coin);
+      getCoins();
+      getUserMoney();
     });
   }
 
   useEffect(() => {
     if (user) {
       getMyCoins();
-      getCoins();
-      getUserMoney();
     }
   }, [coins]);
 
@@ -100,14 +100,16 @@ const PropertyTab = () => {
                     <CoinInfo 
                       style={{ 
                         textAlign: 'right',
-                        paddingRight: '75px'
+                        paddingRight: '80px'
+                        // paddingRight: '75px'
                       }}> 
                         {fmPurchasingPrice}
                     </CoinInfo>
                     <CoinInfo 
                       style={{ 
                         textAlign: 'right',
-                        paddingRight: '155px'
+                        paddingRight: '160px'
+                        // paddingRight: '155px'
                       }}
                       fontColor={priceDiff}
                     > 
@@ -115,7 +117,7 @@ const PropertyTab = () => {
                     </CoinInfo>
                     <CoinInfo 
                       fontColor={priceDiff}
-                      style={{ paddingRight: '65px' }}
+                      style={{ paddingRight: '70px' }}
                     >
                       {priceDiff !== 0 ? (
                         <>
@@ -190,6 +192,8 @@ const Line = styled.div`
   margin: 25px 20px;
 `;
 const ListContainer = styled.div`
+    white-space: nowrap;
+    justify-content: space-around;
 `;
 const CoinList = styled.div`
   display: flex;
