@@ -73,6 +73,9 @@ const Header = ({ exchange, property, selectExchange, selectProperty }) => {
               console.error("사용자 정보 가져오기 오류: ", error);
             }
           }
+          getMyUser();
+        } else {
+          setTeamName('');
         }
       } catch (error) {
         console.error("Error checking login status:", error);

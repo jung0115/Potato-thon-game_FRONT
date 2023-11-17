@@ -84,20 +84,23 @@ const Login = ({ onClose }) => {
             });
         } catch (error) {
             console.error("로그인 에러: ", error);
+            alert('아이디 또는 비밀번호가 일치하지 않습니다.')
         }
-    }
-    
-    useEffect(() => {
-        // authSignIn 함수를 여기서 호출하여 로그인 시도
-        authSignIn();
-    }, [userId, userPw]);
+    };
 
     const CheckLogin = () => {
-        console.log(user.name);
-        console.log(token);
-        onClose(user.name);
-        login(user);
+        authSignIn();
+        
+        if (!userId || !userPw) {
+            alert('아이디 또는 비밀번호를 입력해주세요.');
+        } else if (!token) {
+            return;
+        } else {
+            onClose(user.name);
+            login(user);
+        }
     };
+    // console.log(token);
 
     return (
         <Container>
@@ -131,7 +134,7 @@ const Login = ({ onClose }) => {
             </Body>
             <LoginBtn 
                 onClick={() => CheckLogin()}
-                isInputCheck={isInputCheck}
+                isinputcheck={isInputCheck}
             > 로그인 </LoginBtn>
         </Container>
     )
