@@ -18,6 +18,7 @@ const PropertyTab = () => {
   const [cookies] = useCookies(['token']);
   const [coins, setCoins] = useState([]);
   const [allCoins, setAllCoins] = useState([]);
+  const [price, setPrice] = useState(0);
   const { user } = useAuth();
   
   const getConnection = () => {
@@ -31,12 +32,12 @@ const PropertyTab = () => {
     }
   }
 
-  const getMyCoins = async () => {
-    await client.functional.user.me.coins.getMyCoins(
+  const getUserMoney = async () => {
+    await client.functional.user.me.getMyUser(
       getConnection()
-    ).then(response => {
-      const coin = response.coins.filter(coin => coin.amount > 0);
-      setCoins(coin);
+      ).then((response) => {
+        // 사용자 보유 화폐
+        setPrice(response.user.balance);
     });
   }
 
@@ -50,10 +51,20 @@ const PropertyTab = () => {
     });
   }
 
+  const getMyCoins = async () => {
+    await client.functional.user.me.coins.getMyCoins(
+      getConnection()
+    ).then(response => {
+      const coin = response.coins.filter(coin => coin.amount > 0);
+      setCoins(coin);
+    });
+  }
+
   useEffect(() => {
     if (user) {
       getMyCoins();
       getCoins();
+      getUserMoney();
     }
   }, [coins]);
 
@@ -65,7 +76,7 @@ const PropertyTab = () => {
             <WalletIcon src={walletIcon}/>
             <PossMoney> 보유 화폐 </PossMoney>
             <PossMoney style={{ marginLeft: '90px' }}> 
-              {(user.balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              {price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </PossMoney>
             <PossMoney style={{marginLeft: '10px'}}> 원 </PossMoney>
           </MoneyContainer>
