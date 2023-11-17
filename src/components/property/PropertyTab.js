@@ -19,7 +19,6 @@ const PropertyTab = () => {
   const [coins, setCoins] = useState([]);
   const [allCoins, setAllCoins] = useState([]);
   const [price, setPrice] = useState(0);
-  const { user } = useAuth();
   
   const getConnection = () => {
     return {
@@ -38,6 +37,7 @@ const PropertyTab = () => {
       ).then((response) => {
         // 사용자 보유 화폐
         setPrice(response.user.balance);
+        console.log(response.user);
     });
   }
 
@@ -63,14 +63,14 @@ const PropertyTab = () => {
   }
 
   useEffect(() => {
-    if (user) {
+    if (cookies.token) {
       getMyCoins();
     }
-  }, [coins]);
+  }, [cookies.token, coins]);
 
   return(
     <Container>
-      { user ? (
+      { cookies.token ? (
         <>
           <MoneyContainer>
             <WalletIcon src={walletIcon}/>
@@ -151,7 +151,7 @@ const MoneyContainer = styled.div`
   display: flex;
   flex-direction: row;
   margin: 13px;
-  padding: 30px;
+  padding: 15px 30px;
   align-items: center;
   background-color: ${palette.box_bg_color};
 `;
@@ -160,7 +160,7 @@ const WalletIcon = styled.img`
   height: 23px;
   margin-right: 10px;
 `;
-const PossMoney = styled.text`
+const PossMoney = styled.p`
   color: #C8C8C8;
   font-size: 19px;
   font-weight: 700;
@@ -177,10 +177,10 @@ const CoinContainer = styled.div`
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: row;
-  padding-top: 35px;
+  padding-top: 10px;
   justify-content: space-around;
 `;
-const Title = styled.text`
+const Title = styled.p`
   color: #C8C8C8;
   font-size: 20px;
   font-weight: 700;
@@ -189,7 +189,7 @@ const Title = styled.text`
 const Line = styled.div`
   height: 1px;
   background: #252525;
-  margin: 25px 20px;
+  margin: 15px 20px;
 `;
 const ListContainer = styled.div`
     white-space: nowrap;
