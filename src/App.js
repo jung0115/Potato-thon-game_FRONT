@@ -1,8 +1,8 @@
 import React from 'react';
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
-import "./styles/App.css";
+import "./view/styles/App.css";
 
-import Main from './pages/Main';
+import Main from './view/pages/Main';
 
 const App = () => {
   return(
