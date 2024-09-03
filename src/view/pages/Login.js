@@ -6,7 +6,7 @@ import client from 'gamja-backend-client';
 
 import { useAuth } from "../components/Context";
 
-import cancel from '../contents/cancel.svg';
+import cancel from '../../assets//cancel.svg';
 
 const Login = ({ onClose }) => {
     const [userId, setUserId] = useState('');

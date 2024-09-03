@@ -2,15 +2,15 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { useAuth } from "../../components/Context";
+import { useAuth } from "../Context";
 import client from 'gamja-backend-client';
 
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
 import Login from '../../pages/Login';
 
-import logo from "../../contents/logo.png";
-import profile from "../../contents/profile.png";
+import logo from "../../../assets/logo.png";
+import profile from "../../../assets/profile.png";
 
 const host = 'https://api.miruku.dog';
 

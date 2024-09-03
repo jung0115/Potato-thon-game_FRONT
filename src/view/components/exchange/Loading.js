@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
 
-import potato from "../../contents/img_potato_angry.png";
-import loadingAni1 from "../../contents/img_loading1.png";
-import loadingAni2 from "../../contents/img_loading2.png";
-import loadingAni3 from "../../contents/img_loading3.png";
-import loadingAni4 from "../../contents/img_loading4.png";
+import potato from "../../../assets/img_potato_angry.png";
+import loadingAni1 from "../../../assets/img_loading1.png";
+import loadingAni2 from "../../../assets/img_loading2.png";
+import loadingAni3 from "../../../assets/img_loading3.png";
+import loadingAni4 from "../../../assets/img_loading4.png";
 
 const Question = ({ closeLoading, time }) => {
   const [imgNum, setImgNum] = useState(0);
