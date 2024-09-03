@@ -69,3 +69,16 @@
    [CHORE] #20 - delete unnecessary import package
   - TEST : 테스트 코드 추가
   ```
+
+---
+
+### 🍠 Refactoring
+```
+📆 2024.09.03.화 ~
+```
+
+- [x] [1. MVC 패턴](https://github.com/jung0115/Potato-thon-game_FRONT/issues/70)
+- [x] [2. Typescript](https://github.com/jung0115/Potato-thon-game_FRONT/issues/71)
+- [x] [3. Redux](https://github.com/jung0115/Potato-thon-game_FRONT/issues/72)
+- [x] [4. Recoil](https://github.com/jung0115/Potato-thon-game_FRONT/issues/73)
+- [x] [5. Context api](https://github.com/jung0115/Potato-thon-game_FRONT/issues/74)
