@@ -4,7 +4,7 @@ import palette from "../../styles/colorPalatte";
 
 import client from 'gamja-backend-client';
 
-import closeImg from '../../assets/ic_close.png';
+import closeImg from '../../../assets/ic_close.png';
 
 const TitleNmae = ['시간', '현재가', '대비', '수량'];
 

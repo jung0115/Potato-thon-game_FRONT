@@ -1,130 +1,31 @@
 // 도움말
 import React from "react";
-import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
 
-import helpIcon from "../../contents/ic_question_help.png";
-import submitIcon from "../../contents/ic_question_submit.png";
-import checkNewIcon from "../../contents/ic_question_check.png";
+import submitIcon from "../../../assets/ic_question_submit.png";
+import checkNewIcon from "../../../assets/ic_question_check.png";
 
 import Loading from "./Loading";
 
-import client from 'gamja-backend-client';
+import { useQuestionController } from '../../../controller/exchange/QuestionController';
 
 // api BASE URL
 const host = 'https://api.miruku.dog';
 
 const Question = () => {
   const [cookies] = useCookies(['token']);
-  const [qnaList, setQnaList] = useState([]);
-  const [isNewAnswer, setIsNewAnswer] = useState(false);
-
-  // 로딩
-  const [isLoading, setIsLoading] = useState(false);
-
-  const closeLoading = () => {
-    setIsLoading(false);
-  }
-
-  const [inputQuestion, setInputQuestion] = useState("");
-
-  const handleInputChange = (e) => {
-    let input = e.target.value;
-    // 500자를 초과하면 뒤에 글자 자르기
-    if(input.length >= 500) {
-      input = input.substr(0, 501);
-    }
-    setInputQuestion(input);
-  };
-
-  const getConnection = () => {
-    return {
-      host: host,
-      headers: {
-        ...cookies.token ? {
-          'Authorization': `Bearer ${cookies.token}`
-        } : null
-      }
-    }
-  }
-
-  // 질문 생성 --------------------------------------------------------------------------------------------
-  async function createQna() {
-    
-    if(inputQuestion.length > 0) {
-      // 로그인 안 한 상태
-      if(!cookies.token) {
-        alert("질문하기는 로그인 후에 사용할 수 있습니다!");
-      }
-      // 로그인 된 상태
-      else {
-        setIsLoading(true);
-        await client.functional.qna.create(
-          getConnection(),
-          {
-            question: inputQuestion, // Question
-          }
-        );
-        setInputQuestion('');
-      }
-    }
-  }
-  
-  //createQna();
-  // 답변 완료된 질문 --------------------------------------------------------------------------------------------
-  async function getAllQnA() {
-    await client.functional.qna.answered.listAnswered(
-      getConnection()
-      ).then((response) => {
-        //console.log(response.qna);
-        const sortedItems = [...response.qna];
-        sortedItems.sort((a, b) => b.answeredAt.localeCompare(a.answeredAt));
-        setQnaList([...response.qna]);
-    });
-  }
-  // 답변 안 한 질문 --------------------------------------------------------------------------------------------
-  async function getNonAnswerQnA() {
-    await client.functional.qna.not_answered.manageListNotAnswered(
-      getConnection()
-      ).then((response) => {
-        console.log(response.qna);
-    });
-  }
-  //getNonAnswerQnA();
-  // 답변 --------------------------------------------------------------------------------------------
-  async function answerQna() {
-    await client.functional.qna.answer.manageAnswer(
-      getConnection(),
-      '1c171a7c-9e4f-42c8-9e70-9ea652bb19e2',
-      {
-        answer: "도움말 답변 19:53", // Answer
-      }
-    );
-  }
-  //answerQna();
-  
-  useEffect(() => {
-    getAllQnA();
-
-    // 5초마다 질문 리스트 업데이트
-    const interval = setInterval(() => {
-      getAllQnA();
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    // 10분 내에 답변된 질문이 있는지 확인
-    if(qnaList.length > 0) {
-      const minute = Math.floor((new Date() - new Date(qnaList[0].answeredAt)) / (1000 * 60));
-      if(minute < 10) setIsNewAnswer(true);
-      else setIsNewAnswer(false);
-    }
-  }, [qnaList]);
+  const { 
+    qnaList,
+    isNewAnswer,
+    isLoading,
+    inputQuestion,
+    setInputQuestion,
+    createQna,
+    closeLoading
+  } = useQuestionController(cookies);
 
   return(
     <Container>
@@ -142,7 +43,7 @@ const Question = () => {
           type="text"
           placeholder="감자톤 주식 게임 관련 질문만 작성부탁드립니다"
           value={inputQuestion}
-          onChange={handleInputChange}/>
+          onChange={(e) => setInputQuestion(e.target.value)}/>
         <QuestionSubmitBtn
           src={submitIcon}
           onClick={createQna}/>
@@ -176,23 +77,19 @@ const Question = () => {
         </QnaListContainer>
 
         {/* 새롭게 답변이 달린 질문 알림 */}
-        {isNewAnswer ? 
+        {isNewAnswer &&
           <NewQnaContainer>
             <NewNoitceText>새로운 답변이 올라왔습니다</NewNoitceText>
-            <CheckNewIcon src={checkNewIcon}/>
+            <CheckNewIcon src={checkNewIcon} />
           </NewQnaContainer>
-          : null
         }
       </QnaListAll>
 
         {/* 로딩창 */}
-        {isLoading ?
+        {isLoading &&
           <LoadingOverlay>
-            <Loading
-              closeLoading={closeLoading}
-              time={200}/>
-          </LoadingOverlay>  
-          : null
+            <Loading closeLoading={() => closeLoading()} time={200} />
+          </LoadingOverlay>
         }
 
     </Container>
@@ -214,16 +111,6 @@ const Title = styled.div`
   color: ${palette.question_title};
   margin-left: 4px;
   cursor: default;
-`;
-const HelpIcon = styled.img`
-  width: 21px;
-  height: 21px;
-  margin-left: 7px;
-`;
-const BottomLine = styled.div`
-  background-color: ${palette.header_btm_line};
-  height: 0.85px;
-  margin-top: 10px;
 `;
 
 const QuestionContainer = styled.div`
@@ -278,16 +165,7 @@ const NewNoitceText = styled.div`
   margin: 12px 0px 7.5px 9px;
   cursor: default;
 `;
-const CheckNewNotice = styled.div`
-  margin-left: auto;
-  display: flex;
-`;
-const CheckNewText = styled.div`
-  font-size: 12px;
-  font-family: 'Pretendard-Medium';
-  color: ${palette.white};
-  margin: 12px 6.5px 7.5px 0px;
-`;
+
 const CheckNewIcon = styled.img`
   width: 25.328px;
   height: 24.12px;

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import LoginController from "../controller/LoginController";
-import cancel from '../contents/cancel.svg';
+
+import cancel from '../../assets//cancel.svg';
 
 const Login = ({ onClose }) => {
     const { handleLogin, token } = LoginController();

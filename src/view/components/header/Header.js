@@ -4,8 +4,8 @@ import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
 import Login from '../../pages/Login';
 
-import logo from "../../contents/logo.png";
-import profile from "../../contents/profile.png";
+import logo from "../../../assets/logo.png";
+import profile from "../../../assets/profile.png";
 
 const Header = ({
   isExchange,

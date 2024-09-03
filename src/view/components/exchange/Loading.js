@@ -5,23 +5,16 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
 
-import potato from "../../contents/img_potato_angry.png";
-import loadingAni1 from "../../contents/img_loading1.png";
-import loadingAni2 from "../../contents/img_loading2.png";
-import loadingAni3 from "../../contents/img_loading3.png";
-import loadingAni4 from "../../contents/img_loading4.png";
+import { LoadingController } from '../../../controller/exchange/LoadingController';
 
-const Question = ({ closeLoading, time }) => {
-  const [imgNum, setImgNum] = useState(0);
-  const aniImgs = [loadingAni1, loadingAni2, loadingAni3, loadingAni4];
+const Loading = ({ closeLoading, time }) => {
+  const { imgSrc, potatoSrc, noticeText } = LoadingController({ closeLoading, time });
 
-  setTimeout(() => {setImgNum((imgNum + 1)); if(imgNum > 4) closeLoading();}, time);
-
-  return(
+  return (
     <Container>
-      <AnimationImg src={aniImgs[imgNum % 4]}/>
-      <PotatoImg src={potato}/>
-      <NoticeText>처리 중입니다</NoticeText>
+      <AnimationImg src={imgSrc} />
+      <PotatoImg src={potatoSrc} />
+      <NoticeText>{noticeText}</NoticeText>
     </Container>
   );
 }
@@ -57,4 +50,4 @@ const NoticeText = styled.div`
   align-self: center;
 `;
 
-export default Question;
+export default Loading;

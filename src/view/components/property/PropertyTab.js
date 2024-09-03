@@ -2,13 +2,12 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
-import { useAuth } from "../Context";
 import { useCookies } from "react-cookie";
 
 import client from 'gamja-backend-client';
 
-import walletIcon from '../../assets/ic_wallet.png';
-import potatoImg from '../../contents/img_potato_angry.png';
+import walletIcon from '../../../assets/ic_wallet.png';
+import potatoImg from '../../../assets/img_potato_angry.png';
 
 const title = ["코인명", "매입가", "현재가", "대비", "수량"];
 
