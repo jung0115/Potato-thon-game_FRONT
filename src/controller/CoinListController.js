@@ -1,8 +1,10 @@
 import CoinListModel from "../model/CoinListModel";
 import CoinList from "../view/components/exchange/CoinList";
+import DetailCoinListModel from "../model/coinList/DetailCoinListModel";
 
 const CoinListController = ({ onCoinClick }) => {
     const { coins, priceDiffs, getCoinHistories } = CoinListModel();
+    const { currentPrice, remainAmount, priceDifferencesCal } = DetailCoinListModel(selectedCoin);
     const [isDetailOpen, setDetailOpen] = useState(false);  
     const [present, setPresent] = useState(new Date());
     const [currentTime, setCurrentTime] = useState(new Date());
@@ -35,17 +37,31 @@ const CoinListController = ({ onCoinClick }) => {
         } 
     }, [currentTime]);
 
-    const CoinClick = (item) => {
+    const handleCoinClick = (item) => {
+        setSelectedCoin(item.name);
         setDetailOpen(true);
-        onCoinClick(item.name + " 코인");
-    }
+    };
+
+    const handleClose = () => {
+        setDetailOpen(false);
+    };
+
 
     return (
-        <CoinList
+        <>
+            <CoinList
             coins={coins}
             priceDiffs={priceDiffs}
-            onCoinClick={CoinClick}
-            isDetailOpen={isDetailOpen}/>
+            onCoinClick={handleCoinClick}/>
+            {isDetailOpen && (
+                <DetailCoinList
+                    coinName={selectedCoin}
+                    onClose={handleClose}
+                    currentPrice={currentPrice}
+                    remainAmount={remainAmount}
+                    priceDifferencesCal={priceDifferencesCal}/>
+            )}
+        </>
     )
 }
 export default CoinListController;
