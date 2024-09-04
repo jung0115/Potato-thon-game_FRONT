@@ -1,110 +1,8 @@
-import React, { useEffect, useState } from 'react';
-
 import styled from 'styled-components';
 import palette from "../../styles/colorPalatte";
 
-import client from 'gamja-backend-client';
-
-const TitleName = ['종목명', '현재가', '대비', '수량'];
-
-const host = 'https://api.miruku.dog';
-
-const CoinList = ({ onCoinClick }) => {
-    const [isDetailOpen, setDetailOpen] = useState(false);  
-    const [present, setPresent] = useState(new Date());
-    const [token, setToken] = useState(null);
-    const [coins, setCoins] = useState([]);
-    const [priceDiffs, setPriceDiffs] = useState({});
-
-    const CoinClick = (item) => {
-        setDetailOpen(true);
-        onCoinClick(item.name + " 코인");
-    }
-    
-    const getConnection = () => {
-        return {
-            host: host,
-            headers: {
-                ...token ? {
-                'Authorization': `Bearer ${token}`
-                } : null
-            }
-        }
-    }
-
-    const getCoins = async () => {
-        await client.functional.coin.getCoins(
-            getConnection()
-        ).then(response => {
-            setCoins(response.coins);
-        });
-    }
-
-    const coinHistories = async (coinId) => {
-        const currentDate = new Date();
-        const pastDate = new Date();
-        pastDate.setMinutes(currentDate.getMinutes() - 10);
-
-        await client.functional.coin.price_histories.getPriceHistories(
-            getConnection(),
-            coinId,
-            {
-                from: pastDate.toString(),
-                to: currentDate.toString()
-            }
-        ).then(response => {
-            const historyPrice = response.histories;
-            console.log(historyPrice);
-            
-            // 가격 대비 세팅
-            if (historyPrice.length >= 2) {
-                const previousPrice = historyPrice[historyPrice.length - 2].price;
-                const currentPrice = historyPrice[historyPrice.length - 1].price;
-
-                setPriceDiffs((prev) => {
-                    return {...prev, [coinId]: currentPrice - previousPrice };
-                });
-            }
-        });
-    }
-
-    
-    // 최초 접속 시, 코인 리스트 가져오기
-    useEffect(() => {
-        getCoins();
-    }, []);
-
-    // 코인 리스트 가져오면 코인별 가격, 대비 등 데이터 가져오기
-    useEffect(() => {
-        coins.forEach(coin => {
-            coinHistories(coin.id);
-        });
-    }, [coins]);
-
-    // 1분마다 체크 ---------------------------------------------------------------------------------------------------------
-    //setInterval(setTime, 60000);
-    const [currentTime, setCurrentTime] = useState(new Date());
-
-    useEffect(() => {
-        // 1초마다 현재 시간을 업데이트
-        const interval = setInterval(() => {
-        setCurrentTime(new Date());
-        }, 1000);
-
-        return () => clearInterval(interval);
-    }, []);
-
-    useEffect(() => {
-        // 1분마다 코인 증감 데이터 조회 api 호출
-        // 너무 자주 api 호출하면 fetch 오류 발생
-        const currentSecond = currentTime.getSeconds();
-        if(currentSecond == 0) {
-            coins.forEach(coin => {
-                coinHistories(coin.id);
-            });
-        } 
-        
-    }, [currentTime]);
+const CoinList = ({ coins, priceDiffs, onCoinClick }) => {
+    const TitleName = ["종목명", "현재가", "대비", "수량"];
 
     return (
         <Container>
@@ -121,36 +19,34 @@ const CoinList = ({ onCoinClick }) => {
                     backgroundColor: '#BBBBBB'
                 }} />
                 <CoinInfoContent>
-                    {coins.map((item, idx) => {
-                        const presentPrice = (item.price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-                        const priceDiff = priceDiffs[item.id] || 0;
-                        
-                        return (
-                            <CoinInfoSubContent onClick={() => CoinClick(item)}>
-                                <SubContent> {item.name} </SubContent>
-                                <SubContent 
-                                    style={{ marginLeft: '20px' }}
-                                    fontColor={priceDiff}
-                                > 
-                                    {presentPrice} 
-                                </SubContent>
-                                <SubContent 
-                                    style={{ marginLeft: '10px' }}
-                                    fontColor={priceDiff}
-                                > 
-                                    {priceDiff != 0 ? (
-                                        <>
-                                            {priceDiff > 0 ? '▲' : '▼'} {" "}
-                                            {Math.abs(priceDiff).toLocaleString()} 
-                                        </>) : ('-')
-                                    } 
-                                </SubContent>
-                                <SubContent style={{ marginLeft: '5px' }}> 
-                                    {item.amount} 
-                                </SubContent>  
-                            </CoinInfoSubContent>      
-                        )
-                    })}
+                    {Array.isArray(coins) && coins.length > 0 ? (
+                        coins.map((item) => {
+                            const presentPrice = item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                            const priceDiff = priceDiffs[item.id] || 0;
+                            
+                            return (
+                                <CoinInfoSubContent key={item.id} onClick={() => onCoinClick(item)}>
+                                    <SubContent>{item.name}</SubContent>
+                                    <SubContent style={{ marginLeft: '20px' }} fontColor={priceDiff}> 
+                                        {presentPrice} 
+                                    </SubContent>
+                                    <SubContent style={{ marginLeft: '10px' }} fontColor={priceDiff}> 
+                                        {priceDiff !== 0 ? (
+                                            <>
+                                                {priceDiff > 0 ? '▲' : '▼'} {" "}
+                                                {Math.abs(priceDiff).toLocaleString()} 
+                                            </>
+                                        ) : ('-')}
+                                    </SubContent>
+                                    <SubContent style={{ marginLeft: '5px' }}> 
+                                        {item.amount} 
+                                    </SubContent>  
+                                </CoinInfoSubContent>      
+                            )
+                        })
+                    ) : (
+                        <div>코인 정보가 없습니다.</div>
+                    )}
                 </CoinInfoContent>
             </CoinInfo>
         </Container>
