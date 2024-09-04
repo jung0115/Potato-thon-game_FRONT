@@ -4,7 +4,7 @@ import client from 'gamja-backend-client';
 // API BASE URL
 const host = 'https://api.miruku.dog';
 
-export const useQuestionModel = (cookies) => {
+export const useQuestionModel = ( cookies ) => {
   const [qnaList, setQnaList] = useState([]);
   const [isNewAnswer, setIsNewAnswer] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
