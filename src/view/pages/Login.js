@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import LoginController from "../controller/LoginController";
+import LoginController from "../../controller/LoginController";
 
 import cancel from '../../assets//cancel.svg';
 

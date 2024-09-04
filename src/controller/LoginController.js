@@ -1,5 +1,5 @@
 import useUserModel from "../model/useUserModel";
-import { useAuth } from "../components/Context";
+import { useAuth } from "../view/components/Context";
 
 const LoginController = ({ onClose }) => {
     const { user, token, authSignIn } = useUserModel();
