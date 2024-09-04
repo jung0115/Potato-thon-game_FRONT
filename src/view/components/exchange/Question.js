@@ -12,9 +12,6 @@ import Loading from "./Loading";
 
 import { useQuestionController } from '../../../controller/exchange/QuestionController';
 
-// api BASE URL
-const host = 'https://api.miruku.dog';
-
 const Question = () => {
   const [cookies] = useCookies(['token']);
   const { 
