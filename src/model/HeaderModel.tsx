@@ -1,15 +1,29 @@
+import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import client from 'gamja-backend-client';
 
-const useHeaderModel = (initialExchange, initialProperty, selectExchange, selectProperty) => {
+interface User {
+    name: string;
+}
+
+interface GetMyUserResponse {
+    user: User;
+}
+
+const HeaderModel = (
+    initialExchange: boolean,
+    initialProperty: boolean,
+    selectExchange: () => void,
+    selectProperty: () => void
+) => {
     const host = 'https://api.miruku.dog';
 
-    const [isExchange, setExchange] = useState(initialExchange);
-    const [isProperty, setProperty] = useState(initialProperty);
-    const [isExchangeHover, setExchangeHover] = useState(false);
-    const [isPropertyHover, setPropertyHover] = useState(false);
-    const [isSelectLogin, setSelectLogin] = useState(false);
-    const [teamName, setTeamName] = useState('');
+    const [isExchange, setExchange] = useState<boolean>(initialExchange);
+    const [isProperty, setProperty] = useState<boolean>(initialProperty);
+    const [isExchangeHover, setExchangeHover] = useState<boolean>(false);
+    const [isPropertyHover, setPropertyHover] = useState<boolean>(false);
+    const [isSelectLogin, setSelectLogin] = useState<boolean>(false);
+    const [teamName, setTeamName] = useState<string>('');
     const [cookies] = useCookies(['token']);
 
     // API 호출에 필요한 연결 설정
@@ -61,7 +75,7 @@ const useHeaderModel = (initialExchange, initialProperty, selectExchange, select
     }, [cookies.token]);
 
     // 로그인 상태 변경 처리
-    const loginClose = (name) => {
+    const loginClose = (name?: string) => {
         setSelectLogin(false);
         setTeamName(name || '');
     };
@@ -81,4 +95,4 @@ const useHeaderModel = (initialExchange, initialProperty, selectExchange, select
         setSelectLogin
     };
 };
-export default useHeaderModel;
+export default HeaderModel;
