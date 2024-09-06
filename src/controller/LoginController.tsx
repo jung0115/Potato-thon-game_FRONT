@@ -1,12 +1,22 @@
 import { useAuth } from "../view/components/Context";
-import LoginModel from "../model/LoginModel.ts";
+import LoginModel from "../model/LoginModel.tsx";
 
 interface LoginControllerProps {
     onClose: (userName: string) => void;
 }
 
+interface User {
+    name: string;
+}
+
+interface LoginModelResult {
+    user: User | null;
+    token: string | null;
+    authSignIn: (userId: string, userPw: string) => Promise<void>;
+}
+
 const LoginController = ({ onClose }: LoginControllerProps) => {
-    const { user, token, authSignIn } = LoginModel();
+    const { user, token, authSignIn }: LoginModelResult = LoginModel();
     const { login } = useAuth();
 
     const handleLogin = async (userId: string, userPw: string) => {

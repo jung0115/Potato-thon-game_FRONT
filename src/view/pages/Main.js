@@ -4,7 +4,7 @@ import React from "react";
 import styled from "styled-components";
 import palette from "../styles/colorPalatte";
 
-import Header from '../components/header/Header';
+import Header from "../components/header/Header.tsx";
 import ExchangeTab from "../components/exchange/ExchangeTab";
 import PropertyTab from "../components/property/PropertyTab";
 import { useMainController } from "../../controller/MainController";

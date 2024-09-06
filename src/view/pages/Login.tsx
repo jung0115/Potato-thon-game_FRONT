@@ -1,21 +1,25 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import LoginController from "../../controller/LoginController";
+import LoginController from "../../controller/LoginController.tsx";
 
 import cancel from '../../assets//cancel.svg';
 
-const Login = ({ onClose }) => {
-    const { handleLogin, token } = LoginController();
-    const [userId, setUserId] = useState('');
-    const [userPw, setUserPw] = useState('');
-    
-    const isInputCheck = userId  && userPw;
+interface LoginProps {
+    onClose: (message: string) => void;
+}
 
-    const onChangeId = (e) => {
+const Login: React.FC<LoginProps> = ({ onClose }) => {
+    const { handleLogin } = LoginController({ onClose });
+    const [userId, setUserId] = useState<string>('');
+    const [userPw, setUserPw] = useState<string>('');
+    
+    const isInputCheck = userId.length > 0 && userPw.length > 0;
+
+    const onChangeId = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserId(e.target.value);
     }
 
-    const onChangePw = (e) => {
+    const onChangePw = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserPw(e.target.value);
     }
 
@@ -27,10 +31,7 @@ const Login = ({ onClose }) => {
                     <SubTitle> 로그인 이후, 모든 기능을 이용할 수 있어요. </SubTitle>
                 </TitleContainer>
                 {!isInputCheck && 
-                    <Img 
-                        src={cancel}
-                        onClick={() => onClose('')}
-                    />
+                    <Img src={cancel} onClick={() => onClose('')}/>
                 }
             </Header>
             <Body>
@@ -49,8 +50,8 @@ const Login = ({ onClose }) => {
                 />
             </Body>
             <LoginBtn 
-                onClick={() => handleLogin()}
-                isinputcheck={isInputCheck}
+                onClick={() => handleLogin(userId, userPw)}
+                isInputCheck={isInputCheck}
             > 로그인 </LoginBtn>
         </Container>
     )
@@ -111,7 +112,7 @@ const Img = styled.img`
     float: right;
     cursor: pointer;
 `;
-const LoginBtn = styled.button`
+const LoginBtn = styled.button<{ isInputCheck: boolean }>`
     width: 362px;
     padding: 13px 28px;
     margin: 45px auto;
@@ -127,4 +128,4 @@ const LoginBtn = styled.button`
     color: #FFFFFF;
     cursor: pointer;
 `;
-export  default Login;
+export default Login;
