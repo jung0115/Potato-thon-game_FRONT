@@ -1,18 +1,23 @@
-import useUserModel from "../model/useUserModel";
 import { useAuth } from "../view/components/Context";
+import LoginModel from "../model/LoginModel.ts";
 
-const LoginController = ({ onClose }) => {
-    const { user, token, authSignIn } = useUserModel();
+interface LoginControllerProps {
+    onClose: (userName: string) => void;
+}
+
+const LoginController = ({ onClose }: LoginControllerProps) => {
+    const { user, token, authSignIn } = LoginModel();
     const { login } = useAuth();
 
-    const handleLogin = async (userId, userPw) => {
+    const handleLogin = async (userId: string, userPw: string) => {
         if (!userId || !userPw) {
             alert('아이디 또는 비밀번호를 입력해주세요.');
-        } 
+            return;
+        }
 
         await authSignIn(userId, userPw);
 
-        if (token) {
+        if (token && user) {
             onClose(user.name);
             login(user);
         }
@@ -20,4 +25,5 @@ const LoginController = ({ onClose }) => {
 
     return { handleLogin, user, token };
 }
+
 export default LoginController;
