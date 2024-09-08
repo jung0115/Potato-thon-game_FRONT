@@ -5,7 +5,7 @@ import { useCookies } from "react-cookie";
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
 
-import submitIcon from "../../../assets/ic_question_submit.png";
+import submitIcon from '../../../assets/ic_question_submit.png';
 import checkNewIcon from "../../../assets/ic_question_check.png";
 
 import Loading from "./Loading";

@@ -2,12 +2,28 @@
 import React from "react";
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
-import Login from '../../pages/Login';
+import Login from '../../pages/Login.tsx';
 
 import logo from "../../../assets/logo.png";
 import profile from "../../../assets/profile.png";
 
-const Header = ({
+interface HeaderProps {
+  isExchange: boolean;
+  isProperty: boolean;
+  isExchangeHover: boolean;
+  isPropertyHover: boolean;
+  isSelectLogin: boolean;
+  teamName?: string;
+  onClickExchange: () => void;
+  onClickProperty: () => void;
+  setExchangeHover: (hover: boolean) => void;
+  setPropertyHover: (hover: boolean) => void;
+  loginClose: () => void;
+  setSelectLogin: (select: boolean) => void;
+  handleRefresh: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({
   isExchange,
   isProperty,
   isExchangeHover,
@@ -21,8 +37,8 @@ const Header = ({
   loginClose,
   setSelectLogin,
   handleRefresh
- }) => {
-  return(
+}) => {
+  return (
     <Container>
       <HeaderContainer>
         {/* 감자톤 로고 + 서비스명 */}
@@ -100,11 +116,10 @@ const Header = ({
             }
           </UserContainer>
         }
-
       </HeaderContainer>
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.div`
   display: block;
@@ -242,5 +257,4 @@ const LoginOverlay = styled.div`
   align-items: center;
   z-index: 999;
 `;
-
 export default Header;

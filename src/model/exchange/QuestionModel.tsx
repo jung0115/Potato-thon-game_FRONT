@@ -4,11 +4,21 @@ import client from 'gamja-backend-client';
 // API BASE URL
 const host = 'https://api.miruku.dog';
 
-export const useQuestionModel = ( cookies ) => {
-  const [qnaList, setQnaList] = useState([]);
-  const [isNewAnswer, setIsNewAnswer] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [inputQuestion, setInputQuestion] = useState("");
+interface Cookies {
+  token?: string;
+}
+
+interface Qna {
+  question: string;
+  answer: string;
+  answeredAt: string;
+}
+
+export const useQuestionModel = ( cookies: Cookies ) => {
+  const [qnaList, setQnaList] = useState<Qna[]>([]);
+  const [isNewAnswer, setIsNewAnswer] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [inputQuestion, setInputQuestion] = useState<string>("");
 
   const closeLoading = () => {
     setIsLoading(false);
@@ -58,9 +68,8 @@ export const useQuestionModel = ( cookies ) => {
 
   useEffect(() => {
     if (qnaList.length > 0) {
-      const minute = Math.floor((new Date() - new Date(qnaList[0].answeredAt)) / (1000 * 60));
-      if (minute < 10) setIsNewAnswer(true);
-      else setIsNewAnswer(false);
+      const minute = Math.floor((new Date().getTime() - new Date(qnaList[0].answeredAt).getTime()) / (1000 * 60));
+      setIsNewAnswer(minute < 10);
     }
   }, [qnaList]);
 

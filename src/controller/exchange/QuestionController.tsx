@@ -1,6 +1,10 @@
 import { useQuestionModel } from '../../model/exchange/QuestionModel';
 
-export const useQuestionController = (cookies) => {
+interface Cookies {
+  token?: string;
+}
+
+export const useQuestionController = ( cookies: Cookies ) => {
   const {
     qnaList,
     isNewAnswer,
