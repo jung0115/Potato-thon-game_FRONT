@@ -1,23 +1,17 @@
 import { useAuth } from "../view/components/Context";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store.tsx";
 import LoginModel from "../model/LoginModel.tsx";
 
 interface LoginControllerProps {
     onClose: (userName: string) => void;
 }
 
-interface User {
-    name: string;
-}
-
-interface LoginModelResult {
-    user: User | null;
-    token: string | null;
-    authSignIn: (userId: string, userPw: string) => Promise<void>;
-}
-
 const LoginController = ({ onClose }: LoginControllerProps) => {
-    const { user, token, authSignIn }: LoginModelResult = LoginModel();
+    const { authSignIn } = LoginModel();
     const { login } = useAuth();
+    const user = useSelector((state: RootState) => state.user.user);
+    const token = useSelector((state: RootState) => state.user.token);
 
     const handleLogin = async (userId: string, userPw: string) => {
         if (!userId || !userPw) {
