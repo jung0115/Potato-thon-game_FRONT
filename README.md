@@ -24,6 +24,19 @@
   
 - [x] `행사 기간` : 2023.11.18(토) 13:00 ~ 2023.11.19(일) 10:30 (1박 2일)  
 - [x] `참가 자격` : 한림대학교, 강원대학교 멋쟁이사자처럼 부원 및 재학생
+
+---
+
+### 🍠 Refactoring
+```
+📆 2024.09.03.화 ~
+```
+
+- [x] [1. MVC 패턴](https://github.com/jung0115/Potato-thon-game_FRONT/issues/70)
+- [x] [2. Typescript](https://github.com/jung0115/Potato-thon-game_FRONT/issues/71)
+- [x] [3. Redux](https://github.com/jung0115/Potato-thon-game_FRONT/issues/72)
+- [x] [4. Recoil](https://github.com/jung0115/Potato-thon-game_FRONT/issues/73)
+- [x] [5. Context api](https://github.com/jung0115/Potato-thon-game_FRONT/issues/74)
    
 ---
 
@@ -37,13 +50,6 @@
 ```
 ✨ 연합 해커톤을 진행한 한림대, 강원대 재학생들과 운영진의 지인인 경상대 학생이 함께 서비스를 개발하였습니다.
 ```
-
----
-
-### 🛠️ Tech Stack
-<a href="https://reactjs.org/" target="_blank" rel="noreferrer"> <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="react" height="24"/> </a> <!--React -->
-<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="http://img.shields.io/badge/-Javascript-f7e018?style=for-the-badge&logo=javascript&logoColor=black" alt="javascript" height="24"/> </a> <!-- JavaScript -->  
-
 ---
 
 ### 🔥 Git Convention
@@ -72,13 +78,6 @@
 
 ---
 
-### 🍠 Refactoring
-```
-📆 2024.09.03.화 ~
-```
-
-- [x] [1. MVC 패턴](https://github.com/jung0115/Potato-thon-game_FRONT/issues/70)
-- [x] [2. Typescript](https://github.com/jung0115/Potato-thon-game_FRONT/issues/71)
-- [x] [3. Redux](https://github.com/jung0115/Potato-thon-game_FRONT/issues/72)
-- [x] [4. Recoil](https://github.com/jung0115/Potato-thon-game_FRONT/issues/73)
-- [x] [5. Context api](https://github.com/jung0115/Potato-thon-game_FRONT/issues/74)
+### 🛠️ Tech Stack
+<a href="https://reactjs.org/" target="_blank" rel="noreferrer"> <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="react" height="24"/> </a> <!--React -->
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="http://img.shields.io/badge/-Javascript-f7e018?style=for-the-badge&logo=javascript&logoColor=black" alt="javascript" height="24"/> </a> <!-- JavaScript -->  
