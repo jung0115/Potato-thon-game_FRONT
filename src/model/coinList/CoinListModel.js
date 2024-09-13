@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { useCookies } from "react-cookie";
 import client from 'gamja-backend-client';
+import CoinContext from '../../context/CoinContext';
 
 const host = "https://api.miruku.dog";
 
 const CoinListModel = () => {
-    const [cookies] = useCookies(['token']);
-    const [coins, setCoins] = useState([]);
-    const [priceDiffs, setPriceDiffs] = useState({});
+    const [ cookies ] = useCookies(['token']);
+
+    const { coins, setCoins, priceDiffs, setPriceDiffs } = useContext(CoinContext);
 
     const getConnection = () => {
         return {
@@ -63,6 +65,6 @@ const CoinListModel = () => {
         getCoins();
     }, []);
 
-    return { coins, priceDiffs, getCoinHistories }
+    return { getCoinHistories }
 }
 export default CoinListModel;
