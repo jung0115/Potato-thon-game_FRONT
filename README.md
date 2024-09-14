@@ -29,7 +29,7 @@
 
 ### 🍠 Refactoring
 ```
-📆 2024.09.03.화 ~
+📆 2024.09.03.화 ~ 2024.09.14.토
 ```
 
 - [x] [1. MVC 패턴](https://github.com/jung0115/Potato-thon-game_FRONT/issues/70)
