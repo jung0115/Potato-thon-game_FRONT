@@ -1,8 +1,8 @@
-import { setUser, setToken } from "../redux/userSlice.tsx";
+import { setUser, setToken } from "../redux/slices/userSlice.tsx";
 import { Cookies } from "react-cookie";
 import client from 'gamja-backend-client';
 import { useDispatch } from "react-redux";
-import type { User } from "../redux/userSlice";
+import type { User } from "../redux/slices/userSlice.tsx";
 
 interface AuthResponse {
     token: string;

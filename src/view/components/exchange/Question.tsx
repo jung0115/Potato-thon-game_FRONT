@@ -1,6 +1,9 @@
 // 도움말
-import React from "react";
-import { useCookies } from "react-cookie";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useCookies } from 'react-cookie';
+import { setInputQuestion, createQna, closeLoading, fetchQnaList } from '../../../redux/slices/questionSlice.tsx';
+import { RootState, AppDispatch } from '../../../redux/store';
 
 import styled from "styled-components";
 import palette from "../../styles/colorPalatte";
@@ -10,85 +13,68 @@ import checkNewIcon from "../../../assets/ic_question_check.png";
 
 import Loading from "./Loading";
 
-import { useQuestionController } from '../../../controller/exchange/QuestionController';
-
-const Question = () => {
+const Question: React.FC = () => {
   const [cookies] = useCookies(['token']);
-  const { 
-    qnaList,
-    isNewAnswer,
-    isLoading,
-    inputQuestion,
-    setInputQuestion,
-    createQna,
-    closeLoading
-  } = useQuestionController(cookies);
+  const dispatch = useDispatch<AppDispatch>(); // AppDispatch 타입을 지정합니다
+  const { qnaList, isNewAnswer, isLoading, inputQuestion } = useSelector((state: RootState) => state.question);
+
+  useEffect(() => {
+    dispatch(fetchQnaList(cookies.token));
+    const interval = setInterval(() => {
+      dispatch(fetchQnaList(cookies.token));
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [dispatch, cookies.token]);
 
   return(
     <Container>
-      {/* 설명 */}
       <TitleContainer>
         <Title>도움말</Title>
-        {/*<HelpIcon src={helpIcon}/>*/}
       </TitleContainer>
 
-      {/*<BottomLine/>*/}
-
-      {/* 질문 요청 */}
       <QuestionContainer>
         <QuestionInput
           type="text"
           placeholder="감자톤 주식 게임 관련 질문만 작성부탁드립니다"
           value={inputQuestion}
-          onChange={(e) => setInputQuestion(e.target.value)}/>
+          onChange={(e) => dispatch(setInputQuestion(e.target.value))}
+        />
         <QuestionSubmitBtn
           src={submitIcon}
-          onClick={createQna}/>
+          onClick={() => dispatch(createQna())}
+        />
       </QuestionContainer>
 
       <QnaListAll>
-        {/* 질문답변 리스트 */}
         <QnaListContainer>
           <QnaList
             style={
-              isNewAnswer ? {
-                paddingTop: 35,
-                height: 145.75,
-              } : {
-                paddingTop: 0,
-                height: 180.75,
-              }
-            }>
+              isNewAnswer ? { paddingTop: 35, height: 145.75 } : { paddingTop: 0, height: 180.75 }
+            }
+          >
             {qnaList.map((qna, idx) => (
-              <QnaItemContainer
-                key={idx}>
-                <QnaQuestion>
-                  Q. {qna.question}
-                </QnaQuestion>
-                <QnaAnswer>
-                  A. {qna.answer}
-                </QnaAnswer>
+              <QnaItemContainer key={idx}>
+                <QnaQuestion>Q. {qna.question}</QnaQuestion>
+                <QnaAnswer>A. {qna.answer}</QnaAnswer>
               </QnaItemContainer>
             ))}
           </QnaList>
         </QnaListContainer>
 
-        {/* 새롭게 답변이 달린 질문 알림 */}
-        {isNewAnswer &&
+        {isNewAnswer && (
           <NewQnaContainer>
             <NewNoitceText>새로운 답변이 올라왔습니다</NewNoitceText>
             <CheckNewIcon src={checkNewIcon} />
           </NewQnaContainer>
-        }
+        )}
       </QnaListAll>
 
-        {/* 로딩창 */}
-        {isLoading &&
-          <LoadingOverlay>
-            <Loading closeLoading={() => closeLoading()} time={200} />
-          </LoadingOverlay>
-        }
-
+      {isLoading && (
+        <LoadingOverlay>
+          <Loading closeLoading={() => dispatch(closeLoading())} time={200} />
+        </LoadingOverlay>
+      )}
     </Container>
   );
 }
