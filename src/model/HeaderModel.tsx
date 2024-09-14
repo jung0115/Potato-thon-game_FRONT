@@ -1,29 +1,29 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
 import { useCookies } from "react-cookie";
 import client from 'gamja-backend-client';
-
-interface User {
-    name: string;
-}
-
-interface GetMyUserResponse {
-    user: User;
-}
+import { 
+    isExchangeState,
+    isPropertyState,
+    isExchangeHoverState,
+    isPropertyHoverState,
+    isSelectLoginState,
+    teamNameState
+} from "../recoil/recoilState";
 
 const HeaderModel = (
-    initialExchange: boolean,
-    initialProperty: boolean,
     selectExchange: () => void,
     selectProperty: () => void
 ) => {
     const host = 'https://api.miruku.dog';
 
-    const [isExchange, setExchange] = useState<boolean>(initialExchange);
-    const [isProperty, setProperty] = useState<boolean>(initialProperty);
-    const [isExchangeHover, setExchangeHover] = useState<boolean>(false);
-    const [isPropertyHover, setPropertyHover] = useState<boolean>(false);
-    const [isSelectLogin, setSelectLogin] = useState<boolean>(false);
-    const [teamName, setTeamName] = useState<string>('');
+    const [isExchange, setExchange] = useRecoilState(isExchangeState);
+    const [isProperty, setProperty] = useRecoilState(isPropertyState);
+    const [isExchangeHover, setExchangeHover] = useRecoilState(isExchangeHoverState);
+    const [isPropertyHover, setPropertyHover] = useRecoilState(isPropertyHoverState);
+    const [isSelectLogin, setSelectLogin] = useRecoilState(isSelectLoginState);
+    const [teamName, setTeamName] = useRecoilState(teamNameState);
+    
     const [cookies] = useCookies(['token']);
 
     // API 호출에 필요한 연결 설정
@@ -35,8 +35,8 @@ const HeaderModel = (
                     'Authorization': `Bearer ${cookies.token}`
                 } : {}
             }
-        }
-    }
+        };
+    };
 
     // 거래소탭 선택
     const onClickExchange = () => {
